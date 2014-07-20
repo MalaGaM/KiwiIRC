@@ -105,7 +105,7 @@
     if(!kiwi.settings.get('rich_nicklist')) return;
 
     // Add the userlist button
-    $(".main").prepend('<li><button class="btn btn-primary" id="userlist">Liste des chatteurs</button></li>');
+    $(".main").prepend('<li><i id="userlist" title="Liste des chatteurs" class="fa fa-users"></i></li>');
 
     // Add the action on the button, but only when nicklist is rich
     var userlist_network = kiwi.components.Network();

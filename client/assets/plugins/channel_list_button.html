@@ -12,11 +12,12 @@
 	        initialize: function (options) {
 				// Add channel list button
 				if(!channelButtonAdded) {
-					$(".main").prepend('<li><button class="btn btn-primary" id="chanlist">' +
+					/*$(".main").prepend('<li><button class="btn btn-primary" id="chanlist">' +
 							   kiwi.i18n.translate('client_applets_chanlist_channellist').fetch() +
-							   '</button></li>');
+							   '</button></li>');*/
+					$(".main").prepend('<li><i id="chanlist" title="'+kiwi.i18n.translate('client_applets_chanlist_channellist').fetch()+'" class="fa fa-list-alt"></i></li>');
 			
-					this.styleChannelListButton();
+					//this.styleChannelListButton();
 				}
 				
 				// Listen to layout change to adjust the button
