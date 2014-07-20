@@ -19,38 +19,30 @@
 #kiwi .action_title {width: 150px;}
 #canvas_ignore td {padding: 3px;}
 #kiwi .btn-xs {
-  padding: 1px 5px;
-  font-size: 12px;
-  line-height: 1.5;
-  border-radius: 3px;
+	padding: 1px 5px;
+	font-size: 12px;
+	line-height: 1.5;
+	border-radius: 3px;
 }
 </style>
 <script>
 kiwi.plugins.on('loaded', function() {
-
-
-
-var ignorelist_data = kiwi.components.DataStore.instance('kiwi.ignore_list');
-	ignorelist_data.load();
+	var ignorelist_data = kiwi.components.DataStore.instance('kiwi.ignore_list');
+		ignorelist_data.load();
 	var ignorelist = ignorelist_data.get('ignore_list');
 
 
-var net = kiwi.components.Network()
-	net.on('connect', function() 
-	{
-		
-		if(ignorelist == null)
-		{
-			console.log("ignore list == null");
+	var net = kiwi.components.Network();
+	net.on('connect', function() {
+		if(ignorelist == null) {
 			return;
 		}
-		console.log("on set l'ignore list");
 		kiwi.connections.active_connection.set("ignore_list",ignorelist);
-		console.log("ignore list = "+kiwi.connections.active_connection.get("ignore_list"));
-	
 	});
 	
-(function () {
+	$("#kiwi .app_tools .main").prepend('<li><i id="ignorelist" class="fa fa-ban" title="Liste des ignorés"></i></li>');
+
+	(function () {
         var view = Backbone.View.extend({
             events: {
             },
@@ -61,31 +53,19 @@ var net = kiwi.components.Network()
 				
                 this.model.on('applet_loaded', function () {
                     that.$el.parent().css('height', '100%');
-					
-					console.log(kiwi.connections.active_connection.get("ignore_list"));
-					
+										
 					that.showIgnore();
                 });
-				
-				
-				
             },
 			
-			showIgnore : function()
-			{
+			showIgnore : function() {
 				var tab = kiwi.connections.active_connection.get("ignore_list");
 				
-				for(var i = 0; i<tab.length;i++)
-				{
+				for(var i = 0; i<tab.length;i++) {
 					if($(".ignorelist_name:contains('"+tab[i]+"')").length == 0)
 					$(".ignorelist_list").append('<tr><td class="ignorelist_name">'+tab[i]+'</td><td class="ignorelist_num_users">21/05/2014</td><td class="ignorelist_action"><button class="btn btn-warning btn-xs ignorelist_remove" data-nn="'+tab[i]+'">Effacer</button></td></tr>');
 				}
-			}
-			
-		
-			
-			
-			
+			}			
         });
 
 
@@ -98,36 +78,22 @@ var net = kiwi.components.Network()
                 this.view = new view({model: this});
 
                 this.on('applet_loaded', function () {
-                  
-				  
-				  that.startApplet();
+					that.startApplet();
                 });
-
             },
 
 
             startApplet: function() {
-
-            }
-			
-		
+            }		
         });
 
-
         kiwi.components.Applet.register('canvas_ignore', applet);
-		
-        
     })();
 	
-	$(document).on("click",".applets li", function() 
-	{
-		
-		if(kiwi.panels().active.get("title") == "Liste des ignores")
-		{
+	$(document).on("click",".applets li", function() {
+		if(kiwi.panels().active.get("title") == "Liste des ignores") {
 			var tab = kiwi.connections.active_connection.get("ignore_list");
-				
-				for(var i = 0; i<tab.length;i++)
-				{
+				for(var i = 0; i<tab.length;i++) {
 					if($(".ignorelist_name:contains('"+tab[i]+"')").length == 0)
 					$(".ignorelist_list").append('<tr><td class="ignorelist_name">'+tab[i]+'</td><td class="ignorelist_num_users">21/05/2014</td><td class="ignorelist_action"><button class="btn btn-warning btn-xs ignorelist_remove" data-nn="'+tab[i]+'">Effacer</button></td></tr>');
 				}
@@ -136,48 +102,27 @@ var net = kiwi.components.Network()
 	
 
 	
-	$(document).on("change",".close_menu input", function() 
-	{
+	$(document).on("change",".close_menu input", function() {
 		var tab = kiwi.connections.active_connection.get("ignore_list");
 		ignorelist_data.set('ignore_list',tab);
 		ignorelist_data.save();
-		console.log("datastore2 : " + ignorelist_data.get('ignore_list'));
 	});
 	
 	
 	
-	$(document).on("click",".ignorelist_remove",function()
-	{
-		console.log("on efface " + $(this).attr("data-nn"));
+	$(document).on("click",".ignorelist_remove",function() {
 		var tab = kiwi.connections.active_connection.get("ignore_list");
 		var n = tab.indexOf($(this).attr("data-nn")); 
 		tab.splice(n,1);
 		kiwi.connections.active_connection.set("ignore_list",tab);
 		ignorelist_data.set('ignore_list',tab);
 		ignorelist_data.save();
-		console.log("datastore : " + ignorelist_data.get('ignore_list'));
-		console.log(kiwi.connections.active_connection.get("ignore_list"));
 		
 		$(this).parent().parent().remove();
 	});
 	
-	$(document).on("click","#ignorelist", function()
-	{
-		kiwi.components.Applet.loadOnce('canvas_ignore').view.show();
-		
-		
-	});
-	
-	$(document).on("click",".part", function()
-	{
-		console.log(kiwi.panels().active.get("title"));
-		
-		if (kiwi.panels().active.isApplet()) 
-		{
-			console.log("on quit un applet");
-			var arr = kiwi.panels();
-			arr[0].view.show();
-		}
+	$(document).on("click","#ignorelist", function() {
+		kiwi.components.Applet.loadOnce('canvas_ignore').view.show();		
 	});
 });
 </script> 
