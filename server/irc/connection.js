@@ -80,7 +80,7 @@ var IrcConnection = function (hostname, port, ssl, nick, user, options, state, c
     this.con_num = con_num;
 
     // IRC protocol handling
-    this.irc_commands = new IrcCommands(this);
+    this.irc_commands = new IrcCommands.Handler(this);
 
     // IrcServer object
     this.server = new IrcServer(this, hostname, port);
@@ -349,13 +349,12 @@ IrcConnection.prototype.clientEvent = function (event_name, data, callback) {
  * @param data The line of data to be sent
  * @param force Write the data now, ignoring any write queue
  */
-IrcConnection.prototype.write = function (data, force) {
-    //console.log('WRITE', data);
+IrcConnection.prototype.write = function (data, force, force_complete_fn) {
     //ENCODE string to encoding of the server
     var encoded_buffer = iconv.encode(data + '\r\n', this.encoding);
 
     if (force) {
-        this.socket.write(encoded_buffer);
+        this.socket.write(encoded_buffer, force_complete_fn);
         return;
     }
 
@@ -420,6 +419,8 @@ IrcConnection.prototype.flushWriteBuffer = function () {
  * Close the connection to the IRCd after forcing one last line
  */
 IrcConnection.prototype.end = function (data) {
+    var that = this;
+
     if (!this.socket) {
         return;
     }
@@ -427,10 +428,31 @@ IrcConnection.prototype.end = function (data) {
     this.requested_disconnect = true;
 
     if (data) {
-        this.write(data, true);
+        // Once the last bit of data has been sent, then re-run this function to close the socket
+        this.write(data, true, function() {
+            that.end();
+        });
+
+        return;
     }
 
     this.socket.end();
+};
+
+
+
+/**
+ * Check if any server capabilities are enabled
+ */
+IrcConnection.prototype.capContainsAny = function (caps) {
+    var enabled_caps;
+
+    if (!caps instanceof Array) {
+        caps = [caps];
+    }
+
+    enabled_caps = _.intersection(this.cap.enabled, caps);
+    return enabled_caps.length > 0;
 };
 
 
@@ -843,5 +865,5 @@ function parseIrcLine(buffer_line) {
         msg_obj.params.push(msg[8].trim());
     }
 
-    this.irc_commands.dispatch(msg_obj.command.toUpperCase(), msg_obj);
+    this.irc_commands.dispatch(new IrcCommands.Command(msg_obj.command.toUpperCase(), msg_obj));
 }

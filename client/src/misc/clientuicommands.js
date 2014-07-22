@@ -75,6 +75,7 @@
         'command:kick':        kickCommand,
         'command:clear':       clearCommand,
         'command:ctcp':        ctcpCommand,
+        'command:quit':        quitCommand,
         'command:server':      serverCommand,
         'command:whois':       whoisCommand,
         'command:whowas':      whowasCommand,
@@ -517,6 +518,16 @@
     }
 
 
+    function quitCommand (ev) {
+        var network = this.app.connections.active_connection;
+
+        if (!network)
+            return;
+
+        network.gateway.quit(ev.params.join(' '));
+    }
+
+
     function serverCommand (ev) {
         var that = this,
             server, port, ssl, password, nick,
@@ -574,7 +585,10 @@
             host: server,
             port: port,
             ssl: ssl,
-            password: password
+            password: password,
+            age: age,
+            gender: gender,
+            location: location
         }, function(err, new_connection) {
             var translated_err_text = {text: translateText('client_models_application_connection_error', [server, port.toString(), err.toString()])};
 

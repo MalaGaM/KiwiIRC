@@ -44,15 +44,12 @@
 	$("div.controlbox").prepend("<div id='emoticon-box'></div>");
 	generar_iconos();
 	$("#emoticon-button").click(function () {
-		$('#emoticon-box').toggle("fast",function()
-		{
+		$('#emoticon-box').toggle("fast",function() {
 				var h = $(".controlbox").height();
 				$(".memberlists_resize_handle").css("bottom",h+"px");
 				$(".right_bar").css("bottom",h+"px");
 				$(".panels").css("bottom",h+"px");
-			
 		});
-		
 	});
 
     $(".emoticonoindividual").click(function () {

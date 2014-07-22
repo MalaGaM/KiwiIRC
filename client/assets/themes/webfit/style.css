@@ -259,14 +259,20 @@ font-weight: normal;
 #kiwi .messages .msg .nick { width:11em; float:left; font-family:Arial; text-align:right; padding: 5px 5px 5px 0; overflow:hidden; }
 #kiwi .messages .msg .text { display:block; margin-left:12em; border-left: 1px solid #DEDEDE; white-space:pre-wrap; word-wrap:break-word; font-family:arial; padding:5px; }
 
-#kiwi .messages .msg.action .text { color:#d58512; border-left:none; font-style:italic; }
-#kiwi .messages .msg.action.nick .text { color:#009900; }
-#kiwi .messages .msg.action.join .text { color:#009900; }
-#kiwi .messages .msg.action.part .text { color:#900; }
-#kiwi .messages .msg.action.quit .text { color:#900; }
-#kiwi .messages .msg.action.kick .text { color:#900; }
+#kiwi .messages .msg.action .text { color:#E14AF1; border-left:none; font-style:italic; }
+#kiwi .messages .msg.action.nick .text { color:#f17f49; }
+#kiwi .messages .msg.action.join .text { color:#55a532; }
+#kiwi .messages .msg.action.part .text { color:#bd2c00; }
+#kiwi .messages .msg.action.quit .text { color:#bd2c00; }
+#kiwi .messages .msg.action.kick .text { color:#bd2c00; }
 #kiwi .messages .msg.status .nick { }
 #kiwi .messages .msg.status .text { color:#990000; margin-left:9em; border-left:none; font-weight:bold; }
+#kiwi .messages .msg.topic {
+    margin: 10px;
+    background: #fcf8e3;
+    border: 1px solid #F3C572;
+    border-radius: 5px;
+}
 #kiwi .messages .msg.topic .nick { display:none; }
 #kiwi .messages .msg.topic .text { color:#009900; margin-left:9em; font-style: italic; border-left:none; }
 #kiwi .messages .msg.motd { border:none; }
@@ -310,7 +316,7 @@ font-weight: normal;
     float: left;
 }
 
-#kiwi .messages .notice {color: #7f3e3e}
+#kiwi .messages .notice {color: #f17f49}
 
 #kiwi .messages .msg .media.twitter .media_content > .content {
     background: transparent;
@@ -425,7 +431,7 @@ font-weight: normal;
 
 
 
-#kiwi .toolbar .topic {padding-bottom: 1px; background-color: #428bca;  }
+#kiwi .toolbar .topic {padding-bottom: 1px; background-color: #eee;}
 #kiwi .toolbar .topic div {
     top:2; bottom:2px; left:0; width:100%;
     padding: 0.2em 1em;
@@ -471,6 +477,8 @@ font-weight: normal;
     width: 196px;
     margin: 20px auto;
     display: block;
+    background: #428bca;
+    color: #fff;
 }
 #kiwi .server_select input { padding:3px 7px; width:150px; }
 #kiwi .server_select label { }

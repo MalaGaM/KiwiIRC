@@ -38,6 +38,13 @@ _kiwi.view.ControlBox = Backbone.View.extend({
         });
     },
 
+    render: function() {
+        var send_message_text = translateText('client_views_controlbox_message');
+        this.$('.inp').attr('placeholder', send_message_text);
+
+        return this;
+    },
+
     showNickChange: function (ev) {
         // Nick box already open? Don't do it again
         if (this.nick_change)
@@ -239,6 +246,12 @@ _kiwi.view.ControlBox = Backbone.View.extend({
     processInput: function (command_raw) {
         var command, params,
             pre_processed;
+
+        // If sending a message when not in a channel or query window, automatically
+        // convert it into a command
+        if (command_raw[0] !== '/' && !_kiwi.app.panels().active.isChannel() && !_kiwi.app.panels().active.isQuery()) {
+            command_raw = '/' + command_raw;
+        }
 
         // The default command
         if (command_raw[0] !== '/' || command_raw.substr(0, 2) === '//') {
