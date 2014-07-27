@@ -12,6 +12,7 @@ var net             = require('net'),
     EE              = require('../ee.js'),
     iconv           = require('iconv-lite'),
     Proxy           = require('../proxy.js'),
+    Stats           = require('../stats.js'),
     Socks;
 
 
@@ -32,6 +33,8 @@ var IrcConnection = function (hostname, port, ssl, nick, user, options, state, c
     });
     this.setMaxListeners(0);
 
+    Stats.incr('irc.connection.created');
+
     options = options || {};
 
     // Socket state
@@ -39,6 +42,9 @@ var IrcConnection = function (hostname, port, ssl, nick, user, options, state, c
 
     // If the connection closes and this is false, we reconnect
     this.requested_disconnect = false;
+
+    // Number of times we have tried to reconnect
+    this.reconnect_attempts = 0;
 
     // IRCd write buffers (flood controll)
     this.write_buffer = [];
@@ -48,9 +54,6 @@ var IrcConnection = function (hostname, port, ssl, nick, user, options, state, c
 
     // Max number of lines to write a second
     this.write_buffer_lines_second = 2;
-
-    // If registeration with the IRCd has completed
-    this.registered = false;
 
     // If we are in the CAP negotiation stage
     this.cap_negotiation = true;
@@ -287,6 +290,7 @@ IrcConnection.prototype.connect = function () {
                 rawSocketConnect.call(that, this);
             }
 
+            Stats.incr('irc.connection.connected');
             that.connected = true;
 
             socketConnectHandler.call(that);
@@ -303,7 +307,7 @@ IrcConnection.prototype.connect = function () {
         that.socket.on('close', function socketCloseCb(had_error) {
             // If that.connected is false, we never actually managed to connect
             var was_connected = that.connected,
-                had_registered = that.server.registered,
+                safely_registered = (new Date()) - that.server.registered > 10000, // Safely = registered + 10secs after.
                 should_reconnect = false;
 
             that.connected = false;
@@ -314,12 +318,26 @@ IrcConnection.prototype.connect = function () {
                 delete global.clients.port_pairs[that.identd_port_pair];
             }
 
-            should_reconnect = (!that.requested_disconnect && was_connected && had_registered);
+            // If trying to reconnect, continue with it
+            if (that.reconnect_attempts && that.reconnect_attempts < 3) {
+                should_reconnect = true;
+
+            // If this was an unplanned disconnect and we were originally connected OK, reconnect
+            } else if (!that.requested_disconnect  && was_connected && safely_registered) {
+                should_reconnect = true;
+
+            } else {
+                should_reconnect = false;
+            }
 
             if (should_reconnect) {
+                Stats.incr('irc.connection.reconnect');
+                that.reconnect_attempts++;
                 that.emit('reconnecting');
             } else {
+                Stats.incr('irc.connection.closed');
                 that.emit('close', had_error);
+                that.reconnect_attempts = 0;
             }
 
             // Close the whole socket down
@@ -330,7 +348,7 @@ IrcConnection.prototype.connect = function () {
             if (should_reconnect) {
                 setTimeout(function() {
                     that.connect();
-                }, 3000);
+                }, 4000);
             }
         });
     });
