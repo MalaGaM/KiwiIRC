@@ -38,8 +38,6 @@
         submitNickserv: function(event) {
             event.preventDefault();
 
-            console.log('pass', this.$(".nickserv_password").val());
-
             if(this.$(".nickserv_password").val() != "") {
                 network.msg(nickserv_nick, 'identify ' + this.$(".nickserv_password").val())
             };
