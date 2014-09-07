@@ -14,38 +14,37 @@
 
     var nickServModalView = Backbone.View.extend({
         events: {
-            // I've not succeeded making this event get listened to.
-            // For now it's idle and replaced by $('#nickserv_auth').submit()
             'submit form': 'submitNickserv'
         },
 
         // Build the modal box
         render: function() {
             var modalbox = new kiwi.components.MenuBox(this.model.locale.translate('identification').fetch());
-            this.$el = $('<form id="nickserv_auth" method="POST">\
+            this.$el.html('<form class="nickserv_auth" method="POST">\
                             <div>\
                                 <p>' + this.model.locale.translate('registered_nick_identify').fetch() + '</p>\
                                 <p class="warning"></p> \
-                                <input type="password" placeholder="Mot de passe" id="nickserv_password">\
-                                <button id="nickserv_submit" class="btn btn-primary">' + this.model.locale.translate('submit').fetch() + '</button>\
+                                <input type="password" placeholder="Mot de passe" class="nickserv_password">\
+                                <button class="nickserv_submit" class="btn btn-primary">' + this.model.locale.translate('submit').fetch() + '</button>\
                             </div>\
                         </form>');
 
             modalbox.addItem(this.model.locale.translate('identification').fetch(), this.$el);
             modalbox.show();
 
-            $('#nickserv_password').focus();
+            this.$('.nickserv_password').focus();
+        },
 
+        submitNickserv: function(event) {
+            event.preventDefault();
 
-            // Do the nickserv authentification
-            $('#nickserv_auth').submit({nickserv_nick: nickserv_nick}, function(event){
-                event.preventDefault();
+            console.log('pass', this.$(".nickserv_password").val());
 
-                if($("#nickserv_password").val() != "") {
-                    network.msg(nickserv_nick, 'identify '+$("#nickserv_password").val())
-                };
-            });
-        }
+            if(this.$(".nickserv_password").val() != "") {
+                network.msg(nickserv_nick, 'identify ' + this.$(".nickserv_password").val())
+            };
+
+        }        
     });
 
     var nickServModal = Backbone.Model.extend({
