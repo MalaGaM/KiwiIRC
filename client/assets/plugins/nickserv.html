@@ -10,6 +10,7 @@
 </style>
 <script>
 (function () {
+    // Configure the NickServ
     var nickserv_nick = "NickServ";
 
     var nickServModalView = Backbone.View.extend({
@@ -39,7 +40,7 @@
             event.preventDefault();
 
             if(this.$(".nickserv_password").val() != "") {
-                network.msg(nickserv_nick, 'identify ' + this.$(".nickserv_password").val())
+                this.model.trigger('identify', this.$(".nickserv_password").val()); 
             };
 
         }        
@@ -95,6 +96,8 @@
                 that.parseMessage(event, nickserv_nick);
             });
 
+            this.bind('identify', this.nickservIdentify);
+
             this.view = new nickServModalView({model: this});
         },
 
@@ -144,6 +147,11 @@
             }
 
             this.boxTriggered = false;
+        },
+
+        // This sends the nickserv identify command
+        nickservIdentify: function() {
+            this.network.msg(nickserv_nick, 'identify ' + this.view.$(".nickserv_password").val())
         }
     });
 
