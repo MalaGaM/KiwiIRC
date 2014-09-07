@@ -3,7 +3,7 @@
  * Rework by Cory Chaplin <elephantman@europnet.org>
 -->
 <style type="text/css">
-    #kiwi #nickserv_auth .warning {
+    #kiwi .nickserv_auth .warning {
         color: #F00;
         font-weight: bold;
     }
@@ -19,7 +19,7 @@
 
         // Build the modal box
         render: function() {
-            var modalbox = new kiwi.components.MenuBox(this.model.locale.translate('identification').fetch());
+            this.modalbox = new kiwi.components.MenuBox(this.model.locale.translate('identification').fetch());
             this.$el.html('<form class="nickserv_auth" method="POST">\
                             <div>\
                                 <p>' + this.model.locale.translate('registered_nick_identify').fetch() + '</p>\
@@ -29,8 +29,8 @@
                             </div>\
                         </form>');
 
-            modalbox.addItem(this.model.locale.translate('identification').fetch(), this.$el);
-            modalbox.show();
+            this.modalbox.addItem(this.model.locale.translate('identification').fetch(), this.$el);
+            this.modalbox.show();
 
             this.$('.nickserv_password').focus();
         },
@@ -109,9 +109,9 @@
                     this.boxState = 'close';
                 } else if(event.msg.search(/Password incorrect/) >= 0 || 
                             event.msg.search(/Mot de passe incorrect/) >= 0) { // Bad password
-                     $("#nickserv_auth .warning").html(this.locale.translate('bad_password').fetch());
-                     $("#nickserv_auth .warning").show();
-                     this.boxState = 'open';
+                    this.view.$(".nickserv_auth .warning").html(this.locale.translate('bad_password').fetch());
+                    this.view.$(".nickserv_auth .warning").show();
+                    this.boxState = 'open';
                 } else if(event.msg.search(/Your nickname is now being changed to/) >= 0 || 
                             event.msg.search(/pseudo est maintenant chang/) >= 0) { // Nick changed
                     this.boxState = 'close';
@@ -135,11 +135,10 @@
 
         // This toggles the modal box
         doToggleModalBox: function() {
-            if(this.boxState == 'open' && $('#nickserv_auth').length == 0) {
-                //this.modalBox(); // Create the modal
-                this.view.render();
+            if(this.boxState == 'open' && !this.view.$el.is(':visible')) {
+                this.view.render(); // Create the modal
             } else if(this.boxState == 'close') {
-                $('.ui_menu_foot .close').click(); // Close the modal
+                this.view.modalbox.dispose(); // Close the modal
             } else {
                 this.boxState = ''; // Do nothing
             }
