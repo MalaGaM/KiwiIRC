@@ -84,6 +84,13 @@ conf.default_encoding = 'utf8';
 //conf.default_gecos = 'Web IRC Client';
 
 
+/*
+* Auto reconnect if the IRC server disconnects a kiwi user
+* Hundreds of connected users getting disconnected then reconnecting at once may see
+* high CPU usage causing further dropouts. Set to false if under high usage.
+*/
+conf.ircd_reconnect = true;
+
 
 /*
  * Client side plugins
@@ -106,11 +113,14 @@ conf.modules = [];
 
 
 
-// WebIRC passwords enabled for this server
-conf.webirc_pass = {
-    //"irc.network.com":  "configured_webirc_password",
-    //"127.0.0.1":        "foobar"
-};
+// WebIRC password enabled for this server
+//conf.webirc_pass = "foobar";
+
+// Multiple WebIRC passwords may be used for multiple servers
+//conf.webirc_pass = {
+//    "irc.network.com":  "configured_webirc_password",
+//    "127.0.0.1":        "foobar"
+//};
 
 // Some IRCDs require the clients IP via the username/ident
 conf.ip_as_username = [

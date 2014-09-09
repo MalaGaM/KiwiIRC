@@ -46,6 +46,9 @@ var IrcConnection = function (hostname, port, ssl, nick, user, options, state, c
     // Number of times we have tried to reconnect
     this.reconnect_attempts = 0;
 
+    // Last few lines from the IRCd for context when disconnected (server errors, etc)
+    this.last_few_lines = [];
+
     // IRCd write buffers (flood controll)
     this.write_buffer = [];
 
@@ -318,37 +321,42 @@ IrcConnection.prototype.connect = function () {
                 delete global.clients.port_pairs[that.identd_port_pair];
             }
 
-            // If trying to reconnect, continue with it
-            if (that.reconnect_attempts && that.reconnect_attempts < 3) {
-                should_reconnect = true;
-
-            // If this was an unplanned disconnect and we were originally connected OK, reconnect
-            } else if (!that.requested_disconnect  && was_connected && safely_registered) {
-                should_reconnect = true;
-
-            } else {
-                should_reconnect = false;
-            }
-
-            if (should_reconnect) {
-                Stats.incr('irc.connection.reconnect');
-                that.reconnect_attempts++;
-                that.emit('reconnecting');
-            } else {
-                Stats.incr('irc.connection.closed');
-                that.emit('close', had_error);
-                that.reconnect_attempts = 0;
-            }
-
             // Close the whole socket down
             that.disposeSocket();
 
-            // If this socket closing was not expected and we did actually connect and
-            // we did previously completely register on the network, then reconnect
-            if (should_reconnect) {
-                setTimeout(function() {
-                    that.connect();
-                }, 4000);
+            if (!global.config.ircd_reconnect) {
+                that.emit('close', had_error);
+
+            } else {
+                // If trying to reconnect, continue with it
+                if (that.reconnect_attempts && that.reconnect_attempts < 3) {
+                    should_reconnect = true;
+
+                // If this was an unplanned disconnect and we were originally connected OK, reconnect
+                } else if (!that.requested_disconnect  && was_connected && safely_registered) {
+                    should_reconnect = true;
+
+                } else {
+                    should_reconnect = false;
+                }
+
+                if (should_reconnect) {
+                    Stats.incr('irc.connection.reconnect');
+                    that.reconnect_attempts++;
+                    that.emit('reconnecting');
+                } else {
+                    Stats.incr('irc.connection.closed');
+                    that.emit('close', had_error);
+                    that.reconnect_attempts = 0;
+                }
+
+                // If this socket closing was not expected and we did actually connect and
+                // we did previously completely register on the network, then reconnect
+                if (should_reconnect) {
+                    setTimeout(function() {
+                        that.connect();
+                    }, 4000);
+                }
             }
         });
     });
@@ -724,18 +732,25 @@ var socketConnectHandler = function () {
 function findWebIrc(connect_data) {
     var webirc_pass = global.config.webirc_pass,
         ip_as_username = global.config.ip_as_username,
-        tmp;
+        found_webirc_pass, tmp;
 
 
-    // Do we have a WEBIRC password for this?
-    if (webirc_pass && webirc_pass[this.irc_host.hostname]) {
+    // Do we have a single WEBIRC password?
+    if (typeof webirc_pass === 'string') {
+        found_webirc_pass = webirc_pass;
+
+    // Do we have a WEBIRC password for this hostname?
+    } else if (typeof webirc_pass === 'object' && webirc_pass[this.irc_host.hostname]) {
+        found_webirc_pass = webirc_pass[this.irc_host.hostname];
+    }
+
+    if (found_webirc_pass) {
         // Build the WEBIRC line to be sent before IRC registration
         tmp = 'WEBIRC ' + webirc_pass[this.irc_host.hostname] + ' KiwiIRC ';
         tmp += this.user.hostname + ' ' + this.user.address;
 
         connect_data.prepend_data = [tmp];
     }
-
 
     // Check if we need to pass the users IP as its username/ident
     if (ip_as_username && ip_as_username.indexOf(this.irc_host.hostname) > -1) {
@@ -842,7 +857,8 @@ function parseIrcLine(buffer_line) {
         tags = [],
         tag,
         line = '',
-        msg_obj;
+        msg_obj,
+        hold_last_lines;
 
     // Decode server encoding
     line = iconv.decode(buffer_line, this.encoding);
@@ -859,6 +875,18 @@ function parseIrcLine(buffer_line) {
         return;
     }
 
+    // If enabled, keep hold of the last X lines
+    if (global.config.hold_ircd_lines) {
+        this.last_few_lines.push(line.replace(/^\r+|\r+$/, ''));
+
+        // Trim the array down if it's getting to long. (max 3 by default)
+        hold_last_lines = parseInt(global.config.hold_ircd_lines, 10) || 3;
+
+        if (this.last_few_lines.length > hold_last_lines) {
+            this.last_few_lines = this.last_few_lines.slice(this.last_few_lines.length - hold_last_lines);
+        }
+    }
+
     // Extract any tags (msg[1])
     if (msg[1]) {
         tags = msg[1].split(';');
@@ -872,8 +900,8 @@ function parseIrcLine(buffer_line) {
     msg_obj = {
         tags:       tags,
         prefix:     msg[2],
-        nick:       msg[3],
-        ident:      msg[4],
+        nick:       msg[3] || msg[2],  // Nick will be in the prefix slot if a full user mask is not used
+        ident:      msg[4] || '',
         hostname:   msg[5] || '',
         command:    msg[6],
         params:     msg[7] ? msg[7].split(/ +/) : []
