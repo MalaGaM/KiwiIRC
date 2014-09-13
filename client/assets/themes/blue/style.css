@@ -128,6 +128,14 @@
     /*display:none; width:0;*/;
 }
 
+#kiwi .toolbar .connections { list-style: none; }
+#kiwi .toolbar .panellist {
+    background: none;
+    color: #a5a5a5;
+    margin: 5px 0 0 5px;
+    float: left;
+}
+#kiwi .toolbar .panellist.applets { }
 #kiwi .toolbar .panellist li {
     display: inline-block;
     padding: 6px 10px;
@@ -227,6 +235,8 @@
 
 #kiwi .toolbar .panellist li.server span {
     padding-left: 5px;
+    font-weight: bold;
+    font-family: Arial,Helvetica,sans-serif;
 }
 
 #kiwi.connected .toolbar .panellist li.server:before {
@@ -286,7 +296,7 @@
 #kiwi .status_message {
     background: #FEEFB3;
     color: #9F6000;
-    border-bottom: 1px solid;
+    border-bottom: 1px solid #d7bb71;
     padding: 0.9em;
     text-align: center;
     font-size: 1.1em;
@@ -459,19 +469,13 @@
 #kiwi .messages .msg.repeated_nick .nick {
 }
 
-/* Narrow styling (window width < 400px) */
-#kiwi.narrow .messages .msg .nick {
-    width: auto;
-}
+/* Narrow styling (window width < 420px) */
+#kiwi.narrow .messages .msg .time { display:none; }
+#kiwi.narrow .messages .msg .nick { display:block; float:none; text-align:left; padding-bottom:0;}
+#kiwi.narrow .messages .msg .text { display:block; white-space:pre-wrap; word-wrap:break-word; padding-top:0; margin:0;}
+#kiwi.narrow .messages .msg.action .text { }
+#kiwi.narrow .messages .msg.repeated_nick .nick { display:none; }
 
-#kiwi.narrow .messages .msg .text {
-    margin-left: 1em;
-    border: none;
-}
-
-#kiwi.narrow .messages .msg.action .text {
-    margin-left: 1em;
-}
 
 #kiwi .messages .msg .media {
     margin-left: 0.5em;
@@ -536,9 +540,16 @@
     border-left: 1px dashed #ccc;
 }
 
+#kiwi.narrow .right_bar { 
+    width:100%;
+}
+#kiwi.narrow .right_bar.disabled {
+    width:0;
+}
 #kiwi .right_bar.disabled {
     width: 0;
 }
+#kiwi .memberlists {}
 
 #kiwi .memberlists .meta {
     background: #428bca;
@@ -555,6 +566,12 @@
 }
 
 #kiwi .memberlists ul.active {
+}
+
+#kiwi.narrow .memberlists ul li {
+    padding: 0.5em 1em;
+    border-bottom: 1px solid lightgray;
+    text-align: center;
 }
 
 #kiwi .memberlists ul li {
@@ -627,6 +644,9 @@
     background: #428bca;
     color: #FFF;
 }
+
+#kiwi.narrow .controlbox .input .nick { display:none; }
+#kiwi.narrow .controlbox .input .input_wrap { left:7px; }
 
 #kiwi .controlbox .input .nick:after {
     content: ">";
@@ -708,7 +728,7 @@
     word-wrap: break-word;
     overflow: visible;
  /*   background-color:#d9edf7; */
-    z-index: 1;
+    z-index: 10;
     height: auto;
     bottom: auto;
     border-bottom: 1px dotted #3071a9;
@@ -724,7 +744,8 @@
     -webkit-transition: all .3s ease;
        -moz-transition: all .3s ease;
             transition: all .3s ease;
-    margin-left: 10px;
+    margin: 10px 0 0 10px;
+    float: left;
 }
 
 #kiwi .toolbar .app_tools ul li:hover {
