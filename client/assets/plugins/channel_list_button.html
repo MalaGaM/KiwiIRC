@@ -1,7 +1,4 @@
 <style type="text/css">
-	#kiwi .toolbar .app_tools {width: auto !important; padding-right: 10px;}
-	#kiwi .toolbar .tabs {margin-right: 1px!important;}
-	#kiwi .toolbar .app_tools ul li {margin-left: 5px!important;}
 </style>
 <script type="text/javascript">
 	// Add a channel list button in the toolbar
@@ -12,16 +9,8 @@
 	        initialize: function (options) {
 				// Add channel list button
 				if(!channelButtonAdded) {
-					/*$(".main").prepend('<li><button class="btn btn-primary" id="chanlist">' +
-							   kiwi.i18n.translate('client_applets_chanlist_channellist').fetch() +
-							   '</button></li>');*/
-					$(".main").prepend('<li><i id="chanlist" title="'+kiwi.i18n.translate('client_applets_chanlist_channellist').fetch()+'" class="fa fa-comments"></i></li>');
-			
-					//this.styleChannelListButton();
+					$(".main").prepend('<li id="chanlist"><button class="btn btn-primary"><i title="Liste des salons" class="fa fa-comments"></i><span class="button-text">&nbsp;Salons</span></button></li>');
 				}
-				
-				// Listen to layout change to adjust the button
-				kiwi.settings.on('change:channel_list_style', this.styleChannelListButton);
 				
 				// Add the action on the button
 				$(document).on("click","#chanlist",function() {
@@ -32,30 +21,7 @@
 						kiwi.components.Applet.loadOnce('kiwi_chanlist').view.show();
 					}
 				});
-			},
-			
-			// Adjust the css for the button
-			styleChannelListButton: function() {
-				if(kiwi.settings.get('theme') == 'relaxed') {
-					// First reset styles if we've already built the button
-					if (channelButtonAdded) {
-						if(kiwi.settings.get('channel_list_style') == 'list') {
-							$('#kiwi .toolbar .app_tools').css({'top': '0'});
-						} else if (kiwi.settings.get('channel_list_style') == 'tabs') {
-							$('#kiwi .toolbar .app_tools').css({'padding-top': '0', 'margin-bottom': '0'});
-							$('#kiwi .panels').css('top', '100px !important');
-						}
-					}
-					
-					if(kiwi.settings.get('channel_list_style') == 'tabs') {
-						$("#kiwi .toolbar .app_tools").css({position: "relative"});
-					} else if (kiwi.settings.get('channel_list_style') == 'list') {
-						$('#kiwi .toolbar .app_tools').css({'padding-top': '7px', 'margin-bottom': '7px'});
-					}
-				}
-				
-				channelButtonAdded = true;
-			}			
+			}
 		});
 		
 		new View();

@@ -3,16 +3,67 @@
 	(function () {
 	    var View = Backbone.View.extend({
 	        initialize: function (options) {
-				/*$(".settings").html('<button class="btn btn-primary">' +
-									kiwi.i18n.translate('client_applets_settings_title').fetch() +
-									'</button>');*/
-				/*if(kiwi.settings.get('channel_list_style') == 'tabs') {
-					$('#kiwi .toolbar .app_tools').css('width', '+=60px');
-					$('#kiwi .toolbar .tabs').css('margin-right', '+=60px');
-				}*/
+				$(".settings").html('<button class="btn btn-primary"><i title="Settings" class="fa fa-cogs"></i><span class="button-text">&nbsp;Options</span></button>');
+
+				// This part is to resize the buttons when there's not enough space - Not relevant in treeview
+				if($('#kiwi.chanlist_treeview').length == 0) {
+					// Each time a new panel is created, re-check available space
+					kiwi.events.on('panel:created', function() {
+						// Leave a bit of time for all the plugins to execute
+						setTimeout(function() {
+							var toolbar_width = $('#kiwi .toolbar').width(),
+								app_tools_width = $('#kiwi .app_tools').width(),
+								pannellist_length = $('#kiwi .connections .panellist li').length + 1,
+								pannellist_width = pannellist_length * 120;
+							
+							if(kiwi.settings.get('theme') == 'webfit' || kiwi.settings.get('theme') == 'blue') {
+								var toolbar_avail_width = toolbar_width - app_tools_width - 120;
+							} else {
+								pannellist_width = pannellist_length * 100;
+								var toolbar_avail_width = toolbar_width - app_tools_width;
+							}
+
+							// If we're short on space, remove buttons labels
+							if(pannellist_width > toolbar_avail_width) {
+								$('#kiwi .button-text').addClass('hidden', function() {
+									// Make sure everything redraws neatly
+									$(window).trigger('resize');
+								});
+								$('#kiwi .app_tools .btn').addClass('tooltip');
+							} else { // If enough space, put buttons labels back
+								$('#kiwi .button-text').removeClass('hidden', function() {
+									// Make sure everything redraws neatly
+									$(window).trigger('resize');
+								});
+								$('#kiwi .app_tools .btn').removeClass('tooltip');
+							}
+						}, 20);
+					});
+				}
 			}
 		});
 		
 		new View();
 	})();
 </script>
+
+<style>
+	#kiwi .toolbar .tabs {margin-right: 1px!important;}
+	#kiwi .toolbar .app_tools {width: auto !important; padding-right: 10px;}
+	#kiwi .toolbar .app_tools ul li {margin-left: 5px!important;}
+	#kiwi .toolbar .app_tools img {margin: 2px 0 0 0;}
+	#kiwi.chanlist_treeview .toolbar .app_tools {margin-top: 0;}
+	#kiwi .btn .hidden {display: none;}
+	#kiwi button.tooltip:hover span {
+		display:inline; 
+		position:absolute; 
+		color:#111; 
+		border:1px solid #DCA; 
+		background:#fffAF0;
+		border-radius:4px; 
+		margin-left: -30px;
+		margin-top: 30px;
+		padding: 2px;
+		z-index: 100;
+	}
+</style>

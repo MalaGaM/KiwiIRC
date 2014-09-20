@@ -40,7 +40,7 @@ kiwi.plugins.on('loaded', function() {
 		kiwi.connections.active_connection.set("ignore_list",ignorelist);
 	});
 	
-	$("#kiwi .app_tools .main").prepend('<li><i id="ignorelist" class="fa fa-ban" title="Liste des ignorés"></i></li>');
+	$("#kiwi .app_tools .main").prepend('<li id="ignorelist"><button class="btn btn-primary"><i class="fa fa-ban" title="Liste des ignorés"></i><span class="button-text">&nbsp;Ignorés</span></button></li>');
 
 	(function () {
         var view = Backbone.View.extend({
