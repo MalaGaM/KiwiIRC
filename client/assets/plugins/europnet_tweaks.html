@@ -25,16 +25,18 @@
 
 							// If we're short on space, remove buttons labels
 							if(pannellist_width > toolbar_avail_width) {
-								$('#kiwi .button-text').addClass('hidden', function() {
-									// Make sure everything redraws neatly
-									$(window).trigger('resize');
-								});
+								$('#kiwi .button-text').addClass('hidden');
+								
+								// Make sure everything redraws neatly
+								$(window).trigger('resize');
+								
 								$('#kiwi .app_tools .btn').addClass('tooltip');
 							} else { // If enough space, put buttons labels back
-								$('#kiwi .button-text').removeClass('hidden', function() {
-									// Make sure everything redraws neatly
-									$(window).trigger('resize');
-								});
+								$('#kiwi .button-text').removeClass('hidden');
+								
+								// Make sure everything redraws neatly
+								$(window).trigger('resize');
+
 								$('#kiwi .app_tools .btn').removeClass('tooltip');
 							}
 						}, 20);
