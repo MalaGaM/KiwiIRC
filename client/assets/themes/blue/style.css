@@ -26,7 +26,6 @@
 
 #kiwi button, #kiwi .ui_menu .toggle_banlist {
     display: inline-block;
-    padding: 6px 12px;
     margin-bottom: 0;
     font-size: 14px;
     font-weight: normal;
@@ -40,7 +39,7 @@
             -ms-user-select: none;
                 user-select: none;
     background-image: none;
-    background-color: #428bca;
+    background-color: #5bc0de;
     color: #FFF;
     border: 1px solid transparent;
     border-radius: 4px;
@@ -81,8 +80,8 @@
 
 #kiwi .btn-primary,  #kiwi .ui_menu .toggle_banlist {
     color: #fff;
-    background-color: #428bca;
-    border-color: #357ebd;
+    background-color: #5bc0de;
+    border-color: #5bc0de;
 }
 
 #kiwi .btn-primary:hover,
@@ -108,8 +107,8 @@
 #kiwi .btn-primary.disabled.active,
 #kiwi .btn-primary[disabled].active,
 #kiwi fieldset[disabled] .btn-primary.active {
-    background-color: #3071a9;
-    border-color: #357ebd;
+    background-color: #21B1D9;
+    border-color: #5bc0de;
 }
 
 #kiwi .toolbar {
@@ -736,6 +735,7 @@
 
 #kiwi .toolbar .app_tools {
     padding-left: 10px;
+    margin-top: 10px;
     color: #FFF;
 }
 
@@ -744,7 +744,6 @@
     -webkit-transition: all .3s ease;
        -moz-transition: all .3s ease;
             transition: all .3s ease;
-    margin: 10px 0 0 10px;
     float: left;
 }
 

@@ -26,7 +26,6 @@
 
 #kiwi button, #kiwi .ui_menu .toggle_banlist {
     display: inline-block;
-    padding: 6px 12px;
     margin-bottom: 0;
     font-size: 14px;
     font-weight: normal;
@@ -730,6 +729,7 @@
 
 #kiwi .toolbar .app_tools {
     padding-left: 10px;
+    margin-top: 10px;
     color: #D4D4D4;
     background: #eee;
 }
@@ -739,7 +739,6 @@
     -webkit-transition: all .3s ease;
     -moz-transition: all .3s ease;
     transition: all .3s ease;
-    margin: 10px 0 0 10px;
     float: left;
 }
 
@@ -879,7 +878,7 @@
 
 #kiwi.chanlist_treeview .toolbar {
     position: static;
-    background: #fff;
+    background: #eee;
 }
 
 #kiwi.chanlist_treeview .toolbar .app_tools {
@@ -901,9 +900,9 @@
     left: 0px;
     bottom: 0px;
     top: 0px;
-    margin: 3px 0 0 0;
+    margin: 0;
     width: 160px;
-    background: #fff;
+    background: #eee;
     overflow-y: auto;
     padding-top: 0px;
 }
