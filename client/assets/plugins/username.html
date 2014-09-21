@@ -38,7 +38,7 @@ kiwi.plugins.on('loaded', function() {
 
     // Create and store the username
     if (cookie == null) {
-        var prefixes = {'3': 'c-', '4': 'e-'}, // list of EuropNet's source prefixes
+        var prefixes = {'3': 'cf1-', '4': 'eu1-', '5': 'fa1-', '6': 'ad3-'}, // list of EuropNet's source prefixes
             origin = getQueryVariable('origin');
 
         if(origin != '') {
@@ -46,7 +46,7 @@ kiwi.plugins.on('loaded', function() {
         }
 
         if(prefix === undefined) {
-            prefix = 'u-';
+            prefix = 'uk1-';
         }
         var username =  prefix + kiwi.utils.randomString(8);
         // var value =  prefix + kiwi.connections.active.get('network').get('nick').substring(0, 8);
