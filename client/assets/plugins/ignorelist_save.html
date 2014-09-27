@@ -74,7 +74,7 @@ kiwi.plugins.on('loaded', function() {
             initialize: function () {
                 var that = this;
 
-                this.set('title', 'Liste des ignores');
+                this.set('title', 'Liste des ignorés');
                 this.view = new view({model: this});
 
                 this.on('applet_loaded', function () {
@@ -91,12 +91,14 @@ kiwi.plugins.on('loaded', function() {
     })();
 	
 	$(document).on("click",".applets li", function() {
-		if(kiwi.panels().active.get("title") == "Liste des ignores") {
+		if(kiwi.panels().active.get("title") == "Liste des ignorés") {
 			var tab = kiwi.connections.active_connection.get("ignore_list");
-				for(var i = 0; i<tab.length;i++) {
-					if($(".ignorelist_name:contains('"+tab[i]+"')").length == 0)
+
+			for(var i = 0; i<tab.length;i++) {
+				if($(".ignorelist_name:contains('"+tab[i]+"')").length == 0) {
 					$(".ignorelist_list").append('<tr><td class="ignorelist_name">'+tab[i]+'</td><td class="ignorelist_num_users">21/05/2014</td><td class="ignorelist_action"><button class="btn btn-warning btn-xs ignorelist_remove" data-nn="'+tab[i]+'">Effacer</button></td></tr>');
 				}
+			}
 		}
 	});
 	
