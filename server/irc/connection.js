@@ -380,7 +380,7 @@ IrcConnection.prototype.write = function (data, force, force_complete_fn) {
     var encoded_buffer = iconv.encode(data + '\r\n', this.encoding);
 
     if (force) {
-        this.socket.write(encoded_buffer, force_complete_fn);
+        this.socket && this.socket.write(encoded_buffer, force_complete_fn);
         return;
     }
 
@@ -411,7 +411,7 @@ IrcConnection.prototype.flushWriteBuffer = function () {
     // Disabled write buffer? Send everything we have
     if (!this.write_buffer_lines_second) {
         this.write_buffer.forEach(function(buffer) {
-            this.socket.write(buffer);
+            this.socket && this.socket.write(buffer);
             this.write_buffer = null;
         });
 
@@ -427,7 +427,7 @@ IrcConnection.prototype.flushWriteBuffer = function () {
         return;
     }
 
-    this.socket.write(this.write_buffer[0]);
+    this.socket && this.socket.write(this.write_buffer[0]);
     this.write_buffer = this.write_buffer.slice(1);
 
     // Call this function again at some point if we still have data to write

@@ -52,6 +52,11 @@ var Client = function (websocket, opts) {
     // Handles the kiwi.* RPC functions
     this.attachKiwiCommands();
 
+    websocket.on('message', function() {
+        // A message from the client is a sure sign the client is still alive, so consider it a heartbeat
+        that.heartbeat();
+    });
+
     websocket.on('close', function () {
         websocketDisconnect.apply(that, arguments);
     });
@@ -76,21 +81,47 @@ module.exports.Client = Client;
 
 Client.prototype.sendIrcCommand = function (command, data, callback) {
     var c = {command: command, data: data};
-    this.rpc.call('irc', c, callback);
+    this.rpc('irc', c, callback);
 };
 
 Client.prototype.sendKiwiCommand = function (command, data, callback) {
     var c = {command: command, data: data};
-    this.rpc.call('kiwi', c, callback);
+    this.rpc('kiwi', c, callback);
 };
 
 Client.prototype.dispose = function () {
     Stats.incr('client.disposed');
 
-    this.disposed = true;
+    if (this._heartbeat_tmr) {
+        clearTimeout(this._heartbeat_tmr);
+    }
+
     this.rpc.dispose();
+    this.websocket.removeAllListeners();
+
+    this.disposed = true;
     this.emit('dispose');
+
     this.removeAllListeners();
+};
+
+
+
+Client.prototype.heartbeat = function() {
+    if (this._heartbeat_tmr) {
+        clearTimeout(this._heartbeat_tmr);
+    }
+
+    // After 2 minutes of this heartbeat not being called again, assume the client has disconnected
+    console.log('resetting heartbeat');
+    this._heartbeat_tmr = setTimeout(_.bind(this._heartbeat_timeout, this), 120000);
+};
+
+
+Client.prototype._heartbeat_timeout = function() {
+    console.log('heartbeat stopped');
+    Stats.incr('client.timeout');
+    this.dispose();
 };
 
 
@@ -132,6 +163,12 @@ Client.prototype.attachKiwiCommands = function() {
         that.client_info = {
             build_version: args.build_version.toString() || undefined
         };
+    });
+
+
+    // Just to let us know the client is still there
+    this.rpc.on('kiwi.heartbeat', function(callback, args) {
+        that.heartbeat();
     });
 };
 
