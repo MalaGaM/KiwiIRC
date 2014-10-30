@@ -18,7 +18,7 @@ var State = function (client, save_state) {
         if (!that.save_state) {
             _.each(that.irc_connections, function (irc_connection, i, cons) {
                 if (irc_connection) {
-                    irc_connection.end('QUIT :' + (global.config.quit_message || ''));
+                    irc_connection.end('QUIT :' + (irc_connection.quit_message || global.config.quit_message || ''));
                     global.servers.removeConnection(irc_connection);
                     cons[i] = null;
                 }
@@ -91,7 +91,7 @@ State.prototype.connect = function (hostname, port, ssl, nick, user, options, ca
 
     // Call any modules before making the connection
     global.modules.emit('irc connecting', {state: this, connection: con})
-        .done(function () {
+        .then(function () {
             con.connect();
         });
 };

@@ -42,7 +42,6 @@ module.exports = IrcChannel;
 
 IrcChannel.prototype.dispose = function (){
     EventBinder.unbindIrcEvents('channel ' + this.name, this.irc_events, this.irc_connection);
-    this.irc_connection = undefined;
 };
 
 
@@ -55,7 +54,7 @@ function onJoin(event) {
         connection: this.irc_connection,
         irc_event: event
     })
-    .done(function() {
+    .then(function() {
         that.irc_connection.clientEvent('channel', {
             type: 'join',
             channel: that.name,
@@ -92,7 +91,7 @@ function onPart(event) {
         connection: this.irc_connection,
         irc_event: event
     })
-    .done(function() {
+    .then(function() {
         that.irc_connection.clientEvent('channel', {
             type: 'part',
             nick: event.nick,
@@ -114,7 +113,7 @@ function onKick(event) {
         connection: this.irc_connection,
         irc_event: event
     })
-    .done(function() {
+    .then(function() {
         that.irc_connection.clientEvent('channel', {
             type: 'kick',
             kicked: event.kicked,  // Nick of the kicked
@@ -137,7 +136,7 @@ function onQuit(event) {
         connection: this.irc_connection,
         irc_event: event
     })
-    .done(function() {
+    .then(function() {
         that.irc_connection.clientEvent('channel', {
             type: 'quit',
             nick: event.nick,
@@ -158,7 +157,7 @@ function onMsg(event) {
         connection: this.irc_connection,
         irc_event: event
     })
-    .done(function() {
+    .then(function() {
         that.irc_connection.clientEvent('message', {
             type: 'message',
             nick: event.nick,
@@ -180,7 +179,7 @@ function onAction(event) {
         connection: this.irc_connection,
         irc_event: event
     })
-    .done(function() {
+    .then(function() {
         that.irc_connection.clientEvent('message', {
             type: 'action',
             nick: event.nick,
@@ -202,7 +201,7 @@ function onNotice(event) {
         connection: this.irc_connection,
         irc_event: event
     })
-    .done(function() {
+    .then(function() {
         that.irc_connection.clientEvent('message', {
             type: 'notice',
             from_server: event.from_server,
@@ -298,7 +297,7 @@ function onTopic(event) {
         connection: this.irc_connection,
         irc_event: event
     })
-    .done(function() {
+    .then(function() {
         that.irc_connection.clientEvent('topic', {
             nick: event.nick,
             channel: that.name,
@@ -346,7 +345,7 @@ function onMode(event) {
         connection: this.irc_connection,
         irc_event: event
     })
-    .done(function() {
+    .then(function() {
         that.irc_connection.clientEvent('mode', {
             target: event.target,
             nick: event.nick,

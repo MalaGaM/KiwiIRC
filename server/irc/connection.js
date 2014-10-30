@@ -67,6 +67,7 @@ var IrcConnection = function (hostname, port, ssl, nick, user, options, state, c
     this.username = this.nick.replace(/[^0-9a-zA-Z\-_.\/]/, '');
     this.gecos = ''; // Users real-name. Uses default from config if empty
     this.password = options.password || '';
+    this.quit_message = ''; // Uses default from config if empty
     
     if (global.config.client.settings.rich_nicklist && global.config.client.settings.rich_nicklist_track_asl) {
         this.age = options.age || '';
@@ -462,7 +463,7 @@ IrcConnection.prototype.end = function (data) {
         return;
     }
 
-    this.socket.end();
+    this.socket.destroy();
 };
 
 
@@ -688,7 +689,7 @@ var socketConnectHandler = function () {
     // Let the webirc/etc detection modify any required parameters
     connect_data = findWebIrc.call(this, connect_data);
 
-    global.modules.emit('irc authorize', connect_data).done(function ircAuthorizeCb() {
+    global.modules.emit('irc authorize', connect_data).then(function ircAuthorizeCb() {
         var gecos = that.gecos;
 
         if (global.config.client.settings.rich_nicklist && global.config.client.settings.rich_nicklist_track_asl) {
