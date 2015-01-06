@@ -770,3 +770,22 @@ msgstr "Liste des bannis"
 msgid "client_views_controlbox_message"
 msgstr "Envoyer un message..."
 
+#: 
+msgid "client_applets_chanlist_search"
+msgstr "Rechercher"
+
+#: 
+msgid "client_applets_chanlist_search_channels"
+msgstr "Rechercher des salons"
+
+#: 
+msgid "client_applets_chanlist_refresh"
+msgstr "Actualiser"
+
+#: 
+msgid "client_applets_chanlist_noresults"
+msgstr "Aucun résultat, merci de modifier votre recherche !"
+
+#:
+msgid "disconnect_from_server"
+msgstr "Vous allez être déconnecté du réseau IRC. Voulez-vous vraiment vous déconnecter ?"
