@@ -530,6 +530,10 @@
     margin-right: 0.5em;
 }
 
+#kiwi .messages .last_seen {
+    border-bottom-color: #B0CF82;
+}
+
 #kiwi .right_bar {
     background-color: #fff;
     border-left: 1px dashed #ccc;
@@ -571,6 +575,10 @@
 
 #kiwi .memberlists ul li {
     padding: 0.2em 1em;
+}
+
+#kiwi.touch .memberlists ul li {
+    padding: 1em 0.5em;
 }
 
 #kiwi .memberlists ul li:hover {
@@ -1257,6 +1265,7 @@
 
 
 #kiwi .toolbar .panellist li .part:before {
+    font-family: FontAwesome; 
     content: "\f00d";
 }
 
