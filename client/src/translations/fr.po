@@ -498,6 +498,11 @@ msgid "client_applets_settings_emoticons"
 msgstr "Afficher les émoticônes"
 
 #: 
+msgid "client_applets_settings_allow_queries"
+msgstr "Autoriser les nouveaux dialogues privés"
+
+
+#: 
 msgid "client_applet_about"
 msgstr "À propos de Kiwi"
 

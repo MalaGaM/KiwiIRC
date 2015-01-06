@@ -497,7 +497,8 @@
                 if (!panel && _kiwi.global.settings.get('allow_queries')) {
                     panel = new _kiwi.model.Query({name: event.nick, network: this});
                     this.panels.add(panel);
-                } else { // We have not allowed new queries, don't process the message
+                } else if(!panel) {
+                    // We have not allowed new queries and we have not opened the panel ourselves, don't process the message
                     return;
                 }
 
