@@ -202,7 +202,7 @@ conf.client = {
         allow_queries: true,
         rich_nicklist: false,
         rich_nicklist_gender_regexes: {'F': ['F001', ' f ', '/f/', '^f ', ' f$', '^f$'],
-                                        'M': ['M002', ' h ', '/H/', ' m ', '^h ', ' h$', '^m ', ' m$', '^h$', '^m$',],
+                                        'M': ['M002', ' h ', '/H/', ' m ', '^h ', ' h$', '^m ', ' m$', '^h$', '^m$'],
                                         'U': ['U003', '/U/']},
         rich_nicklist_track_asl: true,
         rich_nicklist_track_away: true,
