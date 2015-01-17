@@ -135,29 +135,29 @@ _kiwi.view.MediaMessage = Backbone.View.extend({
         },
 
         spotify: function () {
-            var uri = this.$el.data('uri');
-            var method = this.$el.data('method');
-            var that = this;
+            var uri = this.$el.data('uri'),
+                method = this.$el.data('method'),
+                spot, html;
 
             switch (method) {
                 case "track":
                 case "album":
-                     var spot = {
-                         url: 'https://embed.spotify.com/?uri=' + uri,
-                         width: 300,
-                         height: 80
-                     };
-                     break;
+                    spot = {
+                        url: 'https://embed.spotify.com/?uri=' + uri,
+                        width: 300,
+                        height: 80
+                    };
+                    break;
                 case "artist":
-                     var spot = {
-                         url: 'https://embed.spotify.com/follow/1/?uri=' + uri +'&size=detail&theme=dark',
-                         width: 300,
-                         height: 56
-                     };
-                     break;
-            };
+                    spot = {
+                        url: 'https://embed.spotify.com/follow/1/?uri=' + uri +'&size=detail&theme=dark',
+                        width: 300,
+                        height: 56
+                    };
+                    break;
+            }
 
-            var html = '<iframe src="' + spot.url + '" width="' + spot.width + '" height="' + spot.height + '" frameborder="0" allowtransparency="true"></iframe>';
+            html = '<iframe src="' + spot.url + '" width="' + spot.width + '" height="' + spot.height + '" frameborder="0" allowtransparency="true"></iframe>';
 
             return $(html);
         },
@@ -166,7 +166,7 @@ _kiwi.view.MediaMessage = Backbone.View.extend({
             var url = this.$el.data('url'),
                 $content = $('<div></div>').text(_kiwi.global.i18n.translate('client_models_applet_loading').fetch());
 
-            $.getJSON('http://soundcloud.com/oembed', { url: url })
+            $.getJSON('https://soundcloud.com/oembed', { url: url })
                 .then(function (data) {
                     $content.empty().append(
                         $(data.html).attr('height', data.height - 100)
