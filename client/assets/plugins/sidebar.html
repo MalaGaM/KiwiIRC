@@ -4,10 +4,10 @@
 -->
 
 <style>
-    #kiwi .cred {
+    /*#kiwi .cred {
         color: #ff0000;
     }
-    #kiwi .right_bar_pv {
+    #kiwi .right_bar_query {
         background-color: #fff;
         border-left: 1px dashed #ccc;
         z-index: 10;
@@ -18,9 +18,9 @@
         top: 100px;
         width: 200px;
     }
-    #kiwi .right_bar_pv.disabled {
+    #kiwi .right_bar_query.disabled {
         width: 0;
-    }
+    }*/
 </style>
 
 <script type="text/html" id="query_sidebar">
@@ -28,10 +28,11 @@
     <div class="right-bar-toggle" style="display: none;">
         <i class="fa fa-user"></i>
     </div>
-    <div class="right-bar-content">
+    <div class="query-right-bar-content">
+        <div class="query_nick"></div>
         <div class="query_tools">
-            <i title="<%= whois %>" class="fa fa-search query_whois"></i>
-            <i title="<%= ignore %>" class="fa fa-minus-circle query_ignore"></i>
+            <button class="query_whois"><i title="<%= whois %>" class="fa fa-search"></i>&nbsp;<%= whois %></button><br />
+            <button class="query_ignore"><i title="<%= ignore %>" class="fa fa-minus-circle"></i>&nbsp;<%= ignore %></button><br />
             <i title="<%= hide_sidebar %>" class="fa fa-angle-double-right right-bar-toggle-inner"></i>
         </div>
     </div>
@@ -94,14 +95,36 @@ kiwi.plugins.on('loaded', function() {
 
     kiwi.events.on('panel:change', function(event, panel) {
         var panel = panel['panel'];
+        //console.log('pp', panel.model.get('name'));
         
         if(panel.model.view.model.isQuery()) {
             // Push the html with the locale strings
             var query_sidebar = $(_.template($('#query_sidebar').html().trim(), text));
             $('.right_bar').append(query_sidebar);
-            console.log('IGNITE', query_sidebar);
+            $('.right_bar .query_nick').text(panel.model.get('name'));
+
+            // Tweak the right_bar visibility
+            setTimeout(function () {
+                if ($('.right_bar').hasClass('disabled')) {
+                    $('.right_bar').removeClass('disabled');
+                    $('#kiwi .memberlists').children().removeClass('active');
+                    $('.right-bar-content').hide();
+                }
+            }, 20);
+
+            // Bind  button actions
+            $('.right_bar .query_whois').on('click', function () {
+                var net = kiwi.components.Network();
+                net.raw('WHOIS :' + kiwi.panels().active.get("name"));
+            });
+            
+            $('.right_bar .query_ignore').on('click', function () {
+            });
+
+
         }
     });
+
 
     // This plugin is only valid for rich_nicklist contexts
     if(!kiwi.settings.get('rich_nicklist')) return;
@@ -109,8 +132,6 @@ kiwi.plugins.on('loaded', function() {
     
     var View = Backbone.View.extend({
         events: {
-            "click .whois_button": "whoisUser",
-            "click .ignore_button": "toggleIgnore"
         },
 
 
@@ -123,10 +144,6 @@ kiwi.plugins.on('loaded', function() {
             console.log('RENDER');
         },
         
-        whoisUser: function () {
-            var net = kiwi.components.Network();
-            net.raw('WHOIS :' +kiwi.panels().active.get("name"));
-        },
         
         toggleIgnore: function () {
             
@@ -139,7 +156,7 @@ kiwi.plugins.on('loaded', function() {
     console.log(kiwi);
     
     // bouton
-    $(document).on("click",".pv_whois", function() {
+    /*$(document).on("click",".pv_whois", function() {
         var net = kiwi.components.Network();
         net.raw('WHOIS :' +kiwi.panels().active.get("name"));
     });
@@ -232,7 +249,7 @@ kiwi.plugins.on('loaded', function() {
                 $(".right_bar_pv .right-bar-toggle").hide();
             }
         }
-    });
+    });*/
 
 
 
