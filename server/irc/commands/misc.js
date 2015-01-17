@@ -66,12 +66,21 @@ var handlers = {
                 channel: command.params[1]
             });
         } else { // It's a user WHO
+            if(this.who_members[0] == undefined) { // Looks like there is nothing to work with here
+                return;
+            }
+            
             var who_member = this.who_members[0],
-                nick = command.params[1];
+                nick = command.params[1],
+                realname = this.who_members[0].realname;
+            
+            if(realname == undefined) {
+                realname = 'U';
+            }
                 
             this.irc_connection.emit('user ' + nick + ' who_user', {
                 nick: nick,
-                realname: who_member.realname,
+                realname: realname,
                 flags: who_member.flags,
                 channel: who_member.channel
             });
