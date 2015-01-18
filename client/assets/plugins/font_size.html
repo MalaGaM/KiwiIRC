@@ -114,7 +114,7 @@
         }
     });
 
-    kiwi.panels.on('active', function (event) {
+    kiwi.events.on('panel:active', function () {
         if (values.length > 1) {
             $(".messages").css("font-size", values[1]);
             $("#kiwi .panel_container .messages .msg .nick").css("font-size", values[0]);
