@@ -29,7 +29,16 @@
         <i class="fa fa-user"></i>
     </div>
     <div class="query-right-bar-content">
-        <div class="query_nick"></div>
+        <div class="query_nick">
+            <%= query_with %>
+            <span class="query_nick_nickname"></span>
+        </div>
+        <div class="query_avatar">
+            <img src="http://www.chat-fr.org/components/com_community/assets/user-Female.png" />
+        </div>
+        <div class="common_channels">
+            <span class="query_common_channels_title"><%= common_channels %></span>
+        </div>        
         <div class="query_tools">
             <button class="query_whois"><i title="<%= whois %>" class="fa fa-search"></i>&nbsp;<%= whois %></button><br />
             <button class="query_ignore"><i title="<%= ignore %>" class="fa fa-minus-circle"></i>&nbsp;<%= ignore %></button><br />
@@ -56,7 +65,8 @@ kiwi.plugins.on('loaded', function() {
                 "ignore" : [ null, "Ignore user" ],
                 "unignore" : [ null, "Stop ignoring" ],
                 "common_channels" : [ null, "Channels in common" ],
-                "hide_sidebar" : [ null, "Hide" ]
+                "hide_sidebar" : [ null, "Hide" ],
+                "query_with" : [ null, "Query with" ]
             }
         },
        'fr': {
@@ -69,7 +79,8 @@ kiwi.plugins.on('loaded', function() {
                 "ignore" : [ null, "Ignorer" ],
                 "unignore" : [ null, "Ne plus ignorer" ],
                 "common_channels" : [ null, "Channels in common" ],
-                "hide_sidebar" : [ null, "Masquer" ]
+                "hide_sidebar" : [ null, "Masquer" ],
+                "query_with" : [ null, "Dialogue privé avec" ]
             }
         }
     }
@@ -89,19 +100,19 @@ kiwi.plugins.on('loaded', function() {
         ignore: this.locale.translate('ignore').fetch(),
         unignore: this.locale.translate('unignore').fetch(),
         common_channels: this.locale.translate('common_channels').fetch(),
-        hide_sidebar: this.locale.translate('hide_sidebar').fetch()
+        hide_sidebar: this.locale.translate('hide_sidebar').fetch(),
+        query_with: this.locale.translate('query_with').fetch()
     };
 
 
-    kiwi.events.on('panel:change', function(event, panel) {
-        var panel = panel['panel'];
-        //console.log('pp', panel.model.get('name'));
+    kiwi.events.on('panel:active', function(event, panel) {
+        var panel = panel['active'];
         
-        if(panel.model.view.model.isQuery()) {
+        if(panel.isQuery()) {
             // Push the html with the locale strings
             var query_sidebar = $(_.template($('#query_sidebar').html().trim(), text));
             $('.right_bar').append(query_sidebar);
-            $('.right_bar .query_nick').text(panel.model.get('name'));
+            $('.right_bar .query_nick .query_nick_nickname').text(panel.get('name'));
 
             // Tweak the right_bar visibility
             setTimeout(function () {
