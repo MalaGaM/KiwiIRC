@@ -30,14 +30,14 @@
     </div>
     <div class="query-right-bar-content">
         <div class="query_nick">
-            <%= query_with %>
+            <%= query_with %><br />
             <span class="query_nick_nickname"></span>
         </div>
-        <div class="query_avatar">
-            <img src="http://www.chat-fr.org/components/com_community/assets/user-Female.png" />
-        </div>
+        <div class="query_avatar"></div>
+        <div class="query_age"></div>
+        <div class="query_location"></div>
         <div class="common_channels">
-            <span class="query_common_channels_title"><%= common_channels %></span>
+            <span class="query_common_channels_title"><%= common_channels %></span><br />
         </div>        
         <div class="query_tools">
             <button class="query_whois"><i title="<%= whois %>" class="fa fa-search"></i>&nbsp;<%= whois %></button><br />
@@ -51,6 +51,9 @@
 
 <script>
 kiwi.plugins.on('loaded', function() {
+    // This plugin is only valid for rich_nicklist contexts
+    if(!kiwi.settings.get('rich_nicklist')) return;
+
     var locale_strings,
         text;
 
@@ -78,7 +81,7 @@ kiwi.plugins.on('loaded', function() {
                 "whois" : [ null, "Infos" ],
                 "ignore" : [ null, "Ignorer" ],
                 "unignore" : [ null, "Ne plus ignorer" ],
-                "common_channels" : [ null, "Channels in common" ],
+                "common_channels" : [ null, "Salons communs" ],
                 "hide_sidebar" : [ null, "Masquer" ],
                 "query_with" : [ null, "Dialogue privé avec" ]
             }
@@ -111,8 +114,15 @@ kiwi.plugins.on('loaded', function() {
         if(panel.isQuery()) {
             // Push the html with the locale strings
             var query_sidebar = $(_.template($('#query_sidebar').html().trim(), text));
+            var query_nick = panel.get('name'),
+                common_channels = [],
+                query_gender = '',
+                query_age = '',
+                query_location = '',
+                avatar = '';
+
             $('.right_bar').append(query_sidebar);
-            $('.right_bar .query_nick .query_nick_nickname').text(panel.get('name'));
+            $('.right_bar .query_nick .query_nick_nickname').text(query_nick);
 
             // Tweak the right_bar visibility
             setTimeout(function () {
@@ -123,10 +133,49 @@ kiwi.plugins.on('loaded', function() {
                 }
             }, 20);
 
+            // Run through all the open channels to find the ones in common with the current query user
+            _.each(kiwi.connections.panels(), function(panel) {
+                if(panel.get('members') != undefined) {
+                    var members = panel.get('members').nick_cache,
+                        panel_name = panel.get('name');
+
+                    for(member in members) {
+                        var regexp = new RegExp(query_nick, 'i');
+                        if(member.match(regexp)) {
+                            common_channels.push(panel_name);
+                        }
+
+                        if(query_gender == '') {
+                            var query_member = members[member];
+                            console.log(query_member);
+                            query_gender = query_member.get('gender');
+                            query_age = query_member.get('age');
+                            query_location = query_member.get('location');
+                        }
+                    }
+                }
+            });
+            // Write the common channels in the right bar
+            $('.right_bar .common_channels').append(common_channels.join(', '));
+
+            // Set the gender avatar
+            console.log(query_gender, query_age, query_location);
+            if(query_gender == 'M') {
+                avatar = "http://www.chat-fr.org/components/com_community/assets/user-Male.png";
+            } else if(query_gender == 'F') {
+                avatar = "http://www.chat-fr.org/components/com_community/assets/user-Female.png";
+            } else {
+                avatar = "http://www.chat-fr.org/components/com_community/assets/user-Male.png"
+            }
+            // Add the avatar
+            if(avatar != '') {
+                $('.query_avatar').append('<img src="' + avatar + '" />');
+            }
+
             // Bind  button actions
             $('.right_bar .query_whois').on('click', function () {
                 var net = kiwi.components.Network();
-                net.raw('WHOIS :' + kiwi.panels().active.get("name"));
+                net.raw('WHOIS :' + query_nick);
             });
             
             $('.right_bar .query_ignore').on('click', function () {
@@ -137,35 +186,8 @@ kiwi.plugins.on('loaded', function() {
     });
 
 
-    // This plugin is only valid for rich_nicklist contexts
-    if(!kiwi.settings.get('rich_nicklist')) return;
 
-    
-    var View = Backbone.View.extend({
-        events: {
-        },
-
-
-        initialize: function (options) {
-
-
-        },
-
-        render: function () {
-            console.log('RENDER');
-        },
         
-        
-        toggleIgnore: function () {
-            
-        },
-        
-        listCommonChannels: function () {
-        
-        }
-    });
-    console.log(kiwi);
-    
     // bouton
     /*$(document).on("click",".pv_whois", function() {
         var net = kiwi.components.Network();
