@@ -139,6 +139,9 @@ kiwi.plugins.on('loaded', function() {
                     query_location = '',
                     avatar = '';
 
+                // Hide all right_bars
+                $('#kiwi .memberlists').children().removeClass('active');
+                $('#kiwi .memberlists').hide();
                 // Add the right_bar content
                 $('#kiwi .right-bar-content .queries').append(query_sidebar_content);
                 $('#kiwi .right_bar .queries .' + panel.cid + ' .query_nick .query_nick_nickname').text(query_nick);
@@ -187,23 +190,50 @@ kiwi.plugins.on('loaded', function() {
                 }
 
                 // Bind  button actions
-                $('.right_bar .query_whois').on('click', function () {
+                $('#kiwi .right_bar .queries .' + panel.cid + ' .query_whois').on('click', function () {
                     var net = kiwi.components.Network();
                     net.raw('WHOIS :' + query_nick);
                 });
                 
-                $('.right_bar .query_ignore').on('click', function () {
+                $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').on('click', function () {
+                    console.log('click ignore');
+
+                    // WORK ##
+                    var ignorelist_data = kiwi.components.DataStore.instance('kiwi.ignore_list');
+                    ignorelist_data.load();
+
+                    var ignorelist = ignorelist_data.get('ignore_list');
+
+                    var tab = kiwi.connections.active_connection.get("ignore_list");
+                    var i = tab.indexOf(kiwi.panels().active.get("name"));
+
+                    console.log("i = " + i);
+
+                    if(i == -1) {
+                        tab.push(kiwi.panels().active.get("name"));
+                        $(this).addClass("cred");
+                    } else {
+                        tab.splice(i,1);
+                        $(this).removeClass("cred");
+                    }
+                    kiwi.connections.active_connection.set("ignore_list",tab);
+
+                    ignorelist_data.set('ignore_list',tab);
+                    ignorelist_data.save();
+                    ignoreornot();
+                    // WORK ##
                 });
             } else { // The query exists but is inactive
                 // Hide all right_bars
                 $('#kiwi .memberlists').children().removeClass('active');
+                $('#kiwi .memberlists').hide();
                 $('#kiwi .right-bar-content .queries .' + panel.cid).addClass('active');
             }
 
             // Tweak the right_bar visibility
             setTimeout(function () {
-                if ($('.right_bar').hasClass('disabled')) {
-                    $('.right_bar').removeClass('disabled');
+                if ($('#kiwi .right_bar').hasClass('disabled')) {
+                    $('#kiwi .right_bar').removeClass('disabled');
                     $('#kiwi .memberlists').children().removeClass('active');
                     $('#kiwi .right_bar .right-bar-content .channel_tools').hide();
                 }
@@ -228,27 +258,6 @@ kiwi.events.on('panel:close', function(event, panel) {
     });
 
     $(document).on("click",".pv_ignore", function() {
-        var ignorelist_data = kiwi.components.DataStore.instance('kiwi.ignore_list');
-        ignorelist_data.load();
-
-        var ignorelist = ignorelist_data.get('ignore_list');
-
-        var tab = kiwi.connections.active_connection.get("ignore_list");
-        var i = tab.indexOf(kiwi.panels().active.get("name"));
-
-        console.log("i = " + i);
-
-        if(i == -1) {
-            tab.push(kiwi.panels().active.get("name"));
-            $(this).addClass("cred");
-        } else {
-            tab.splice(i,1);
-            $(this).removeClass("cred");
-        }
-        kiwi.connections.active_connection.set("ignore_list",tab);
-
-        ignorelist_data.set('ignore_list',tab);
-        ignorelist_data.save();
     });
 
 
@@ -333,35 +342,5 @@ kiwi.events.on('panel:close', function(event, panel) {
     }
 });
 
-//fix bug nicklist
-var width;
-var hide = false;
-$(document).on("click", ".right_bar .right-bar-toggle", function() {
-	if(parseInt(width) > 0 && width != null) {
-        $(".right_bar").css("width",width);
-        $(".memberlists_resize_handle").css("left",$("#kiwi").width() - parseInt(width) -10);
-    } else {
-        $(".right_bar").css("width",'');
-    }
-});
-$(document).on("click", ".right_bar .right-bar-toggle-inner", function() {
-	if($(".right_bar").hasClass("disabled")) {
-		console.log($(".right_bar").css("width"));
-		if(parseInt($(".right_bar").css("width")) > 0) {
-			console.log("on set width");
-			width = $(".right_bar").css("width");
-		}
-		
-		$(".right_bar").css("width",'');
-		console.log("width = " + width);			
-	} else {
-		if( parseInt(width) > 0 && width != null) {
-			$(".right_bar").css("width",width);
-		} else {
-			$(".right_bar").css("width",'');
-		}
-	}
-});
-// fin fix
 </script>
 
