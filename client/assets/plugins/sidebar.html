@@ -139,9 +139,6 @@ kiwi.plugins.on('loaded', function() {
                     query_location = '',
                     avatar = '';
 
-                // Hide all right_bars
-                $('#kiwi .memberlists').children().removeClass('active');
-                $('#kiwi .memberlists').hide();
                 // Add the right_bar content
                 $('#kiwi .right-bar-content .queries').append(query_sidebar_content);
                 $('#kiwi .right_bar .queries .' + panel.cid + ' .query_nick .query_nick_nickname').text(query_nick);
@@ -196,32 +193,10 @@ kiwi.plugins.on('loaded', function() {
                 });
                 
                 $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').on('click', function () {
-                    console.log('click ignore');
+                    console.log('click ignore', kiwi.connections.active_connection.get("ignore_list"));
 
-                    // WORK ##
-                    var ignorelist_data = kiwi.components.DataStore.instance('kiwi.ignore_list');
-                    ignorelist_data.load();
-
-                    var ignorelist = ignorelist_data.get('ignore_list');
-
-                    var tab = kiwi.connections.active_connection.get("ignore_list");
-                    var i = tab.indexOf(kiwi.panels().active.get("name"));
-
-                    console.log("i = " + i);
-
-                    if(i == -1) {
-                        tab.push(kiwi.panels().active.get("name"));
-                        $(this).addClass("cred");
-                    } else {
-                        tab.splice(i,1);
-                        $(this).removeClass("cred");
-                    }
-                    kiwi.connections.active_connection.set("ignore_list",tab);
-
-                    ignorelist_data.set('ignore_list',tab);
-                    ignorelist_data.save();
-                    ignoreornot();
-                    // WORK ##
+                    toggleIgnore(query_nick);
+                    console.log('toggled', kiwi.connections.active_connection.get("ignore_list"));
                 });
             } else { // The query exists but is inactive
                 // Hide all right_bars
@@ -235,6 +210,7 @@ kiwi.plugins.on('loaded', function() {
                 if ($('#kiwi .right_bar').hasClass('disabled')) {
                     $('#kiwi .right_bar').removeClass('disabled');
                     $('#kiwi .memberlists').children().removeClass('active');
+                    $('#kiwi .memberlists').hide();
                     $('#kiwi .right_bar .right-bar-content .channel_tools').hide();
                 }
             }, 20);
@@ -328,16 +304,16 @@ kiwi.events.on('panel:close', function(event, panel) {
 
 
 
-    function ignoreornot() {
-        console.log(kiwi.panels().active.get('members'));
-
-        var tab = kiwi.connections.active_connection.get("ignore_list");
-        var i = tab.indexOf(kiwi.panels().active.get("name"));
+    function toggleIgnore(nick) {
+        var ignore_list = kiwi.connections.active_connection.get("ignore_list");
+        var i = ignore_list.indexOf(nick);
 
         if(i == -1) {
-            $(".pv_ignore").removeClass("cred");
+            ignore_list.push(query_nick);
+            return false;
         } else {
-            $(".pv_ignore").addClass("cred");
+            ignore_list.splice(i, 1);
+            return true;
         }
     }
 });
