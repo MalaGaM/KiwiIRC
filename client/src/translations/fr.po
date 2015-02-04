@@ -81,6 +81,10 @@ msgid "client_applets_settings_history_length"
 msgstr "Messages dans l'historique"
 
 #: 
+msgid "client_applets_settings_custom_highlights"
+msgstr "Notifications personnalisées (séparées par des espaces)"
+
+#: 
 msgid "client_applets_settings_default_client"
 msgstr "Client IRC par défaut"
 
