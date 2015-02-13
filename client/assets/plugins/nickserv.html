@@ -105,7 +105,7 @@
             // Parse NickServ notices
             if(event.type == "notice" && event.nick == nickserv_nick) {
                 if(event.msg.search(/This nickname is registered/) >= 0 || 
-                    event.msg.search(/Ce pseudo est enregistr/)  >= 0) { // Nick is registered
+                    event.msg.search(/Le pseudo est enregistr/)  >= 0) { // Nick is registered
                     this.boxState = 'open';
                 } else if(event.msg.search(/you are now recognized/) >= 0 || 
                             event.msg.search(/tes maintenant identifi/) >= 0) { // Password correct
