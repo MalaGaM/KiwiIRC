@@ -226,11 +226,11 @@ kiwi.plugins.on('loaded', function() {
 
                 // Set the gender avatar
                 if(query_gender == 'M') {
-                    avatar = "http://www.chat-fr.org/components/com_community/assets/user-Male.png";
+                    avatar = "/assets/plugins/user-Male.png";
                     $('#kiwi .right_bar .queries .' + panel.cid + ' .query_nick_nickname').css('color', '#0066ff');
                     gender_text = text.gender_male;
                 } else if(query_gender == 'F') {
-                    avatar = "http://www.chat-fr.org/components/com_community/assets/user-Female.png";
+                    avatar = "/assets/plugins/user-Female.png";
                     $('#kiwi .right_bar .queries .' + panel.cid + ' .query_nick_nickname').css('color', '#FF00FF');
                     gender_text = text.gender_female;
                 } else {
