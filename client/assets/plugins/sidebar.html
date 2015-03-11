@@ -271,7 +271,7 @@ kiwi.plugins.on('loaded', function() {
                 if(query_age != '') {
                     query_age = query_age + ' ' + text.years_old;
                 }
-                $('#kiwi .right_bar .queries .' + panel.cid + ' .query_age').text(query_age + ' ' + text.years_old);
+                $('#kiwi .right_bar .queries .' + panel.cid + ' .query_age').text(query_age);
                 // If there is an age and a location, seperate with a comma
                 if(query_age != '' && query_location != '') {
                     query_location = ', ' + query_location;
