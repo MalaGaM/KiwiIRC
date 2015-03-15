@@ -3,23 +3,6 @@
 -->
 
 <style>
-    /*#kiwi .cred {
-        color: #ff0000;
-    }
-    #kiwi .right_bar_query {
-        background-color: #fff;
-        border-left: 1px dashed #ccc;
-        z-index: 10;
-        bottom: 100px;
-        overflow: visible;
-        position: absolute;
-        right: 0;
-        top: 100px;
-        width: 200px;
-    }
-    #kiwi .right_bar_query.disabled {
-        width: 0;
-    }*/
     #kiwi .right_bar .queries > div {
         display: none;
     }
@@ -170,114 +153,23 @@ kiwi.plugins.on('loaded', function() {
                 // Push the html with the locale strings
                 var query_sidebar_content = $(_.template($('#query_sidebar_content').html().trim(), text));
                 var query_nick = panel.get('name'),
-                    current_panel = panel.cid,
-                    common_channels = [],
-                    query_gender = '',
-                    query_age = '',
-                    query_location = '',
-                    avatar = '',
-                    gender_text = '';
+                    current_panel = panel.cid;
 
                 // Add the right_bar content
                 $('#kiwi .right-bar-content .queries').append(query_sidebar_content);
                 $('#kiwi .right_bar .queries .' + panel.cid + ' .query_nick .query_nick_nickname').text(query_nick);
                 // Make the right_bar for this query visible
                 $('#kiwi .right-bar-content .queries .' + panel.cid).addClass('active');
+                // Fix the resize_handle position
+                $('.memberlists_resize_handle').css('left', $('#kiwi').width() - parseInt($('.right_bar').width()) -10);
 
                 // Update the ignore status if query_nick is already ignored
                 if(getIgnoreStatus(query_nick) > -1) {
                     $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').html('<i title="' + text.unignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.unignore);
                 }
 
-                // Run through all the open channels to find the ones in common with the current query user
-                _.each(kiwi.connections.panels(), function(panel) {
-                    if(panel.get('members') != undefined) {
-                        var members = panel.get('members').nick_cache,
-                            panel_name = panel.get('name');
-
-                        // Check if the member is in the channel
-                        for(member in members) {
-                            var regexp = new RegExp(query_nick, 'i');
-                            if(member.match(regexp)) {
-                                var clean_panel_name = panel_name.replace('#', '');
-                                common_channels.push('<a class="chan ' + clean_panel_name + '" data-channel="' + panel_name + '">' + _.escape(panel_name) + '</a>');
-
-                                /*$('#kiwi .right_bar .queries .' + current_panel + ' .common_channels a.' + clean_panel_name).click(function() {
-                                    console.log('ok');
-                                        kiwi.connections.active_connection.createAndJoinChannels(panel_name);
-                                        kiwi.connections.active_connection.panels.getByName(panel_name).show();
-                                });*/
-
-                                // Find ASL from the member we're opening a query with 
-                                if(query_gender == '') {
-                                    var query_member = members[member];
-
-                                    query_gender = query_member.get('gender');
-                                    query_age = query_member.get('age');
-                                    query_location = query_member.get('info');
-                                }
-                            }
-                        }
-                    }
-                });
-
-                // Write the common channels in the right bar
-                $('#kiwi .right_bar .queries .' + panel.cid + ' .common_channels').append(common_channels.join(', '));
-
-                // Set the gender avatar
-                if(query_gender == 'M') {
-                    avatar = "/assets/plugins/user-Male.png";
-                    $('#kiwi .right_bar .queries .' + panel.cid + ' .query_nick_nickname').css('color', '#0066ff');
-                    gender_text = text.gender_male;
-                } else if(query_gender == 'F') {
-                    avatar = "/assets/plugins/user-Female.png";
-                    $('#kiwi .right_bar .queries .' + panel.cid + ' .query_nick_nickname').css('color', '#FF00FF');
-                    gender_text = text.gender_female;
-                } else {
-                    avatar = "/assets/plugins/avatar-undefined.jpg"
-                    $('#kiwi .right_bar .queries .' + panel.cid + ' .query_nick_nickname').css('color', '#000000');
-                    gender_text = text.gender_undefined;
-                }
-                // Add the avatar
-                if(avatar != '') {
-                    $('#kiwi .queries .' + panel.cid + ' .query_avatar').append('<img src="' + avatar + '" width="160" height="160" />');
-                }
-
-                // Bind  button actions
-                // Click on WHOIS button
-                $('#kiwi .right_bar .queries .' + panel.cid + ' .query_whois').on('click', function () {
-                    var net = kiwi.components.Network();
-                    net.raw('WHOIS :' + query_nick);
-                });
-                
-                // Click on Ignore button
-                $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').on('click', function () {
-                    var ignore_state = toggleIgnore(query_nick);
-                    // If nick is ignored, switch the button text
-                    if(ignore_state) {
-                        $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').html('<i title="' + text.unignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.unignore);
-                    } else {
-                        $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').html('<i title="' + text.ignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.ignore);
-                    }
-                });
-
-                // Add the gender
-                $('#kiwi .right_bar .queries .' + panel.cid + ' .query_gender').text(gender_text);
-                // If there is an gender and an age, seperate with a comma
-                if(query_age != '' && gender_text != '') {
-                    query_age = ', ' + query_age;
-                }
-                // Add the Age
-                if(query_age != '') {
-                    query_age = query_age + ' ' + text.years_old;
-                }
-                $('#kiwi .right_bar .queries .' + panel.cid + ' .query_age').text(query_age);
-                // If there is an age and a location, seperate with a comma
-                if(query_age != '' && query_location != '') {
-                    query_location = ', ' + query_location;
-                }
-                // Add the Location
-                $('#kiwi .right_bar .queries .' + panel.cid + ' .query_location').text(query_location);
+                // Collect the member info and fill the right bar
+                getMemberInfo(query_nick, panel);                
             } else { // The query exists but is inactive
                 // Hide all right_bars
                 $('#kiwi .memberlists').children().removeClass('active');
@@ -308,6 +200,137 @@ kiwi.plugins.on('loaded', function() {
     });
 
 
+    function getMemberInfo(query_nick, query_panel) {
+        var common_channels = [],
+            member_info = '';
+
+        // Run through all the open channels to find the ones in common with the current query user
+        _.each(kiwi.connections.panels(), function(panel) {
+            if(panel.get('members') != undefined) {
+                var members = panel.get('members').nick_cache;
+
+                // Check if the member is in the channel
+                for(member in members) {
+                    var regexp = new RegExp(query_nick, 'i'),
+                    panel_name = panel.get('name');
+
+                    if(member.match(regexp)) {
+                        var clean_panel_name = panel_name.replace('#', '');
+
+                        common_channels.push('<a class="chan ' + clean_panel_name + '" data-channel="' + panel_name + '">' + _.escape(panel_name) + '</a>');
+
+                        /*$('#kiwi .right_bar .queries .' + current_panel + ' .common_channels a.' + clean_panel_name).click(function() {
+                            console.log('ok');
+                                kiwi.connections.active_connection.createAndJoinChannels(panel_name);
+                                kiwi.connections.active_connection.panels.getByName(panel_name).show();
+                        });*/
+                        
+                        // We only need to feed the ASL once
+                        if(member_info == '') {
+                            // Find ASL from the member we're opening a query with 
+                            var query_member = members[member];
+                            
+                            // TODO : make the whole execution wait until the ASL is full
+                            /*if(query_member.get('gender') == undefined) {
+                                delay(2000);
+                            }*/
+                            
+                            member_info = {'query_gender': query_member.get('gender'),
+                                            'query_age': query_member.get('age'),
+                                            'query_info': query_member.get('info')};
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Now we've been through all channels, push them into the final object
+        member_info['common_channels'] = common_channels;
+
+        // Now we've collected all the info, do the display
+        fillRightBar(member_info, query_nick, query_panel);
+
+        return;
+    }
+
+    function fillRightBar(member_info, query_nick, panel) {
+        var common_channels = [],
+            query_gender = '',
+            query_age = '',
+            query_info = '',
+            avatar = '',
+            gender_text = '';
+
+        common_channels = member_info['common_channels'];
+        query_gender = member_info['query_gender'];
+        query_age = member_info['query_age'];
+        query_info = member_info['query_info'];
+
+        // Write the common channels in the right bar
+        $('#kiwi .right_bar .queries .' + panel.cid + ' .common_channels').append(common_channels.join(', '));
+
+        // Set the gender avatar
+        if(query_gender == 'M') {
+            avatar = "/assets/plugins/user-Male.png";
+            $('#kiwi .right_bar .queries .' + panel.cid + ' .query_nick_nickname').css('color', '#0066ff');
+            gender_text = text.gender_male;
+        } else if(query_gender == 'F') {
+            avatar = "/assets/plugins/user-Female.png";
+            $('#kiwi .right_bar .queries .' + panel.cid + ' .query_nick_nickname').css('color', '#FF00FF');
+            gender_text = text.gender_female;
+        } else {
+            avatar = "/assets/plugins/avatar-undefined.jpg"
+            $('#kiwi .right_bar .queries .' + panel.cid + ' .query_nick_nickname').css('color', '#000000');
+            gender_text = text.gender_undefined;
+        }
+        // Add the avatar
+        if(avatar != '') {
+            $('#kiwi .queries .' + panel.cid + ' .query_avatar').append('<img src="' + avatar + '" width="160" height="160" />');
+        }
+
+        // Bind  button actions
+        // Click on WHOIS button
+        $('#kiwi .right_bar .queries .' + panel.cid + ' .query_whois').on('click', function () {
+            var net = kiwi.components.Network();
+            net.raw('WHOIS :' + query_nick);
+        });
+        
+        // Click on Ignore button
+        $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').on('click', function () {
+            var ignore_state = toggleIgnore(query_nick);
+            // If nick is ignored, switch the button text
+            if(ignore_state) {
+                $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').html('<i title="' + text.unignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.unignore);
+            } else {
+                $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').html('<i title="' + text.ignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.ignore);
+            }
+        });
+
+        // Add the gender
+        if(query_gender != undefined) {
+            $('#kiwi .right_bar .queries .' + panel.cid + ' .query_gender').text(gender_text);
+            // If there is an gender and an age, seperate with a comma
+            if(query_age != '' && gender_text != '') {
+                query_age = ', ' + query_age;
+            }            
+        }
+        // Add the Age
+        if(query_age != undefined) {
+            if(query_age != '') {
+                query_age = query_age + ' ' + text.years_old;
+            }
+            $('#kiwi .right_bar .queries .' + panel.cid + ' .query_age').text(query_age);
+            // If there is an age and info, seperate with a comma
+            if(query_age != '' && query_info != '') {
+                query_info = ', ' + query_info;
+            }
+        }
+        // Add the Location
+        if(query_info != undefined) {
+            $('#kiwi .right_bar .queries .' + panel.cid + ' .query_location').text(query_info);
+        }
+    }
+
     function toggleIgnore(nick) {
         var ignore_list = kiwi.connections.active_connection.get("ignore_list");
         var i = ignore_list.indexOf(nick);;
@@ -325,57 +348,6 @@ kiwi.plugins.on('loaded', function() {
         var ignore_list = kiwi.connections.active_connection.get("ignore_list");
         return ignore_list.indexOf(nick);
     }
-
-
-
-        
-    // bouton
-    /*
-    $(document).on("click", ".userbox .query", function () {
-        console.log("on click pour ouvrir le pv");
-        //fix bug
-        $(".right_bar .right-bar-toggle-inner").trigger("click");
-        if (kiwi.panels().active.isQuery()) {
-
-            if ($(".right_bar_pv").length > 0) {
-                $(".right_bar_pv").removeClass("disabled");
-                $(".panels").css("right", $(".right_bar_pv").width());
-            } else {
-                $("#kiwi").prepend(html);
-                $(".panels").css("right", $(".right_bar_pv").width());
-            }
-            ignoreornot();
-        }
-    });
-
-    $(document).on("click", ".panellist li", function () {
-        if (kiwi.panels().active.isQuery()) {
-            console.log("cest un pv");
-            //fix bug
-            $(".right_bar .right-bar-toggle-inner").trigger("click");   
-
-            if ($(".right_bar_pv").length > 0) {
-                if(hide) {
-                    $(".right_bar_pv .right-bar-toggle").show();
-                }
-                $(".right_bar_pv").removeClass("disabled");
-                $(".panels").css("right", $(".right_bar_pv").width());
-            } else {
-                $("#kiwi").prepend(html);
-                $(".panels").css("right", $(".right_bar_pv").width());
-            }
-            ignoreornot();
-        } else {
-            $(".memberlists_resize_handle").show();
-            $(".right_bar_pv").addClass("disabled");
-            if(hide) {
-                $(".right_bar_pv .right-bar-toggle").hide();
-            }
-        }
-    });*/
-
-
 });
-
 </script>
 
