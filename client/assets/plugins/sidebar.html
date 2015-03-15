@@ -144,6 +144,8 @@ kiwi.plugins.on('loaded', function() {
                 var query_sidebar_container = $(_.template($('#query_sidebar_container').html().trim(), text));
                 
                 $('#kiwi .right_bar .right-bar-content').append(query_sidebar_container);
+            } else {
+                $('#kiwi .right-bar-content .queries').show();
             }
 
             // If this query doesn't exist yet, we'll create the right_bar for it
@@ -187,6 +189,7 @@ kiwi.plugins.on('loaded', function() {
                 }
             }, 20);
         } else { // Maybe moving out of a query so hide them all
+            $('#kiwi .queries').hide();
             $('#kiwi .right_bar .right-bar-content .channel_tools').show();
             $('#kiwi .memberlists').show();
         }
@@ -258,8 +261,9 @@ kiwi.plugins.on('loaded', function() {
             query_gender = '',
             query_age = '',
             query_info = '',
-            avatar = '',
-            gender_text = '';
+            avatar = '/assets/plugins/avatar-undefined.jpg',
+            gender_text = text.gender_undefined,
+            color = '#000000';
 
         common_channels = member_info['common_channels'];
         query_gender = member_info['query_gender'];
@@ -272,39 +276,21 @@ kiwi.plugins.on('loaded', function() {
         // Set the gender avatar
         if(query_gender == 'M') {
             avatar = "/assets/plugins/user-Male.png";
-            $('#kiwi .right_bar .queries .' + panel.cid + ' .query_nick_nickname').css('color', '#0066ff');
+            color = '#0066ff';
             gender_text = text.gender_male;
         } else if(query_gender == 'F') {
             avatar = "/assets/plugins/user-Female.png";
-            $('#kiwi .right_bar .queries .' + panel.cid + ' .query_nick_nickname').css('color', '#FF00FF');
+            color = '#FF00FF';
             gender_text = text.gender_female;
-        } else {
-            avatar = "/assets/plugins/avatar-undefined.jpg"
-            $('#kiwi .right_bar .queries .' + panel.cid + ' .query_nick_nickname').css('color', '#000000');
-            gender_text = text.gender_undefined;
         }
+
+        // Add the nick
+        $('#kiwi .right_bar .queries .' + panel.cid + ' .query_nick_nickname').css('color', color);
+
         // Add the avatar
         if(avatar != '') {
             $('#kiwi .queries .' + panel.cid + ' .query_avatar').append('<img src="' + avatar + '" width="160" height="160" />');
         }
-
-        // Bind  button actions
-        // Click on WHOIS button
-        $('#kiwi .right_bar .queries .' + panel.cid + ' .query_whois').on('click', function () {
-            var net = kiwi.components.Network();
-            net.raw('WHOIS :' + query_nick);
-        });
-        
-        // Click on Ignore button
-        $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').on('click', function () {
-            var ignore_state = toggleIgnore(query_nick);
-            // If nick is ignored, switch the button text
-            if(ignore_state) {
-                $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').html('<i title="' + text.unignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.unignore);
-            } else {
-                $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').html('<i title="' + text.ignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.ignore);
-            }
-        });
 
         // Add the gender
         if(query_gender != undefined) {
@@ -329,6 +315,24 @@ kiwi.plugins.on('loaded', function() {
         if(query_info != undefined) {
             $('#kiwi .right_bar .queries .' + panel.cid + ' .query_location').text(query_info);
         }
+
+        // Bind  button actions
+        // Click on WHOIS button
+        $('#kiwi .right_bar .queries .' + panel.cid + ' .query_whois').on('click', function () {
+            var net = kiwi.components.Network();
+            net.raw('WHOIS :' + query_nick);
+        });
+        
+        // Click on Ignore button
+        $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').on('click', function () {
+            var ignore_state = toggleIgnore(query_nick);
+            // If nick is ignored, switch the button text
+            if(ignore_state) {
+                $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').html('<i title="' + text.unignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.unignore);
+            } else {
+                $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').html('<i title="' + text.ignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.ignore);
+            }
+        });
     }
 
     function toggleIgnore(nick) {
