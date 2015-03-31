@@ -109,90 +109,11 @@ kiwi.plugins.on('loaded', function() {
         }
     }
 
-    // Create a new JED instance
-    this.locale = new Jed({
-        "domain" : "query_sidebar",
-        "missing_key_callback" : function(key) {
-            console.error('Translation key missing: ' + key)
-        },
-        "locale_data" : locale_strings[kiwi.i18n._textdomain] || locale_strings['en']
-    });
-
-    // Set the locale strings
-    text = {
-        whois: this.locale.translate('whois').fetch(),
-        ignore: this.locale.translate('ignore').fetch(),
-        unignore: this.locale.translate('unignore').fetch(),
-        common_channels: this.locale.translate('common_channels').fetch(),
-        hide_sidebar: this.locale.translate('hide_sidebar').fetch(),
-        years_old: this.locale.translate('years_old').fetch(),
-        gender_male: this.locale.translate('gender_male').fetch(),
-        gender_female: this.locale.translate('gender_female').fetch(),
-        gender_unknown: this.locale.translate('gender_unknown').fetch()
-    };
-
 
     kiwi.events.on('panel:active', function(event, panel) {
-        var panel = panel['active'];
-
         // Hide all query rightbars
-        $('#kiwi .right-bar-content .queries').children().removeClass('active');        
-        
-        if(panel.isQuery()) {
-            // If this is the first query, create "queries" right_bar container
-            if($('#kiwi .right-bar-content .queries') == undefined || $('#kiwi .right-bar-content .queries').length == 0) {
-                var query_sidebar_container = $(_.template($('#query_sidebar_container').html().trim(), text));
-                
-                $('#kiwi .right_bar .right-bar-content').append(query_sidebar_container);
-            } else {
-                $('#kiwi .right-bar-content .queries').show();
-            }
-
-            // If this query doesn't exist yet, we'll create the right_bar for it
-            if($('#kiwi .right-bar-content .queries .' + panel.cid).length == 0) {
-                text['query_id'] = panel.cid;
-
-                // Push the html with the locale strings
-                var query_sidebar_content = $(_.template($('#query_sidebar_content').html().trim(), text));
-                var query_nick = panel.get('name'),
-                    current_panel = panel.cid;
-
-                // Add the right_bar content
-                $('#kiwi .right-bar-content .queries').append(query_sidebar_content);
-                $('#kiwi .right_bar .queries .' + panel.cid + ' .query_nick .query_nick_nickname').text(query_nick);
-                // Make the right_bar for this query visible
-                $('#kiwi .right-bar-content .queries .' + panel.cid).addClass('active');
-                // Fix the resize_handle position
-                $('.memberlists_resize_handle').css('left', $('#kiwi').width() - parseInt($('.right_bar').width()) -10);
-
-                // Update the ignore status if query_nick is already ignored
-                if(getIgnoreStatus(query_nick) > -1) {
-                    $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').html('<i title="' + text.unignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.unignore);
-                }
-
-                // Collect the member info and fill the right bar
-                getMemberInfo(query_nick, panel);                
-            } else { // The query exists but is inactive
-                // Hide all right_bars
-                $('#kiwi .memberlists').children().removeClass('active');
-                $('#kiwi .memberlists').hide();
-                $('#kiwi .right-bar-content .queries .' + panel.cid).addClass('active');
-            }
-
-            // Tweak the right_bar visibility
-            setTimeout(function () {
-                if ($('#kiwi .right_bar').hasClass('disabled')) {
-                    $('#kiwi .right_bar').removeClass('disabled');
-                    $('#kiwi .memberlists').children().removeClass('active');
-                    $('#kiwi .memberlists').hide();
-                    $('#kiwi .right_bar .right-bar-content .channel_tools').hide();
-                }
-            }, 20);
-        } else { // Maybe moving out of a query so hide them all
-            $('#kiwi .queries').hide();
-            $('#kiwi .right_bar .right-bar-content .channel_tools').show();
-            $('#kiwi .memberlists').show();
-        }
+        $('#kiwi .right-bar-content .queries').children().removeClass('active');
+        new queryInfo({'panel': panel['active']});
     });
 
     kiwi.events.on('panel:close', function(event, panel) {
@@ -202,138 +123,250 @@ kiwi.plugins.on('loaded', function() {
         }
     });
 
+    var querySidebar = Backbone.View.extend({
+        // function fillRightBar(member_info, query_nick, panel) {
+        render: function() {
+        if(this.model.panel.isQuery()) {
+            this.initQueryRightPanel();
+            this.createQuerySidebar();
+            console.log('rendering');
+        } else { // Maybe moving out of a query so hide them all
+            $('#kiwi .right-bar-content .queries').children().removeClass('active');        
+            $('#kiwi .queries').hide();
+            $('#kiwi .right_bar .right-bar-content .channel_tools').show();
+            $('#kiwi .memberlists').show();
+        }
+        },
 
-    function getMemberInfo(query_nick, query_panel) {
-        var common_channels = [],
-            member_info = '';
+        initQueryRightPanel: function() {
+            // If this is the first query, create "queries" right_bar container
+            if($('#kiwi .right-bar-content .queries') == undefined || $('#kiwi .right-bar-content .queries').length == 0) {
+                var query_sidebar_container = $(_.template($('#query_sidebar_container').html().trim(), text));
+                
+                $('#kiwi .right_bar .right-bar-content').append(query_sidebar_container);
+            } else {
+                $('#kiwi .right-bar-content .queries').show();
+            }
+        },
 
-        // Run through all the open channels to find the ones in common with the current query user
-        _.each(kiwi.connections.panels(), function(panel) {
-            if(panel.get('members') != undefined) {
-                var members = panel.get('members').nick_cache;
+        createQuerySidebar: function() {
+            // If this query doesn't exist yet, we'll create the right_bar for it
+            if($('#kiwi .right-bar-content .queries .' + this.model.panel.cid).length == 0) {
+                text['query_id'] = this.model.panel.cid;
 
-                // Check if the member is in the channel
-                for(member in members) {
-                    var regexp = new RegExp(query_nick, 'i'),
-                    panel_name = panel.get('name');
+                // Push the html with the locale strings
+                var query_sidebar_content = $(_.template($('#query_sidebar_content').html().trim(), text));
+                var query_nick = this.model.panel.get('name'),
+                    current_panel = this.model.panel.cid;
 
-                    if(member.match(regexp)) {
-                        var clean_panel_name = panel_name.replace('#', '');
+                // Add the right_bar content
+                $('#kiwi .right-bar-content .queries').append(query_sidebar_content);
+                $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_nick .query_nick_nickname').text(query_nick);
+                // Make the right_bar for this query visible
+                $('#kiwi .right-bar-content .queries .' + this.model.panel.cid).addClass('active');
+                // Fix the resize_handle position
+                $('.memberlists_resize_handle').css('left', $('#kiwi').width() - parseInt($('.right_bar').width()) -10);
 
-                        common_channels.push('<a class="chan ' + clean_panel_name + '" data-channel="' + panel_name + '">' + _.escape(panel_name) + '</a>');
+                // Update the ignore status if query_nick is already ignored
+                if(getIgnoreStatus(query_nick) > -1) {
+                    $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_ignore').html('<i title="' + text.unignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.unignore);
+                }
 
-                        /*$('#kiwi .right_bar .queries .' + current_panel + ' .common_channels a.' + clean_panel_name).click(function() {
-                            console.log('ok');
-                                kiwi.connections.active_connection.createAndJoinChannels(panel_name);
-                                kiwi.connections.active_connection.panels.getByName(panel_name).show();
-                        });*/
-                        
-                        // We only need to feed the ASL once
-                        if(member_info == '') {
-                            // Find ASL from the member we're opening a query with 
-                            var query_member = members[member];
+                this.prepareGenderInfo();
+                this.displayNick();
+                this.displayCommonChannels();
+                this.displayAvatar();
+                this.displayASL();
+                this.bindQueryButtons();
+            } else { // The query exists but is inactive
+                // Hide all right_bars
+                $('#kiwi .memberlists').children().removeClass('active');
+                $('#kiwi .memberlists').hide();
+                $('#kiwi .right-bar-content .queries .' + this.model.panel.cid).addClass('active');
+            }
+            this.tweakRightbarVisibility();
+        },
+
+        tweakRightbarVisibility: function() {
+            // Tweak the right_bar visibility
+            setTimeout(function () {
+                console.log('tweaking');
+                if ($('#kiwi .right_bar').hasClass('disabled')) {
+                    $('#kiwi .right_bar').removeClass('disabled');
+                    $('#kiwi .memberlists').children().removeClass('active');
+                    $('#kiwi .memberlists').hide();
+                    $('#kiwi .right_bar .right-bar-content .channel_tools').hide();
+                }
+            }, 20);
+        },
+
+        prepareGenderInfo: function() {
+            this.avatar = '/assets/plugins/avatar-undefined.jpg',
+            this.gender_text = text.gender_undefined,
+            this.color = '#000000';
+
+            // Set the gender avatar
+            if(this.model.member_info.query_gender == 'M') {
+                this.avatar = "/assets/plugins/user-Male.png";
+                this.color = '#0066ff';
+                this.gender_text = text.gender_male;
+            } else if(this.model.member_info.query_gender == 'F') {
+                this.avatar = "/assets/plugins/user-Female.png";
+                this.color = '#FF00FF';
+                this.gender_text = text.gender_female;
+            }
+        },
+
+        displayNick: function() {
+            $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_nick_nickname').css('color', this.color);
+        },
+
+        displayCommonChannels: function() {
+            var common_channels_html = [];
+
+            // Do the html for each channel
+            _.each(this.model.member_info.common_channels, function(channel) {
+                var clean_channel = channel.replace('#', '');
+                common_channels_html.push('<a class="chan ' + clean_channel + '" data-channel="' + channel + '">' + _.escape(channel) + '</a>');
+            });
+
+            $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .common_channels').append(common_channels_html.join(', '));
+        },
+
+        displayAvatar: function() {
+            $('#kiwi .queries .' + this.model.panel.cid + ' .query_avatar').append('<img src="' + this.avatar + '" width="160" height="160" />');
+        },
+
+        displayASL: function() {
+            if(this.model.member_info.query_gender != undefined) {
+                // Add the gender
+                $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_gender').text(this.gender_text);
+                // If there is an gender and an age, seperate with a comma
+                if(this.model.member_info.query_age != '' && this.model.member_info.gender_text != '') {
+                    this.model.member_info.query_age = ', ' + this.model.member_info.query_age;
+                }
+            }
+            // Add the Age
+            if(this.model.member_info.query_age != undefined) {
+                if(this.model.member_info.query_age != '') {
+                    this.model.member_info.query_age = this.model.member_info.query_age + ' ' + text.years_old;
+                }
+                $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_age').text(this.model.member_info.query_age);
+                // If there is an age and info, seperate with a comma
+                if(this.model.member_info.query_age != '' && this.model.member_info.query_info != '') {
+                    this.model.member_info.query_info = ', ' + this.model.member_info.query_info;
+                }
+            }
+            // Add the Location
+            if(this.model.member_info.query_info != undefined) {
+                $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_location').text(this.model.member_info.query_info);
+            }
+        },
+
+        bindQueryButtons: function() {
+            var query_nick = this.model.panel.get('name'),
+                panel_cid = this.model.panel.cid;
+
+            // Click on WHOIS button
+            $('#kiwi .right_bar .queries .' + panel_cid + ' .query_whois').on('click', function () {
+                var net = kiwi.components.Network();
+                net.raw('WHOIS :' + query_nick);
+            });
+
+            // Click on Ignore button
+            $('#kiwi .right_bar .queries .' + panel_cid + ' .query_ignore').on('click', function () {
+                var ignore_state = toggleIgnore(query_nick);
+
+                // If nick is ignored, switch the button text
+                if(ignore_state) {
+                    $('#kiwi .right_bar .queries .' + panel_cid + ' .query_ignore').html('<i title="' + text.unignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.unignore);
+                } else {
+                    $('#kiwi .right_bar .queries .' + panel_cid + ' .query_ignore').html('<i title="' + text.ignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.ignore);
+                }
+            });
+        }
+    });
+
+    var queryInfo = Backbone.Model.extend({
+        initialize: function (options) {
+            this.panel = options.panel;
+
+            // Create a new JED instance
+            this.locale = new Jed({
+                "domain" : "query_sidebar",
+                "missing_key_callback" : function(key) {
+                    console.error('[Jed] missing_key_callback:' + key);
+                },
+                "locale_data" : locale_strings[kiwi.i18n._textdomain] || locale_strings['en']
+            });
+
+            // Set the locale strings
+            text = {
+                whois: this.locale.translate('whois').fetch(),
+                ignore: this.locale.translate('ignore').fetch(),
+                unignore: this.locale.translate('unignore').fetch(),
+                common_channels: this.locale.translate('common_channels').fetch(),
+                hide_sidebar: this.locale.translate('hide_sidebar').fetch(),
+                years_old: this.locale.translate('years_old').fetch(),
+                gender_male: this.locale.translate('gender_male').fetch(),
+                gender_female: this.locale.translate('gender_female').fetch(),
+                gender_unknown: this.locale.translate('gender_unknown').fetch()
+            };
+
+            this.collectQueryInfo();
+            this.view = new querySidebar({model: this});
+            this.view.render();
+        },
+
+        collectQueryInfo: function() {
+            var common_channels = [],
+                query_nick = this.panel.name,
+                member_info = '';
+
+            // Run through all the open channels to find the ones in common with the current query user
+            _.each(kiwi.connections.panels(), function(panel) {
+                if(panel.get('members') != undefined) {
+                    var members = panel.get('members').nick_cache;
+
+                    // Check if the member is in the channel
+                    for(member in members) {
+                        var regexp = new RegExp(query_nick, 'i'),
+                        panel_name = panel.get('name');
+
+                        if(member.match(regexp)) {
+                            common_channels.push(panel_name);
+
+                            /*$('#kiwi .right_bar .queries .' + current_panel + ' .common_channels a.' + clean_panel_name).click(function() {
+                                console.log('ok');
+                                    kiwi.connections.active_connection.createAndJoinChannels(panel_name);
+                                    kiwi.connections.active_connection.panels.getByName(panel_name).show();
+                            });*/
                             
-                            // TODO : make the whole execution wait until the ASL is full
-                            /*if(query_member.get('gender') == undefined) {
-                                delay(2000);
-                            }*/
-                            
-                            member_info = {'query_gender': query_member.get('gender'),
-                                            'query_age': query_member.get('age'),
-                                            'query_info': query_member.get('info')};
+                            // We only need to feed the ASL once
+                            if(member_info == '') {
+                                // Find ASL from the member we're opening a query with 
+                                var query_member = members[member];
+                                
+                                // TODO : make the whole execution wait until the ASL is full
+                                /*if(query_member.get('gender') == undefined) {
+                                    delay(2000);
+                                }*/
+                                
+                                member_info = {'query_gender': query_member.get('gender'),
+                                                'query_age': query_member.get('age'),
+                                                'query_info': query_member.get('info')};
+                            }
                         }
                     }
                 }
-            }
-        });
-        
-        // Now we've been through all channels, push them into the final object
-        member_info['common_channels'] = common_channels;
-
-        // Now we've collected all the info, do the display
-        fillRightBar(member_info, query_nick, query_panel);
-
-        return;
-    }
-
-    function fillRightBar(member_info, query_nick, panel) {
-        var common_channels = [],
-            query_gender = '',
-            query_age = '',
-            query_info = '',
-            avatar = '/assets/plugins/avatar-undefined.jpg',
-            gender_text = text.gender_undefined,
-            color = '#000000';
-
-        common_channels = member_info['common_channels'];
-        query_gender = member_info['query_gender'];
-        query_age = member_info['query_age'];
-        query_info = member_info['query_info'];
-
-        // Write the common channels in the right bar
-        $('#kiwi .right_bar .queries .' + panel.cid + ' .common_channels').append(common_channels.join(', '));
-
-        // Set the gender avatar
-        if(query_gender == 'M') {
-            avatar = "/assets/plugins/user-Male.png";
-            color = '#0066ff';
-            gender_text = text.gender_male;
-        } else if(query_gender == 'F') {
-            avatar = "/assets/plugins/user-Female.png";
-            color = '#FF00FF';
-            gender_text = text.gender_female;
+                return member_info;
+            });
+            this.member_info = member_info;
+            // Now we've been through all channels, push them into the final object
+            this.member_info['common_channels'] = common_channels;
         }
+    });
 
-        // Add the nick
-        $('#kiwi .right_bar .queries .' + panel.cid + ' .query_nick_nickname').css('color', color);
-
-        // Add the avatar
-        if(avatar != '') {
-            $('#kiwi .queries .' + panel.cid + ' .query_avatar').append('<img src="' + avatar + '" width="160" height="160" />');
-        }
-
-        // Add the gender
-        if(query_gender != undefined) {
-            $('#kiwi .right_bar .queries .' + panel.cid + ' .query_gender').text(gender_text);
-            // If there is an gender and an age, seperate with a comma
-            if(query_age != '' && gender_text != '') {
-                query_age = ', ' + query_age;
-            }            
-        }
-        // Add the Age
-        if(query_age != undefined) {
-            if(query_age != '') {
-                query_age = query_age + ' ' + text.years_old;
-            }
-            $('#kiwi .right_bar .queries .' + panel.cid + ' .query_age').text(query_age);
-            // If there is an age and info, seperate with a comma
-            if(query_age != '' && query_info != '') {
-                query_info = ', ' + query_info;
-            }
-        }
-        // Add the Location
-        if(query_info != undefined) {
-            $('#kiwi .right_bar .queries .' + panel.cid + ' .query_location').text(query_info);
-        }
-
-        // Bind  button actions
-        // Click on WHOIS button
-        $('#kiwi .right_bar .queries .' + panel.cid + ' .query_whois').on('click', function () {
-            var net = kiwi.components.Network();
-            net.raw('WHOIS :' + query_nick);
-        });
-        
-        // Click on Ignore button
-        $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').on('click', function () {
-            var ignore_state = toggleIgnore(query_nick);
-            // If nick is ignored, switch the button text
-            if(ignore_state) {
-                $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').html('<i title="' + text.unignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.unignore);
-            } else {
-                $('#kiwi .right_bar .queries .' + panel.cid + ' .query_ignore').html('<i title="' + text.ignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.ignore);
-            }
-        });
-    }
 
     function toggleIgnore(nick) {
         var ignore_list = kiwi.connections.active_connection.get("ignore_list");
