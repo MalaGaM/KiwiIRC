@@ -126,16 +126,15 @@ kiwi.plugins.on('loaded', function() {
     var querySidebar = Backbone.View.extend({
         // function fillRightBar(member_info, query_nick, panel) {
         render: function() {
-        if(this.model.panel.isQuery()) {
             this.initQueryRightPanel();
             this.createQuerySidebar();
-            console.log('rendering');
-        } else { // Maybe moving out of a query so hide them all
+        },
+
+        cleanup: function() {
             $('#kiwi .right-bar-content .queries').children().removeClass('active');        
             $('#kiwi .queries').hide();
             $('#kiwi .right_bar .right-bar-content .channel_tools').show();
             $('#kiwi .memberlists').show();
-        }
         },
 
         initQueryRightPanel: function() {
@@ -164,6 +163,7 @@ kiwi.plugins.on('loaded', function() {
                 $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_nick .query_nick_nickname').text(query_nick);
                 // Make the right_bar for this query visible
                 $('#kiwi .right-bar-content .queries .' + this.model.panel.cid).addClass('active');
+
                 // Fix the resize_handle position
                 $('.memberlists_resize_handle').css('left', $('#kiwi').width() - parseInt($('.right_bar').width()) -10);
 
@@ -190,12 +190,15 @@ kiwi.plugins.on('loaded', function() {
         tweakRightbarVisibility: function() {
             // Tweak the right_bar visibility
             setTimeout(function () {
-                console.log('tweaking');
                 if ($('#kiwi .right_bar').hasClass('disabled')) {
                     $('#kiwi .right_bar').removeClass('disabled');
                     $('#kiwi .memberlists').children().removeClass('active');
                     $('#kiwi .memberlists').hide();
                     $('#kiwi .right_bar .right-bar-content .channel_tools').hide();
+                    // Panels to the side of the sidebar
+                    $('#kiwi .panels').css('right', $('#kiwi .right_bar').outerWidth(true));
+                    // The resize handle sits overlapping the panels and memberlist
+                    $('#kiwi .resize_handle').css('left', $('#kiwi .right_bar').position().left - ($('#kiwi .resize_handle').outerWidth(true) / 2));
                 }
             }, 20);
         },
@@ -315,12 +318,18 @@ kiwi.plugins.on('loaded', function() {
 
             this.collectQueryInfo();
             this.view = new querySidebar({model: this});
-            this.view.render();
+
+            if(!this.panel.isQuery()) {
+                // Moving out of a query, put right bar back in place
+                this.view.cleanup();
+            } else {
+                this.view.render();
+            }
         },
 
         collectQueryInfo: function() {
             var common_channels = [],
-                query_nick = this.panel.name,
+                query_nick = this.panel.get('name'),
                 member_info = '';
 
             // Run through all the open channels to find the ones in common with the current query user
