@@ -219,7 +219,7 @@
 }
 
 #kiwi .toolbar .panellist li .part {
-    
+    top: 7px;
 }
 
 #kiwi .toolbar .panellist li .part:before {
