@@ -37,6 +37,9 @@
     #kiwi .right_bar .queries .query_tools > button {
         margin: 2px 0;
     }
+    #kiwi .right-bar-toggle {
+        top: 35px;
+    }
 </style>
 
 <script type="text/html" id="query_sidebar_container">
@@ -58,7 +61,6 @@
         <div class="query_tools">
             <button class="query_whois"><i title="<%= whois %>" class="fa fa-search"></i>&nbsp;<%= whois %></button><br />
             <button class="query_ignore"><i title="<%= ignore %>" class="fa fa-minus-circle"></i>&nbsp;<%= ignore %></button><br />
-            <i title="<%= hide_sidebar %>" class="fa fa-angle-double-right right-bar-toggle-inner"></i>
         </div>
     </div>
 </script>
@@ -123,8 +125,10 @@ kiwi.plugins.on('loaded', function() {
         }
     });
 
+
     var querySidebar = Backbone.View.extend({
-        // function fillRightBar(member_info, query_nick, panel) {
+        events: {},
+
         render: function() {
             this.initQueryRightPanel();
             this.createQuerySidebar();
@@ -135,6 +139,7 @@ kiwi.plugins.on('loaded', function() {
             $('#kiwi .queries').hide();
             $('#kiwi .right_bar .right-bar-content .channel_tools').show();
             $('#kiwi .memberlists').show();
+            $('#kiwi .right-bar-toggle i').removeClass('fa fa-info').addClass('fa fa-users');
         },
 
         initQueryRightPanel: function() {
@@ -167,10 +172,32 @@ kiwi.plugins.on('loaded', function() {
                 // Fix the resize_handle position
                 $('.memberlists_resize_handle').css('left', $('#kiwi').width() - parseInt($('.right_bar').width()) -10);
 
+
                 // Update the ignore status if query_nick is already ignored
                 if(getIgnoreStatus(query_nick) > -1) {
                     $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_ignore').html('<i title="' + text.unignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.unignore);
                 }
+
+                $('#kiwi .right-bar-toggle').on('click', function() {
+                    if(!$('#kiwi .right_bar').hasClass('disabled')) {
+                        $('#kiwi .right_bar .queries').hide();
+                        $('#kiwi .right-bar-toggle i').removeClass('fa fa-users').addClass('fa fa-info');
+                        setTimeout(function () {
+                            $('#kiwi .right-bar-toggle').show();
+                        }, 20);
+                    } else {
+                        $('#kiwi .right_bar .queries').show();
+                        $('#kiwi .right-bar-toggle i').removeClass('fa fa-info').addClass('fa fa-users');
+                        setTimeout(function () {
+                            $('#kiwi .right_bar').removeClass('disabled');
+                            // Panels to the side of the sidebar
+                            $('#kiwi .panels').css('right', $('#kiwi .right_bar').outerWidth(true));
+                            // The resize handle sits overlapping the panels and memberlist
+                            $('#kiwi .resize_handle').css('left', $('#kiwi .right_bar').position().left - ($('#kiwi .resize_handle').outerWidth(true) / 2));
+                            $('#kiwi .right-bar-toggle').show();
+                        }, 20);
+                    }
+                });
 
                 this.prepareGenderInfo();
                 this.displayNick();
@@ -199,6 +226,9 @@ kiwi.plugins.on('loaded', function() {
                     $('#kiwi .panels').css('right', $('#kiwi .right_bar').outerWidth(true));
                     // The resize handle sits overlapping the panels and memberlist
                     $('#kiwi .resize_handle').css('left', $('#kiwi .right_bar').position().left - ($('#kiwi .resize_handle').outerWidth(true) / 2));
+                    $('#kiwi .right-bar-toggle').show();
+                    // Tweak the toggle icon
+                    $('#kiwi .right-bar-toggle i').removeClass('fa fa-info').addClass('fa fa-users');
                 }
             }, 20);
         },
@@ -319,11 +349,11 @@ kiwi.plugins.on('loaded', function() {
             this.collectQueryInfo();
             this.view = new querySidebar({model: this});
 
-            if(!this.panel.isQuery()) {
+            if(this.panel.isQuery()) {
+                this.view.render();
+            } else {
                 // Moving out of a query, put right bar back in place
                 this.view.cleanup();
-            } else {
-                this.view.render();
             }
         },
 
