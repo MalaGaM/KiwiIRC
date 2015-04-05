@@ -169,35 +169,13 @@ kiwi.plugins.on('loaded', function() {
                 // Make the right_bar for this query visible
                 $('#kiwi .right-bar-content .queries .' + this.model.panel.cid).addClass('active');
 
-                // Fix the resize_handle position
-                $('.memberlists_resize_handle').css('left', $('#kiwi').width() - parseInt($('.right_bar').width()) -10);
-
-
                 // Update the ignore status if query_nick is already ignored
                 if(getIgnoreStatus(query_nick) > -1) {
                     $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_ignore').html('<i title="' + text.unignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.unignore);
                 }
 
-                $('#kiwi .right-bar-toggle').on('click', function() {
-                    if(!$('#kiwi .right_bar').hasClass('disabled')) {
-                        $('#kiwi .right_bar .queries').hide();
-                        $('#kiwi .right-bar-toggle i').removeClass('fa fa-users').addClass('fa fa-info');
-                        setTimeout(function () {
-                            $('#kiwi .right-bar-toggle').show();
-                        }, 20);
-                    } else {
-                        $('#kiwi .right_bar .queries').show();
-                        $('#kiwi .right-bar-toggle i').removeClass('fa fa-info').addClass('fa fa-users');
-                        setTimeout(function () {
-                            $('#kiwi .right_bar').removeClass('disabled');
-                            // Panels to the side of the sidebar
-                            $('#kiwi .panels').css('right', $('#kiwi .right_bar').outerWidth(true));
-                            // The resize handle sits overlapping the panels and memberlist
-                            $('#kiwi .resize_handle').css('left', $('#kiwi .right_bar').position().left - ($('#kiwi .resize_handle').outerWidth(true) / 2));
-                            $('#kiwi .right-bar-toggle').show();
-                        }, 20);
-                    }
-                });
+                // Detect right bar toggling
+                $('#kiwi .right-bar-toggle').on('click', this.toggleQueryRightBar);
 
                 this.prepareGenderInfo();
                 this.displayNick();
@@ -229,6 +207,8 @@ kiwi.plugins.on('loaded', function() {
                     $('#kiwi .right-bar-toggle').show();
                     // Tweak the toggle icon
                     $('#kiwi .right-bar-toggle i').removeClass('fa fa-info').addClass('fa fa-users');
+                    // Fix the resize_handle position
+                    $('#kiwi .memberlists_resize_handle').css('left', $('#kiwi').width() - parseInt($('#kiwi .right_bar').width()) -10);
                 }
             }, 20);
         },
@@ -317,6 +297,28 @@ kiwi.plugins.on('loaded', function() {
                     $('#kiwi .right_bar .queries .' + panel_cid + ' .query_ignore').html('<i title="' + text.ignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.ignore);
                 }
             });
+        },
+
+        toggleQueryRightBar: function() {
+            // Open right bar
+            if($('#kiwi .right_bar').hasClass('disabled')) {
+                $('#kiwi .right_bar .queries').show();
+                $('#kiwi .right-bar-toggle i').removeClass('fa fa-info').addClass('fa fa-users');
+                setTimeout(function () {
+                    $('#kiwi .right_bar').removeClass('disabled');
+                    // Panels to the side of the sidebar
+                    $('#kiwi .panels').css('right', $('#kiwi .right_bar').outerWidth(true));
+                    // The resize handle sits overlapping the panels and memberlist
+                    $('#kiwi .resize_handle').css('left', $('#kiwi .right_bar').position().left - ($('#kiwi .resize_handle').outerWidth(true) / 2));
+                    $('#kiwi .right-bar-toggle').show();
+                }, 20);
+            } else { // Hide right bar
+                $('#kiwi .right_bar .queries').hide();
+                $('#kiwi .right-bar-toggle i').removeClass('fa fa-users').addClass('fa fa-info');
+                setTimeout(function () {
+                    $('#kiwi .right-bar-toggle').show();
+                }, 20);
+            }
         }
     });
 
