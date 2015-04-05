@@ -113,8 +113,6 @@ kiwi.plugins.on('loaded', function() {
 
 
     kiwi.events.on('panel:active', function(event, panel) {
-        // Hide all query rightbars
-        $('#kiwi .right-bar-content .queries').children().removeClass('active');
         new queryInfo({'panel': panel['active']});
     });
 
@@ -130,12 +128,13 @@ kiwi.plugins.on('loaded', function() {
         events: {},
 
         render: function() {
+            $('#kiwi .right-bar-content .queries').children().removeClass('active');
             this.initQueryRightPanel();
             this.createQuerySidebar();
         },
 
         cleanup: function() {
-            $('#kiwi .right-bar-content .queries').children().removeClass('active');        
+            $('#kiwi .right-bar-content .queries').children().removeClass('active');
             $('#kiwi .queries').hide();
             $('#kiwi .right_bar .right-bar-content .channel_tools').show();
             $('#kiwi .memberlists').show();
