@@ -15,7 +15,8 @@ _kiwi.view.ControlBox = Backbone.View.extend({
         this.preprocessor = new InputPreProcessor();
         this.preprocessor.recursive_depth = 5;
 
-        this.autocomplete = window.autoc = new AutoComplete({el: this.$('.autocomplete')[0]});
+        this.autocomplete = new AutoComplete({el: this.$('.autocomplete')[0]});
+        this.autocomplete_command_list = [];
         this.bindAutocomplete();
 
         // Keep the nick view updated with nick changes
@@ -302,17 +303,28 @@ _kiwi.view.ControlBox = Backbone.View.extend({
             break;
 
         case (ev.keyCode === 191 && inp_val === ''):    // Forward slash in an empty box
-            var command_list = [
-                {match: ['/join'], description: 'Join or start a channel'},
-                {match: ['/part', '/leave'], description: 'Leave the channel'},
-                {match: ['/me', '/action'], description: 'Do something physical'},
-                {match: ['/nick'], description: 'Change your nickname'},
-                {match: ['/topic'], description: 'Set the topic for the channel'},
-            ];
-
-            this.showAutocomplete(command_list, true);
+            this.showAutocomplete(this.autocomplete_command_list, true);
             break;
         }
+    },
+
+
+    setAutoCompleteCommands: function(commands) {
+        _.each(commands, function(description, command) {
+            this.autocomplete_command_list.push({
+                match: [command],
+                description: description
+            });
+        }, this);
+        /*
+        var command_list = [
+            {match: ['/join'], description: 'Join or start a channel'},
+            {match: ['/part', '/leave'], description: 'Leave the channel'},
+            {match: ['/me', '/action'], description: 'Do something physical'},
+            {match: ['/nick'], description: 'Change your nickname'},
+            {match: ['/topic'], description: 'Set the topic for the channel'},
+        ];
+        */
     },
 
 
