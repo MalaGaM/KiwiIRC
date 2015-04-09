@@ -26,7 +26,7 @@
         text-align: left;
     }
     #kiwi .right_bar .queries .query_nick_status {
-        font-size: 0.8em;
+        font-size: 0.6em;
     }
     #kiwi .right_bar .queries .available {
         color: green;
@@ -45,6 +45,13 @@
     #kiwi .right-bar-toggle {
         top: 35px;
     }
+    #kiwi.narrow .right-bar-toggle {
+        top: 35px;
+        right: 1em;
+        left: auto;
+        z-index: 2;
+    }
+
 </style>
 
 <script type="text/html" id="query_sidebar_container">
@@ -59,7 +66,6 @@
             <span class="query_nick_nickname"></span>
         </div>
         <div class="query_infos">
-            <span class="query_gender"></span><span class="query_age"></span><span class="query_location"></span>
         </div>
         <div class="common_channels">
             <span class="query_common_channels_title"><%= common_channels %></span><br />
@@ -91,6 +97,7 @@ kiwi.plugins.on('loaded', function() {
                 "ignore" : [ null, "Ignore user" ],
                 "unignore" : [ null, "Stop ignoring" ],
                 "common_channels" : [ null, "Channels in common" ],
+                "no_common_channel" : [ null, "No common channels" ],
                 "hide_sidebar" : [ null, "Hide" ],
                 "years_old" : [ null, "years old" ],
                 "gender_male" : [ null, "Male" ],
@@ -110,6 +117,7 @@ kiwi.plugins.on('loaded', function() {
                 "ignore" : [ null, "Bloquer" ],
                 "unignore" : [ null, "Ne plus bloquer" ],
                 "common_channels" : [ null, "Salons communs" ],
+                "no_common_channel" : [ null, "Aucun salon commun" ],
                 "hide_sidebar" : [ null, "Masquer" ],
                 "years_old" : [ null, "ans" ],
                 "gender_male" : [ null, "Homme" ],
@@ -174,8 +182,13 @@ kiwi.plugins.on('loaded', function() {
 
                 // Add the right_bar content
                 $('#kiwi .right-bar-content .queries').append(query_sidebar_content);
-                // Make the right_bar for this query visible
-                $('#kiwi .right-bar-content .queries .' + this.model.panel.cid).addClass('active');
+
+                // Show the new bar
+                $('#kiwi .right-bar-content .queries .' + this.model.panel.cid).show();
+                // Make the right_bar for this query visible (unless the right_bar is disabled)
+                if(!$('#kiwi .right_bar').hasClass('disabled')) {
+                    $('#kiwi .right-bar-content .queries .' + this.model.panel.cid).addClass('active');
+                }
 
                 // Update the ignore status if query_nick is already ignored
                 if(getIgnoreStatus(query_nick) > -1) {
@@ -194,8 +207,6 @@ kiwi.plugins.on('loaded', function() {
                 this.bindQueryButtons();
             } else { // The query exists but is inactive
                 // Hide all right_bars
-                $('#kiwi .memberlists').children().removeClass('active');
-                $('#kiwi .memberlists').hide();
                 $('#kiwi .right-bar-content .queries .' + this.model.panel.cid).addClass('active');
             }
             this.tweakRightbarVisibility();
@@ -218,6 +229,12 @@ kiwi.plugins.on('loaded', function() {
                     $('#kiwi .right-bar-toggle i').removeClass('fa fa-info').addClass('fa fa-users');
                     // Fix the resize_handle position
                     $('#kiwi .memberlists_resize_handle').css('left', $('#kiwi').width() - parseInt($('#kiwi .right_bar').width()) -10);
+                }
+                // Narrow screen extra tweeks
+                if($('#kiwi.narrow .right_bar').length > 0) {
+                    $('#kiwi.narrow .panels').css('width', '100%');
+                    $('#kiwi.narrow .right_bar').addClass('disabled');
+                    $('#kiwi.narrow .right-bar-toggle i').removeClass('fa fa-users').addClass('fa fa-info');
                 }
             }, 20);
         },
@@ -252,7 +269,6 @@ kiwi.plugins.on('loaded', function() {
                 status_icon = '<i title="' + text.available + '" class="fa fa-circle available"></i>&nbsp;';
             }
             $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_nick .query_nick_status').html(status_icon);
-            console.log(this.model.member_info);
         },
 
         displayCommonChannels: function() {
@@ -264,7 +280,12 @@ kiwi.plugins.on('loaded', function() {
                 common_channels_html.push('<a class="chan ' + clean_channel + '" data-channel="' + channel + '">' + _.escape(channel) + '</a>');
             });
 
-            $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .common_channels').append(common_channels_html.join(', '));
+            if(common_channels_html.length > 0) {
+                $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .common_channels').append(common_channels_html.join(', '));
+            } else {
+                $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .common_channels').append(text.no_common_channel);
+            }
+            
         },
 
         displayAvatar: function() {
@@ -272,32 +293,22 @@ kiwi.plugins.on('loaded', function() {
         },
 
         displayASL: function() {
-            var suffix = '';
+            var asl = [];
 
             // Add the Age
-            if(this.model.member_info.query_age != undefined && this.model.member_info.query_age != '') {
-                if(this.model.member_info.query_gender != '') {
-                    suffix = ', ';
-                }
-
-                $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_age').text(this.model.member_info.query_age + ' ' + text.years_old + suffix);
-
-                suffix = '';
+            if(this.model.member_info.query_age !== undefined && this.model.member_info.query_age !== '') {
+                asl.push(this.model.member_info.query_age + ' ' + text.years_old);
             }
             // Add the gender
-            if(this.model.member_info.query_gender != undefined && this.model.member_info.query_gender != '') {
-                if(this.model.member_info.query_info != '') {
-                    suffix = ', ';
-                }
-
-                $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_gender').text(this.gender_text + suffix);
-
-                suffix = '';
+            if(this.gender_text !== undefined && this.gender_text !== '') {
+                asl.push(this.gender_text);
             }
             // Add the Location
-            if(this.model.member_info.query_info != undefined && this.model.member_info.query_info != '') {
-                $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_location').text(this.model.member_info.query_info);
+            if(this.model.member_info.query_info !== undefined && this.model.member_info.query_info !== '') {
+                asl.push(this.model.member_info.query_info);
             }
+
+            $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_infos').text(asl.join(', '));
         },
 
         bindQueryButtons: function() {
@@ -327,9 +338,13 @@ kiwi.plugins.on('loaded', function() {
             // Open right bar
             if($('#kiwi .right_bar').hasClass('disabled')) {
                 $('#kiwi .right_bar .queries').show();
-                $('#kiwi .right-bar-toggle i').removeClass('fa fa-info').addClass('fa fa-users');
+                if($('#kiwi .right_bar .queries > div:visible').length == 1) {
+                    $('#kiwi .right_bar .queries .' + $('#kiwi .right_bar .queries > div:visible').attr('class')).show();
+                }
+                $('#kiwi .right-bar-toggle i').removeClass('fa fa-info').addClass('fa fa-angle-double-right');
                 setTimeout(function () {
                     $('#kiwi .right_bar').removeClass('disabled');
+                    $('#kiwi .right_bar_toggle').show();
                     // Panels to the side of the sidebar
                     $('#kiwi .panels').css('right', $('#kiwi .right_bar').outerWidth(true));
                     // The resize handle sits overlapping the panels and memberlist
@@ -365,6 +380,7 @@ kiwi.plugins.on('loaded', function() {
                 ignore: this.locale.translate('ignore').fetch(),
                 unignore: this.locale.translate('unignore').fetch(),
                 common_channels: this.locale.translate('common_channels').fetch(),
+                no_common_channel: this.locale.translate('no_common_channel').fetch(),
                 hide_sidebar: this.locale.translate('hide_sidebar').fetch(),
                 years_old: this.locale.translate('years_old').fetch(),
                 gender_male: this.locale.translate('gender_male').fetch(),
@@ -392,7 +408,7 @@ kiwi.plugins.on('loaded', function() {
 
             // Run through all the open channels to find the ones in common with the current query user
             _.each(kiwi.connections.panels(), function(panel) {
-                if(panel.get('members') != undefined) {
+                if(panel.get('members') !== undefined) {
                     var members = panel.get('members').nick_cache;
 
                     // Check if the member is in the channel
@@ -403,7 +419,8 @@ kiwi.plugins.on('loaded', function() {
                         if(member.match(regexp)) {
                             common_channels.push(panel_name);
 
-                            /*$('#kiwi .right_bar .queries .' + current_panel + ' .common_channels a.' + clean_panel_name).click(function() {
+                            /* TODO : make the channel links work
+                            $('#kiwi .right_bar .queries .' + current_panel + ' .common_channels a.' + clean_panel_name).click(function() {
                                 console.log('ok');
                                     kiwi.connections.active_connection.createAndJoinChannels(panel_name);
                                     kiwi.connections.active_connection.panels.getByName(panel_name).show();
