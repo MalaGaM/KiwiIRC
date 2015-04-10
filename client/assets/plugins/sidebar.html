@@ -29,7 +29,7 @@
         font-size: 0.6em;
     }
     #kiwi .right_bar .queries .available {
-        color: green;
+        color: #60AB56;
     }
     #kiwi .right_bar .queries .common_channels {
         clear: both;
@@ -44,6 +44,10 @@
     }
     #kiwi .right-bar-toggle {
         top: 35px;
+        opacity: 0.5;
+    }
+    #kiwi .right-bar-toggle:hover {
+        opacity: 1;
     }
     #kiwi.narrow .right-bar-toggle {
         top: 35px;
@@ -173,6 +177,9 @@ kiwi.plugins.on('loaded', function() {
         createQuerySidebar: function() {
             // If this query doesn't exist yet, we'll create the right_bar for it
             if($('#kiwi .right-bar-content .queries .' + this.model.panel.cid).length == 0) {
+                $('#kiwi .right-bar-content .queries').children().removeClass('active');
+                $('#kiwi .right-bar-content .queries').children().hide();
+
                 // Prepare the query id in the template
                 text['query_id'] = this.model.panel.cid;
 
@@ -207,6 +214,10 @@ kiwi.plugins.on('loaded', function() {
                 this.bindQueryButtons();
             } else { // The query exists but is inactive
                 // Hide all right_bars
+                $('#kiwi .right-bar-content .queries').children().removeClass('active');
+                $('#kiwi .right-bar-content .queries').children().hide();
+                // Show the good right bar
+                $('#kiwi .right-bar-content .queries .' + this.model.panel.cid).show();
                 $('#kiwi .right-bar-content .queries .' + this.model.panel.cid).addClass('active');
             }
             this.tweakRightbarVisibility();
