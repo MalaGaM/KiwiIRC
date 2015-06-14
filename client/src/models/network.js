@@ -227,18 +227,21 @@
             return (channel_prefix.indexOf(channel_name[0]) > -1);
         },
 
-        // Check a nick alongside our ignore list
-        isNickIgnored: function (nick) {
+        // Check if a user is ignored.
+        // Accepts an object with nick, ident and hostname OR a string.
+        isUserIgnored: function (mask) {
             var idx, list = this.get('ignore_list');
-            var pattern, regex;
+
+            if (typeof mask === "object") {
+               mask = (mask.nick||'*')+'!'+(mask.ident||'*')+'@'+(mask.hostname||'*');
+            } else if (typeof mask === "string") {
+               mask = toUserMask(mask);
+            }
 
             for (idx = 0; idx < list.length; idx++) {
-                pattern = list[idx].replace(/([.+^$[\]\\(){}|-])/g, "\\$1")
-                    .replace('*', '.*')
-                    .replace('?', '.');
-
-                regex = new RegExp(pattern, 'i');
-                if (regex.test(nick)) return true;
+                if (list[idx][1].test(mask)) {
+                   return true;
+                }
             }
 
             return false;
@@ -464,7 +467,7 @@
                 is_pm = ((event.target || '').toLowerCase() == this.get('nick').toLowerCase());
 
             // An ignored user? don't do anything with it
-            if (this.isNickIgnored(event.nick)) {
+            if (this.isUserIgnored(event)) {
                 return;
             }
 
@@ -558,7 +561,7 @@
 
     function onCtcpRequest(event) {
         // An ignored user? don't do anything with it
-        if (this.isNickIgnored(event.nick)) {
+        if (this.isUserIgnored(event)) {
             return;
         }
 
@@ -574,7 +577,7 @@
 
     function onCtcpResponse(event) {
         // An ignored user? don't do anything with it
-        if (this.isNickIgnored(event.nick)) {
+        if (this.isUserIgnored(event)) {
             return;
         }
 
