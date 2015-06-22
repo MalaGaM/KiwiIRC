@@ -58,6 +58,10 @@
         left: auto;
         z-index: 2;
     }
+    #kiwi .report_modal .warning {
+        color: #F00;
+        font-weight: bold;
+    }
 
 </style>
 
@@ -80,6 +84,8 @@
         <div class="query_tools">
             <button class="query_whois"><i title="<%= whois %>" class="fa fa-search"></i>&nbsp;<%= whois %></button><br />
             <button class="query_ignore"><i title="<%= ignore %>" class="fa fa-minus-circle"></i>&nbsp;<%= ignore %></button><br />
+            <button class="query_report"><i title="<%= report_title %>" class="fa fa-exclamation-circle"></i>&nbsp;<%= report_title %></button><br />
+            <div class="report_modal"></div>
         </div>
     </div>
 </script>
@@ -102,6 +108,16 @@ kiwi.plugins.on('loaded', function() {
                 },
                 "whois" : [ null, "User info" ],
                 "ignore" : [ null, "Ignore user" ],
+                "report_title" : [ null, "Report abuse" ],
+                "abuse_report" : [ null, "Abuse report" ],
+                "abuse_report_intro1" : [ null, "The user" ],
+                "abuse_report_intro2" : [ null, "insn't respecting the <a href='http://www.europnet.org/en/rules.html' target='_blank'>rules</a> ? <br /><br />Explain us the problem and we will deal with it as soon as possible.<br /><br />Thank you !" ],
+                "abuse_reason_placeholder" : [ null, "Explain the problem here" ],
+                "abuse_button" : [ null, "Report abuse" ],
+                "abuse_channels" : [ null, "Channel(s)" ],
+                "abuse_reason" : [ null, "Reason" ],
+                "abuse_confirm" : [ null, "Your report has been transferred to our moderators. <br /><br />Thank you and good chat !" ],
+                "abuse_empty" : [ null, "You must add a reason to your report !" ],
                 "unignore" : [ null, "Stop ignoring" ],
                 "common_channels" : [ null, "Channels in common" ],
                 "no_common_channel" : [ null, "No common channels" ],
@@ -114,6 +130,7 @@ kiwi.plugins.on('loaded', function() {
                 "away" : [ null, "Away" ]
             }
         },
+
        'fr': {
             "query_sidebar" : {
                 "" : {
@@ -122,6 +139,16 @@ kiwi.plugins.on('loaded', function() {
                 },
                 "whois" : [ null, "Infos" ],
                 "ignore" : [ null, "Bloquer" ],
+                "report_title" : [ null, "Signaler un abus" ],
+                "abuse_report" : [ null, "Signalement d'abus" ],
+                "abuse_report_intro1" : [ null, "L'utilisateur" ],
+                "abuse_report_intro2" : [ null, "ne respecte pas les <a href='http://www.europnet.org/fr/rules.html' target='_blank'>règles</a> ?<br /><br />Expliquez-nous le problème et nous interviendrons dans les plus brefs délais. <br /><br />Merci !" ],
+                "abuse_reason_placeholder" : [ null, "Expliquez le motif ici" ],
+                "abuse_button" : [ null, "Signaler l'abus" ],
+                "abuse_channels" : [ null, "Salon(s)" ],
+                "abuse_reason" : [ null, "Motif" ],
+                "abuse_confirm" : [ null, "Votre signalement a bien été transmis aux modérateurs. <br /><br />Merci, et bon chat !" ],
+                "abuse_empty" : [ null, "Vous devez saisir un motif pour votre signalement !" ],
                 "unignore" : [ null, "Ne plus bloquer" ],
                 "common_channels" : [ null, "Salons communs" ],
                 "no_common_channel" : [ null, "Aucun salon commun" ],
@@ -346,6 +373,9 @@ kiwi.plugins.on('loaded', function() {
                     $('#kiwi .right_bar .queries .' + panel_cid + ' .query_ignore').html('<i title="' + text.ignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.ignore);
                 }
             });
+
+            // Click on Report button
+            $('#kiwi .right_bar .queries .' + panel_cid + ' .query_report').on('click', _.bind(this.showReportModal, this));
         },
 
         toggleQueryRightBar: function() {
@@ -372,6 +402,68 @@ kiwi.plugins.on('loaded', function() {
                     $('#kiwi .right-bar-toggle').show();
                 }, 20);
             }
+        },
+
+        showReportModal: function() {
+            if (!this.reportModalbox || !this.$el.is(':visible')) {
+                this.createReportModal(this.model.panel.get('name'));
+            }
+
+            this.reportModalbox.show();
+            this.$('.report_reason').focus();
+            return this;
+        },
+
+        createReportModal: function(nickname) {
+            this.reportModalbox = new kiwi.components.MenuBox(text.report_title);
+            
+            this.$el.html('<form class="report_modal">\
+                            <div>\
+                                <p class="intro">' + text.abuse_report_intro1 + ' <strong>' + nickname + '</strong> ' + text.abuse_report_intro2 + '<p class="warning"></p> \
+                                <input type="text" placeholder="' + text.abuse_reason_placeholder + '" class="report_reason">\
+                                <button class="report_submit" class="btn btn-primary">' + text.abuse_button + '</button>\
+                            </div>\
+                        </form>');
+
+            this.$('.report_submit').on('click', _.bind(this.submitAbuse, this));
+
+            // Called when the menubox is manually closed
+            this.$dispose = function() {
+                delete this.modalbox;
+            };
+
+            this.reportModalbox.addItem(text.report, this.$el);
+
+            return;
+        },
+
+        closeReportModal: function() {
+            this.reportModalbox.dispose();
+            delete this.reportModalbox;
+            return this;
+        },
+
+        submitAbuse: function(event) {
+            event.preventDefault();
+            var report_reason = this.$(".report_reason").val(),
+                network = kiwi.components.Network();
+
+            if (report_reason != "") {
+                network.msg('#testoz', text.abuse_report + ' : ' + this.model.panel.get('name') + text.abuse_channels + ' - : ' + this.model.member_info.common_channels.join(', ') + ' - ' + text.abuse_reason + ' : ' + report_reason);
+                this.$(".report_modal .intro").hide();
+                this.$(".report_modal .report_reason").hide();
+                this.$(".report_modal .report_submit").hide();
+                this.reportWarning(text.abuse_confirm);
+            } else {
+                this.reportWarning(text.abuse_empty);
+                this.$(".report_reason").focus();
+            }
+        },
+
+        reportWarning: function(warning_text) {
+            this.$(".report_modal .warning")
+                .html(warning_text)
+                .show();
         }
     });
 
@@ -392,6 +484,16 @@ kiwi.plugins.on('loaded', function() {
             text = {
                 whois: this.locale.translate('whois').fetch(),
                 ignore: this.locale.translate('ignore').fetch(),
+                report_title: this.locale.translate('report_title').fetch(),
+                abuse_report: this.locale.translate('abuse_report').fetch(),
+                abuse_report_intro1: this.locale.translate('abuse_report_intro1').fetch(),
+                abuse_report_intro2: this.locale.translate('abuse_report_intro2').fetch(),
+                abuse_reason_placeholder: this.locale.translate('abuse_reason_placeholder').fetch(),
+                abuse_button: this.locale.translate('abuse_button').fetch(),
+                abuse_channels: this.locale.translate('abuse_channels').fetch(),
+                abuse_reason: this.locale.translate('abuse_reason').fetch(),
+                abuse_confirm: this.locale.translate('abuse_confirm').fetch(),
+                abuse_empty: this.locale.translate('abuse_empty').fetch(),
                 unignore: this.locale.translate('unignore').fetch(),
                 common_channels: this.locale.translate('common_channels').fetch(),
                 no_common_channel: this.locale.translate('no_common_channel').fetch(),
