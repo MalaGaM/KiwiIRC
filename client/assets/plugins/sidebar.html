@@ -110,6 +110,7 @@ kiwi.plugins.on('loaded', function() {
                 "ignore" : [ null, "Ignore user" ],
                 "report_title" : [ null, "Report abuse" ],
                 "abuse_report" : [ null, "Abuse report" ],
+                "abuse_report_nick" : [ null, "Nickname" ],
                 "abuse_report_intro1" : [ null, "The user" ],
                 "abuse_report_intro2" : [ null, "insn't respecting the <a href='http://www.europnet.org/en/rules.html' target='_blank'>rules</a> ? <br /><br />Explain us the problem and we will deal with it as soon as possible.<br /><br />Thank you !" ],
                 "abuse_reason_placeholder" : [ null, "Explain the problem here" ],
@@ -141,6 +142,7 @@ kiwi.plugins.on('loaded', function() {
                 "ignore" : [ null, "Bloquer" ],
                 "report_title" : [ null, "Signaler un abus" ],
                 "abuse_report" : [ null, "Signalement d'abus" ],
+                "abuse_report_nick" : [ null, "Pseudo" ],
                 "abuse_report_intro1" : [ null, "L'utilisateur" ],
                 "abuse_report_intro2" : [ null, "ne respecte pas les <a href='http://www.europnet.org/fr/rules.html' target='_blank'>règles</a> ?<br /><br />Expliquez-nous le problème et nous interviendrons dans les plus brefs délais. <br /><br />Merci !" ],
                 "abuse_reason_placeholder" : [ null, "Expliquez le motif ici" ],
@@ -449,7 +451,7 @@ kiwi.plugins.on('loaded', function() {
                 network = kiwi.components.Network();
 
             if (report_reason != "") {
-                network.msg('#testoz', text.abuse_report + ' : ' + this.model.panel.get('name') + text.abuse_channels + ' - : ' + this.model.member_info.common_channels.join(', ') + ' - ' + text.abuse_reason + ' : ' + report_reason);
+                network.msg('#pole-moderation', text.abuse_report + '. ' + text.abuse_report_nick + ': ' + this.model.panel.get('name') + ' - ' + text.abuse_channels + ': ' + this.model.member_info.common_channels.join(', ') + ' - ' + text.abuse_reason + ' : ' + report_reason);
                 this.$(".report_modal .intro").hide();
                 this.$(".report_modal .report_reason").hide();
                 this.$(".report_modal .report_submit").hide();
@@ -486,6 +488,7 @@ kiwi.plugins.on('loaded', function() {
                 ignore: this.locale.translate('ignore').fetch(),
                 report_title: this.locale.translate('report_title').fetch(),
                 abuse_report: this.locale.translate('abuse_report').fetch(),
+                abuse_report_nick: this.locale.translate('abuse_report_nick').fetch(),
                 abuse_report_intro1: this.locale.translate('abuse_report_intro1').fetch(),
                 abuse_report_intro2: this.locale.translate('abuse_report_intro2').fetch(),
                 abuse_reason_placeholder: this.locale.translate('abuse_reason_placeholder').fetch(),
