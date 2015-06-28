@@ -51,6 +51,7 @@ var AutoComplete = Backbone.View.extend({
                 }
 
                 template_str = (word.type === 'nick') ? template_str_nicks : template_str_default;
+                
                 $el = $(_.template(template_str, template)).hide();
                 $word = $el.find('.word');
             } else {
@@ -72,6 +73,14 @@ var AutoComplete = Backbone.View.extend({
         }, this);
 
         this.list = new_list;
+    },
+
+    setTitle: function(type) {
+        if(type == undefined) {
+            this.$('.autocomplete-header-label').text('People or channels');
+        } else if (type == 'command') {
+            this.$('.autocomplete-header-label').text('Commands');
+        }
     },
 
 
@@ -133,6 +142,7 @@ var AutoComplete = Backbone.View.extend({
         this.open = true;
         if (this._show_ui) {
             this.$el.css('max-height', (_kiwi.app.view.$el.height() / 2) + 'px').show();
+            this.$list.css('max-height', (_kiwi.app.view.$el.height() / 2)-32 + 'px').show();
         }
     },
 
