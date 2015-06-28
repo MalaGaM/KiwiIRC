@@ -789,7 +789,9 @@ msgstr "Actualiser"
 #: 
 msgid "client_applets_chanlist_noresults"
 msgstr "Aucun résultat, merci de modifier votre recherche !"
-
-#:
 msgid "disconnect_from_server"
 msgstr "Vous allez être déconnecté du réseau IRC. Voulez-vous vraiment vous déconnecter ?"
+
+#: 
+msgid "client_applets_settings_custom_highlights"
+msgstr "Notifications personnalisées (séparées par un espace)"
