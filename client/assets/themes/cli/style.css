@@ -387,19 +387,31 @@
 }
 #kiwi .notification .close:hover { color: #DBDBDB; }
 
+#kiwi .settings_container .settings-category {
+    background-color: #252525;
+}
 #kiwi .settings_container .settings-category > h5 {
     border-bottom: 1px solid #A5C42C;
     padding-bottom: 20px;
     margin-bottom: 20px;
+    margin-top: 0;
+    padding-top: 15px;
 }
 #kiwi .settings_container .settings-category-list {
     background: #252525;
-    padding: 1em;
     margin-top: 3.4em;
 }
 #kiwi .settings_container .settings-category-list a {
     line-height: 2.5em;
+    background-color: #252525;
+    border-left: solid 4px #252525;
+    color: #6d6d6d;
 }
+#kiwi .settings_container .settings-category-list a.active {
+    border-left: solid 4px #df6b26;
+    color: #6d6d6d;
+}
+
 
 /* Rich userlist */
 #kiwi.theme_relaxed .memberlists ul li.rich_userlist.M a.nick {color: #0066FF;}
@@ -430,4 +442,3 @@
 #kiwi.theme_relaxed .memberlists ul li.rich_userlist.F div.tooltip {background-color: #FF00FF;}
 #kiwi.theme_relaxed .memberlists ul li.rich_userlist.U div.tooltip {background-color: #000000;}
 /* End rich userlist */
-

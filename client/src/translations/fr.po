@@ -53,6 +53,30 @@ msgid "client_applets_scripteditor_title"
 msgstr "Éditeur de Script"
 
 #: client/assets/src/applets/settings.js
+msgid "client_applets_settings_messages"
+msgstr "Messages"
+
+#: client/assets/src/applets/settings.js
+msgid "client_applets_settings_chat_messages"
+msgstr "Messages du chat"
+
+#: client/assets/src/applets/settings.js
+msgid "client_applets_settings_alerts_notifications"
+msgstr "Alertes / Notifications"
+
+#: client/assets/src/applets/settings.js
+msgid "client_applets_settings_appearance"
+msgstr "Apparence"
+
+#: client/assets/src/applets/settings.js
+msgid "client_applets_settings_theme"
+msgstr "Thème"
+
+#: client/assets/src/applets/settings.js
+msgid "client_applets_settings_channels"
+msgstr "Salons"
+
+#: client/assets/src/applets/settings.js
 msgid "client_applets_settings_channelview_tabs"
 msgstr "Onglets"
 
@@ -63,6 +87,10 @@ msgstr "Liste"
 #: 
 msgid "client_applets_settings_channelview_list_notice"
 msgstr "pour un grand nombre de salons"
+
+#: 
+msgid "client_applets_settings_language"
+msgstr "Langue"
 
 #: 
 msgid "client_applets_settings_notification_joinpart"

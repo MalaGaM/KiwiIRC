@@ -387,19 +387,31 @@
 #kiwi .notification .close:hover { color: #DBDBDB; }
 
 
+#kiwi .settings_container .settings-category {
+    background-color: #C5C5C5;
+}
 #kiwi .settings_container .settings-category > h5 {
     border-bottom: 1px solid #A5C42C;
     padding-bottom: 20px;
     margin-bottom: 20px;
+    margin-top: 0;
+    padding-top: 15px;
 }
 #kiwi .settings_container .settings-category-list {
     background: #C5C5C5;
-    padding: 1em;
     margin-top: 3.4em;
 }
 #kiwi .settings_container .settings-category-list a {
     line-height: 2.5em;
+    background-color: #C5C5C5;
+    border-left: solid 4px #C5C5C5;
+    color: #888;
 }
+#kiwi .settings_container .settings-category-list a.active {
+    border-left: solid 4px #76bd2b;
+    color: #555;
+}
+
 
 /* Rich userlist */
 #kiwi.theme_relaxed .memberlists ul li.rich_userlist.M a.nick {color: #0066FF;}
@@ -430,4 +442,3 @@
 #kiwi.theme_relaxed .memberlists ul li.rich_userlist.F div.tooltip {background-color: #FF00FF;}
 #kiwi.theme_relaxed .memberlists ul li.rich_userlist.U div.tooltip {background-color: #000000;}
 /* End rich userlist */
-
