@@ -1,7 +1,6 @@
 <!--
     Plugin by Cory Chaplin (elephantman@europnet.org) - http://www.europnet.org - 01/2015 
     TODO :
-    * Add updating when the user join/parts/quits
     * Add away message support
 -->
 
@@ -237,6 +236,11 @@ kiwi.plugins.on('loaded', function() {
                 // Detect right bar toggling
                 $('#kiwi .right-bar-toggle').on('click', this.toggleQueryRightBar);
 
+                // Bind quit event
+                var net = kiwi.components.Network();
+                net.on('quit', _.bind(this.userQuit, this));
+
+                // Setup the right bar
                 this.prepareGenderInfo();
                 this.displayNick(query_nick);
                 this.displayStatus();
@@ -447,6 +451,7 @@ kiwi.plugins.on('loaded', function() {
 
         submitAbuse: function(event) {
             event.preventDefault();
+
             var report_reason = this.$(".report_reason").val(),
                 network = kiwi.components.Network();
 
@@ -466,6 +471,13 @@ kiwi.plugins.on('loaded', function() {
             this.$(".report_modal .warning")
                 .html(warning_text)
                 .show();
+        },
+
+        userQuit: function(event) {
+            // If the user for the current query has quit, update the status we display
+            if(event.nick === this.model.panel.get('name')) {
+                $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_nick .query_nick_status').html('<i title="' + text.away + '" class="fa fa-circle-o away"></i>&nbsp;');
+            }
         }
     });
 
