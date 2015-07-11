@@ -10,7 +10,6 @@
         - Separate nickserv interface from the plugin model
         - Remove the view/model tight coupling
         - Rename NickServIdentify to NickServIdentify to allow for NickServRegister in future
-        - Modal typo -> Model
 -->
 <style type="text/css">
     #kiwi .nickserv_auth .warning {
@@ -143,7 +142,7 @@
         events: {
             'submit form': 'submitNickserv'
         },
-        // Build the model box
+        // Build the modal box
         render: function() {
             var that = this;
 
@@ -151,7 +150,7 @@
                 return that.model.locale.translate(key).fetch(params);
             };
 
-            this.modelbox = this.modelbox || new kiwi.components.MenuBox(translate('identification'));
+            this.modalbox = this.modalbox || new kiwi.components.MenuBox(translate('identification'));
             this.$el.html('<form class="nickserv_auth">\
                             <div>\
                                 <p>' + translate('registered_nick_identify') + '</p>\
@@ -163,10 +162,10 @@
 
             // Called when the menubox is manually closed
             this.$el.dispose = function() {
-                delete that.modelbox;
+                delete that.modalbox;
             };
 
-            this.modelbox.addItem(translate('identification'), this.$el);
+            this.modalbox.addItem(translate('identification'), this.$el);
             return this;
         },
         warning: function(warning_text) {
@@ -175,17 +174,17 @@
                 .show();
         },
         showDialog: function() {
-            if (!this.modelbox || !this.$el.is(':visible')) {
+            if (!this.modalbox || !this.$el.is(':visible')) {
                 this.render();
             }
 
-            this.modelbox.show();
+            this.modalbox.show();
             this.$('.nickserv_password').focus();
             return this;
         },
         closeDialog: function() {
-            this.modelbox.dispose();
-            delete this.modelbox;
+            this.modalbox.dispose();
+            delete this.modalbox;
             return this;
         },
         submitNickserv: function(event) {
@@ -219,44 +218,43 @@
 
         bindNickServEvents: function() {
             this.listenTo(nickserv, 'nick_is_registered', function() {
-                this.toggleModelBox('open');
+                this.toggleModalBox('open');
             });
 
             this.listenTo(nickserv, 'logged_in', function() {
-                this.toggleModelBox('close');
+                this.toggleModalBox('close');
             });
 
             this.listenTo(nickserv, 'password_incorrect', function() {
                 this.view.warning(this.locale.translate('bad_password').fetch());
-                this.toggleModelBox('open');
             });
 
             this.listenTo(nickserv, 'nick_changing', function() {
-                this.toggleModelBox('close');
+                this.toggleModalBox('close');
             });
         },
 
-        // This triggers the model box toggle
-        toggleModelBox: function(new_state) {
+        // This triggers the modal box toggle
+        toggleModalBox: function(new_state) {
             var that = this;
 
             // Already waiting? No need to start the timer again
-            if (this._tmr_toggle_model_box) {
-                clearTimeout(this._tmr_toggle_model_box);
+            if (this._tmr_toggle_modal_box) {
+                clearTimeout(this._tmr_toggle_modal_box);
             }
 
-            // Wait 500ms in case other contradictory notices are coming, then toggle the model box
-            this._tmr_toggle_model_box = setTimeout(function() {
-                delete that._tmr_toggle_model_box;
-                that.doToggleModelBox(new_state);
+            // Wait 500ms in case other contradictory notices are coming, then toggle the modal box
+            this._tmr_toggle_modal_box = setTimeout(function() {
+                delete that._tmr_toggle_modal_box;
+                that.doToggleModalBox(new_state);
             }, 500);
         },
-        // This toggles the model box
-        doToggleModelBox: function(state) {
+        // This toggles the modal box
+        doToggleModalBox: function(state) {
             if(state == 'open') {
-                this.view.showDialog(); // Create the model
+                this.view.showDialog(); // Create the modal
             } else if(state == 'close') {
-                this.view.closeDialog(); // Close the model
+                this.view.closeDialog(); // Close the modal
             }
         },
         // This sends the nickserv identify command
