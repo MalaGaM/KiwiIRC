@@ -296,6 +296,12 @@
                                 <%= emoticons %>
                             </label>
                         </div>
+                        <div class="checkbox">
+                            <label>
+                                <input data-setting="ignore_new_queries" type="checkbox">
+                                <%= queries %>
+                            </label>
+                        </div>
                         <div>
                             <label>
                                 <input data-setting="scrollback" class="input-small" type="text" size="4" pattern="\d*">
@@ -332,13 +338,6 @@
                                 <input data-setting="custom_highlights" class="input-small" type="text" size="20">
                             </label>
                         </div>
-                        <div class="checkbox">
-                            <label>
-                                <input data-setting="allow_queries" type="checkbox">
-                                <%= queries %>
-                            </label>
-                        </div>
-                        <div>
                     </div>
                 </section>
             </form>

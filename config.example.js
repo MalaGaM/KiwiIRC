@@ -199,7 +199,7 @@ conf.client = {
         use_24_hour_timestamps: true,
         mute_sounds: false,
         show_emoticons: true,
-        allow_queries: true,
+        ignore_new_queries: false,
         rich_nicklist: false,
         rich_nicklist_gender_regexes: {'F': ['F001', ' f ', '/f/', '^f ', ' f$', '^f$'],
                                         'M': ['M002', ' h ', '/H/', ' m ', '^h ', ' h$', '^m ', ' m$', '^h$', '^m$'],

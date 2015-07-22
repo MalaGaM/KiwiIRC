@@ -46,12 +46,14 @@ var AutoComplete = Backbone.View.extend({
                     template.word = word;
                     template.description = '';
                 } else {
-                    template.match_list = template.word = word.match.join(', ');
+                    // Only show the alternative matches for this word if there is more than 1
+                    // Eg. for matching /part show the alternatives ['/part', '/leave']
+                    template.match_list = template.word = (word.match.length > 1 ? word.match.join(', ') : '');
                     template.description = word.description || '';
                 }
 
                 template_str = (word.type === 'nick') ? template_str_nicks : template_str_default;
-                
+
                 $el = $(_.template(template_str, template)).hide();
                 $word = $el.find('.word');
             } else {
@@ -76,11 +78,12 @@ var AutoComplete = Backbone.View.extend({
     },
 
     setTitle: function(type) {
-        if(type == undefined) {
-            this.$('.autocomplete-header-label').text('People or channels');
-        } else if (type == 'command') {
-            this.$('.autocomplete-header-label').text('Commands');
-        }
+        var texts = {
+            nicks: 'People or channels',
+            command: 'Commands'
+        };
+
+        this.$('.autocomplete-header-label').text(texts[type] || texts['nicks']);
     },
 
 

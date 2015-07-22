@@ -55,13 +55,7 @@
                 {symbol: '@', mode: 'o'},
                 {symbol: '%', mode: 'h'},
                 {symbol: '+', mode: 'v'}
-            ],
-
-            /**
-            *   List of nicks we are ignoring
-            *   @type Array
-            */
-            ignore_list: []
+            ]
         },
 
 
@@ -80,6 +74,8 @@
             var server_panel = new _kiwi.model.Server({name: 'Server', network: this});
             this.panels.add(server_panel);
             this.panels.server = this.panels.active = server_panel;
+
+            this.ignore_list = new _kiwi.model.IgnoreList();
         },
 
 
@@ -230,7 +226,7 @@
         // Check if a user is ignored.
         // Accepts an object with nick, ident and hostname OR a string.
         isUserIgnored: function (mask) {
-            var idx, list = this.get('ignore_list');
+            var found_mask;
 
             if (typeof mask === "object") {
                mask = (mask.nick||'*')+'!'+(mask.ident||'*')+'@'+(mask.hostname||'*');
@@ -238,13 +234,11 @@
                mask = toUserMask(mask);
             }
 
-            for (idx = 0; idx < list.length; idx++) {
-                if (list[idx][1].test(mask)) {
-                   return true;
-                }
-            }
+            found_mask = this.ignore_list.find(function(entry) {
+                return entry.get('regex').test(mask);
+            });
 
-            return false;
+            return !!found_mask;
         },
 
         // Create a new query panel
@@ -255,7 +249,7 @@
             // Check if we have the panel already. If not, create it
             query = that.panels.getByName(nick);
             if (!query) {
-                query = new _kiwi.model.Query({name: nick});
+                query = new _kiwi.model.Query({name: nick, network: this});
                 that.panels.add(query);
             }
 
@@ -287,6 +281,8 @@
         this.set('nick', event.nick);
 
         this.set('connected', true);
+
+        this.ignore_list.loadFromNetwork(this);
 
         // If this is a re-connection then we may have some channels to re-join
         this.rejoinAllChannels();
@@ -497,7 +493,7 @@
             } else if (is_pm) {
                 // If a panel isn't found for this PM and we allow new queries, create one
                 panel = this.panels.getByName(event.nick);
-                if (!panel && _kiwi.global.settings.get('allow_queries')) {
+                if (!panel && !_kiwi.global.settings.get('ignore_new_queries')) {
                     panel = new _kiwi.model.Query({name: event.nick, network: this});
                     this.panels.add(panel);
                 } else if(!panel) {
