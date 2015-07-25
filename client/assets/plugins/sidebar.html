@@ -1,5 +1,5 @@
 <!--
-    Plugin by Cory Chaplin (elephantman@europnet.org) - http://www.europnet.org - 01/2015 
+    Plugin by Cory Chaplin (elephantman@europnet.org) - http://www.europnet.org - 06/2015 
     TODO :
     * Add away message support
 -->
@@ -95,8 +95,7 @@ kiwi.plugins.on('loaded', function() {
     // This plugin is only valid for rich_nicklist contexts
     if(!kiwi.settings.get('rich_nicklist')) return;
 
-    var locale_strings,
-        text;
+    var locale_strings;
 
     locale_strings = {
         'en': {
@@ -197,7 +196,7 @@ kiwi.plugins.on('loaded', function() {
         initQueryRightPanel: function() {
             // If this is the first query, create "queries" right_bar container
             if($('#kiwi .right-bar-content .queries') == undefined || $('#kiwi .right-bar-content .queries').length == 0) {
-                var query_sidebar_container = $(_.template($('#query_sidebar_container').html().trim(), text));
+                var query_sidebar_container = $(_.template($('#query_sidebar_container').html().trim(), this.model.text));
                 
                 $('#kiwi .right_bar .right-bar-content').append(query_sidebar_container);
             } else {
@@ -212,10 +211,10 @@ kiwi.plugins.on('loaded', function() {
                 $('#kiwi .right-bar-content .queries').children().hide();
 
                 // Prepare the query id in the template
-                text['query_id'] = this.model.panel.cid;
+                this.model.text['query_id'] = this.model.panel.cid;
 
                 // Push the html with the locale strings
-                var query_sidebar_content = $(_.template($('#query_sidebar_content').html().trim(), text)),
+                var query_sidebar_content = $(_.template($('#query_sidebar_content').html().trim(), this.model.text)),
                     query_nick = this.model.panel.get('name');
 
                 // Add the right_bar content
@@ -230,7 +229,7 @@ kiwi.plugins.on('loaded', function() {
 
                 // Update the ignore status if query_nick is already ignored
                 if(getIgnoreStatus(query_nick) > -1) {
-                    $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_ignore').html('<i title="' + text.unignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.unignore);
+                    $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_ignore').html('<i title="' + this.model.text.unignore + '" class="fa fa-minus-circle"></i>&nbsp;' + this.model.text.unignore);
                 }
 
                 // Detect right bar toggling
@@ -289,18 +288,18 @@ kiwi.plugins.on('loaded', function() {
 
         prepareGenderInfo: function() {
             this.avatar = '/assets/plugins/avatar-undefined.jpg',
-            this.gender_text = text.gender_undefined,
+            this.gender_text = this.model.text.gender_undefined,
             this.color = '#000000';
 
             // Set the gender avatar
             if(this.model.member_info.query_gender == 'M') {
                 this.avatar = "/assets/plugins/user-Male.png";
                 this.color = '#0066ff';
-                this.gender_text = text.gender_male;
+                this.gender_text = this.model.text.gender_male;
             } else if(this.model.member_info.query_gender == 'F') {
                 this.avatar = "/assets/plugins/user-Female.png";
                 this.color = '#FF00FF';
-                this.gender_text = text.gender_female;
+                this.gender_text = this.model.text.gender_female;
             }
         },
 
@@ -312,9 +311,9 @@ kiwi.plugins.on('loaded', function() {
         displayStatus: function() {
             var status_icon = '';
             if(this.model.member_info.is_away) {
-                status_icon = '<i title="' + text.away + '" class="fa fa-circle-o away"></i>&nbsp;';
+                status_icon = '<i title="' + this.model.text.away + '" class="fa fa-circle-o away"></i>&nbsp;';
             } else {
-                status_icon = '<i title="' + text.available + '" class="fa fa-circle available"></i>&nbsp;';
+                status_icon = '<i title="' + this.model.text.available + '" class="fa fa-circle available"></i>&nbsp;';
             }
             $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_nick .query_nick_status').html(status_icon);
         },
@@ -331,7 +330,7 @@ kiwi.plugins.on('loaded', function() {
             if(common_channels_html.length > 0) {
                 $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .common_channels').append(common_channels_html.join(', '));
             } else {
-                $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .common_channels').append(text.no_common_channel);
+                $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .common_channels').append(this.model.text.no_common_channel);
             }
             
         },
@@ -345,7 +344,7 @@ kiwi.plugins.on('loaded', function() {
 
             // Add the Age
             if(this.model.member_info.query_age !== undefined && this.model.member_info.query_age !== '') {
-                asl.push(this.model.member_info.query_age + ' ' + text.years_old);
+                asl.push(this.model.member_info.query_age + ' ' + this.model.text.years_old);
             }
             // Add the gender
             if(this.gender_text !== undefined && this.gender_text !== '') {
@@ -375,9 +374,9 @@ kiwi.plugins.on('loaded', function() {
 
                 // If nick is ignored, switch the button text
                 if(ignore_state) {
-                    $('#kiwi .right_bar .queries .' + panel_cid + ' .query_ignore').html('<i title="' + text.unignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.unignore);
+                    $('#kiwi .right_bar .queries .' + panel_cid + ' .query_ignore').html('<i title="' + this.model.text.unignore + '" class="fa fa-minus-circle"></i>&nbsp;' + this.model.text.unignore);
                 } else {
-                    $('#kiwi .right_bar .queries .' + panel_cid + ' .query_ignore').html('<i title="' + text.ignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.ignore);
+                    $('#kiwi .right_bar .queries .' + panel_cid + ' .query_ignore').html('<i title="' + this.model.text.ignore + '" class="fa fa-minus-circle"></i>&nbsp;' + this.model.text.ignore);
                 }
             });
 
@@ -422,13 +421,13 @@ kiwi.plugins.on('loaded', function() {
         },
 
         createReportModal: function(nickname) {
-            this.reportModalbox = new kiwi.components.MenuBox(text.report_title);
+            this.reportModalbox = new kiwi.components.MenuBox(this.model.text.report_title);
             
             this.$el.html('<form class="report_modal">\
                             <div>\
-                                <p class="intro">' + text.abuse_report_intro1 + ' <strong>' + nickname + '</strong> ' + text.abuse_report_intro2 + '<p class="warning"></p> \
-                                <input type="text" placeholder="' + text.abuse_reason_placeholder + '" class="report_reason">\
-                                <button class="report_submit" class="btn btn-primary">' + text.abuse_button + '</button>\
+                                <p class="intro">' + this.model.text.abuse_report_intro1 + ' <strong>' + nickname + '</strong> ' + this.model.text.abuse_report_intro2 + '<p class="warning"></p> \
+                                <input type="text" placeholder="' + this.model.text.abuse_reason_placeholder + '" class="report_reason">\
+                                <button class="report_submit" class="btn btn-primary">' + this.model.text.abuse_button + '</button>\
                             </div>\
                         </form>');
 
@@ -439,7 +438,7 @@ kiwi.plugins.on('loaded', function() {
                 delete this.modalbox;
             };
 
-            this.reportModalbox.addItem(text.report, this.$el);
+            this.reportModalbox.addItem(this.model.text.report, this.$el);
 
             return;
         },
@@ -457,13 +456,13 @@ kiwi.plugins.on('loaded', function() {
                 network = kiwi.components.Network();
 
             if (report_reason != "") {
-                network.msg('#pole-moderation', text.abuse_report + '. ' + text.abuse_report_nick + ': ' + this.model.panel.get('name') + ' - ' + text.abuse_channels + ': ' + this.model.member_info.common_channels.join(', ') + ' - ' + text.abuse_reason + ' : ' + report_reason);
+                network.msg('#pole-moderation', this.model.text.abuse_report + '. ' + this.model.text.abuse_report_nick + ': ' + this.model.panel.get('name') + ' - ' + this.model.text.abuse_channels + ': ' + this.model.member_info.common_channels.join(', ') + ' - ' + this.model.text.abuse_reason + ' : ' + report_reason);
                 this.$(".report_modal .intro").hide();
                 this.$(".report_modal .report_reason").hide();
                 this.$(".report_modal .report_submit").hide();
-                this.reportWarning(text.abuse_confirm);
+                this.reportWarning(this.model.text.abuse_confirm);
             } else {
-                this.reportWarning(text.abuse_empty);
+                this.reportWarning(this.model.text.abuse_empty);
                 this.$(".report_reason").focus();
             }
         },
@@ -477,7 +476,7 @@ kiwi.plugins.on('loaded', function() {
         userQuit: function(event) {
             // If the user for the current query has quit, update the status we display
             if(event.nick === this.model.panel.get('name')) {
-                $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_nick .query_nick_status').html('<i title="' + text.away + '" class="fa fa-circle-o away"></i>&nbsp;');
+                $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_nick .query_nick_status').html('<i title="' + this.model.text.away + '" class="fa fa-circle-o away"></i>&nbsp;');
             }
         },
 
@@ -503,7 +502,7 @@ kiwi.plugins.on('loaded', function() {
             });
 
             // Set the locale strings
-            text = {
+            this.text = {
                 whois: this.locale.translate('whois').fetch(),
                 ignore: this.locale.translate('ignore').fetch(),
                 report_title: this.locale.translate('report_title').fetch(),
