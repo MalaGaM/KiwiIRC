@@ -8,13 +8,14 @@ var origin = getQueryVariable('origin'),
 	buttonTextColor = getQueryVariable('buttonTextColor');
 
 if(theme !== undefined) {
+	if(firstColor == undefined) firstColor = '';
+	if(secondColor == undefined) secondColor = '';
+	if(textColor == undefined) textColor = '';
+	if(buttonColor == undefined) buttonColor = '';
+	if(buttonTextColor == undefined) buttonTextColor = '';
+	
+
 	if(theme == 'relaxed') {
-		if(firstColor == undefined) firstColor = '';
-		if(secondColor == undefined) secondColor = '';
-		if(textColor == undefined) textColor = '';
-		if(buttonColor == undefined) buttonColor = '';
-		if(buttonTextColor == undefined) buttonTextColor = '';
-		
 		$('<style>'+
 		'#kiwi .toolbar {background: linear-gradient(#' + firstColor + ', #' + secondColor + ') repeat scroll 0 0 rgba(0, 0, 0, 0);}' +
 		'#kiwi .controlbox {background: linear-gradient(#' + secondColor + ', #' + firstColor + ') repeat scroll 0 0 rgba(0, 0, 0, 0);}' +
@@ -26,6 +27,19 @@ if(theme !== undefined) {
 		'#kiwi .toolbar .topic {background-color: #' + secondColor + ';}' +
 		'#kiwi button, #kiwi .toolbar .panellist {background-color: #' + buttonColor + ';color:#' + buttonTextColor +
 		';}</style>').appendTo('body');
+	} else if(theme == 'webfit') {
+		$('<style>'+
+		'#kiwi .toolbar {background: linear-gradient(#' + firstColor + ', #' + secondColor + ') repeat scroll 0 0 rgba(0, 0, 0, 0);}' +
+		'#kiwi .controlbox {background: linear-gradient(#' + secondColor + ', #' + firstColor + ') repeat scroll 0 0 rgba(0, 0, 0, 0);}' +
+		'#kiwi .memberlists ul li.mode.o .prefix {background: none repeat scroll 0 0 #' + firstColor + ';}' +
+		'#kiwi .memberlists ul li:hover {border-left: 5px solid #' + firstColor + ';}' +
+		'#kiwi .messages .msg.action .text {color: #' + firstColor + ';}' +
+		'#kiwi .toolbar .panellist li .activity {background: none repeat scroll 0 0 #' + firstColor + ';color: #' + buttonTextColor + ';}' +
+		'#kiwi .toolbar .panellist li, #kiwi .btn-primary {border: 1px solid #' + buttonColor + ';background: none repeat scroll 0 0 #' + buttonColor + ';}' +
+		'#kiwi .toolbar .panellist li:hover, #kiwi .btn-primary:hover, #kiwi .toolbar .panellist li.active:hover {background: none repeat scroll 0 0 #' + firstColor + ';border: 1px solid #' + buttonColor + ';}' +
+		'#kiwi .toolbar .panellist li.active {border: 1px solid #' + secondColor + ';background: none repeat scroll 0 0 #' + secondColor + ';}' +
+		'#kiwi .toolbar .topic {background-color: #' + secondColor + ';}</style>').appendTo('body');
 	}
+
 }
 </script>
