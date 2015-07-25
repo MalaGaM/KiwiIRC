@@ -61,6 +61,9 @@
         color: #F00;
         font-weight: bold;
     }
+    #kiwi .report_modal .report_reason {
+        width: 20em;
+    }
 
 </style>
 
@@ -110,7 +113,7 @@ kiwi.plugins.on('loaded', function() {
                 "abuse_report" : [ null, "Abuse report" ],
                 "abuse_report_nick" : [ null, "Nickname" ],
                 "abuse_report_intro1" : [ null, "The user" ],
-                "abuse_report_intro2" : [ null, "insn't respecting the <a href='http://www.europnet.org/en/rules.html' target='_blank'>rules</a> ? <br /><br />Explain us the problem and we will deal with it as soon as possible.<br /><br />Thank you !" ],
+                "abuse_report_intro2" : [ null, "insn't respecting the <a href='http://www.europnet.org/en/rules.html' target='_blank'>rules</a> ? <br />Explain us the problem and we will deal with it as soon as possible.<br /><br />Thank you !<br /><br />" ],
                 "abuse_reason_placeholder" : [ null, "Explain the problem here" ],
                 "abuse_button" : [ null, "Report abuse" ],
                 "abuse_channels" : [ null, "Channel(s)" ],
@@ -142,7 +145,7 @@ kiwi.plugins.on('loaded', function() {
                 "abuse_report" : [ null, "Signalement d'abus" ],
                 "abuse_report_nick" : [ null, "Pseudo" ],
                 "abuse_report_intro1" : [ null, "L'utilisateur" ],
-                "abuse_report_intro2" : [ null, "ne respecte pas les <a href='http://www.europnet.org/fr/rules.html' target='_blank'>règles</a> ?<br /><br />Expliquez-nous le problème et nous interviendrons dans les plus brefs délais. <br /><br />Merci !" ],
+                "abuse_report_intro2" : [ null, "ne respecte pas les <a href='http://www.europnet.org/fr/rules.html' target='_blank'>règles</a> ?<br />Expliquez-nous le problème et nous interviendrons dans les plus brefs délais. <br /><br />Merci !<br /><br />" ],
                 "abuse_reason_placeholder" : [ null, "Expliquez le motif ici" ],
                 "abuse_button" : [ null, "Signaler l'abus" ],
                 "abuse_channels" : [ null, "Salon(s)" ],
@@ -228,7 +231,7 @@ kiwi.plugins.on('loaded', function() {
                 }
 
                 // Update the ignore status if query_nick is already ignored
-                if(getIgnoreStatus(query_nick) > -1) {
+                if(getIgnoreStatus(query_nick)) {
                     $('#kiwi .right_bar .queries .' + this.model.panel.cid + ' .query_ignore').html('<i title="' + this.model.text.unignore + '" class="fa fa-minus-circle"></i>&nbsp;' + this.model.text.unignore);
                 }
 
@@ -360,7 +363,8 @@ kiwi.plugins.on('loaded', function() {
 
         bindQueryButtons: function() {
             var query_nick = this.model.panel.get('name'),
-                panel_cid = this.model.panel.cid;
+                panel_cid = this.model.panel.cid,
+                text = this.model.text;
 
             // Click on WHOIS button
             $('#kiwi .right_bar .queries .' + panel_cid + ' .query_whois').on('click', function () {
@@ -374,9 +378,9 @@ kiwi.plugins.on('loaded', function() {
 
                 // If nick is ignored, switch the button text
                 if(ignore_state) {
-                    $('#kiwi .right_bar .queries .' + panel_cid + ' .query_ignore').html('<i title="' + this.model.text.unignore + '" class="fa fa-minus-circle"></i>&nbsp;' + this.model.text.unignore);
+                    $('#kiwi .right_bar .queries .' + panel_cid + ' .query_ignore').html('<i title="' + text.unignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.unignore);
                 } else {
-                    $('#kiwi .right_bar .queries .' + panel_cid + ' .query_ignore').html('<i title="' + this.model.text.ignore + '" class="fa fa-minus-circle"></i>&nbsp;' + this.model.text.ignore);
+                    $('#kiwi .right_bar .queries .' + panel_cid + ' .query_ignore').html('<i title="' + text.ignore + '" class="fa fa-minus-circle"></i>&nbsp;' + text.ignore);
                 }
             });
 
@@ -592,21 +596,35 @@ kiwi.plugins.on('loaded', function() {
 
 
     function toggleIgnore(nick) {
-        var ignore_list = kiwi.connections.active_connection.get("ignore_list");
-        var i = ignore_list.indexOf(nick);;
+        var ignored = getIgnoreStatus(nick),
+            network = kiwi.components.Network(),
+            mask = toUserMask(nick);
 
-        if(i == -1) {
-            ignore_list.push(nick);
-            return true;
-        } else {
-            ignore_list.splice(i, 1);
+        if(ignored) {
+            network.unignoreMask(mask);
             return false;
+        } else {
+            network.ignoreMask(mask);
+            return true;
         }
     }
 
     function getIgnoreStatus(nick) {
-        var ignore_list = kiwi.connections.active_connection.get("ignore_list");
-        return ignore_list.indexOf(nick);
+        var ignore_list = kiwi.connections.active_connection.ignore_list,
+            mask = toUserMask(nick),
+            ignored;
+
+        ignored = ignore_list.find(function(entry) {
+            return entry.get('mask') == mask;
+        });
+        
+        if(ignored == undefined) {
+            ignored = false;
+        } else {
+            ignored = true;
+        }
+
+        return ignored;
     }
 });
 </script>
