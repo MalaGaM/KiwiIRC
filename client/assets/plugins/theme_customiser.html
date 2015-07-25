@@ -29,16 +29,18 @@ if(theme !== undefined) {
 		';}</style>').appendTo('body');
 	} else if(theme == 'webfit') {
 		$('<style>'+
-		'#kiwi .toolbar {background: linear-gradient(#' + firstColor + ', #' + secondColor + ') repeat scroll 0 0 rgba(0, 0, 0, 0);}' +
-		'#kiwi .controlbox {background: linear-gradient(#' + secondColor + ', #' + firstColor + ') repeat scroll 0 0 rgba(0, 0, 0, 0);}' +
-		'#kiwi .memberlists ul li.mode.o .prefix {background: none repeat scroll 0 0 #' + firstColor + ';}' +
-		'#kiwi .memberlists ul li:hover {border-left: 5px solid #' + firstColor + ';}' +
-		'#kiwi .messages .msg.action .text {color: #' + firstColor + ';}' +
-		'#kiwi .toolbar .panellist li .activity {background: none repeat scroll 0 0 #' + firstColor + ';color: #' + buttonTextColor + ';}' +
-		'#kiwi .toolbar .panellist li, #kiwi .btn-primary {border: 1px solid #' + buttonColor + ';background: none repeat scroll 0 0 #' + buttonColor + ';}' +
-		'#kiwi .toolbar .panellist li:hover, #kiwi .btn-primary:hover, #kiwi .toolbar .panellist li.active:hover {background: none repeat scroll 0 0 #' + firstColor + ';border: 1px solid #' + buttonColor + ';}' +
-		'#kiwi .toolbar .panellist li.active {border: 1px solid #' + secondColor + ';background: none repeat scroll 0 0 #' + secondColor + ';}' +
-		'#kiwi .toolbar .topic {background-color: #' + secondColor + ';}</style>').appendTo('body');
+			'#kiwi .toolbar {background: linear-gradient(#' + firstColor + ', #' + secondColor + ') repeat scroll 0 0 rgba(0, 0, 0, 0);}' +
+			'#kiwi .controlbox {background: linear-gradient(#' + secondColor + ', #' + firstColor + ') repeat scroll 0 0 rgba(0, 0, 0, 0);}' +
+			'#kiwi .memberlists ul li.mode.o .prefix {background: none repeat scroll 0 0 #' + firstColor + ';}' +
+			'#kiwi .memberlists ul li:hover {border-left: 5px solid #' + firstColor + ';}' +
+			'#kiwi .messages .msg.action .text {color: #' + firstColor + ';}' +
+			'#kiwi .toolbar .panellist li .activity {background: none repeat scroll 0 0 #' + firstColor + ';color: #' + buttonTextColor + ';}' +
+			'#kiwi .toolbar .panellist li, #kiwi .btn-primary, #kiwi .btn-primary:active, #kiwi .btn-primary:target {border: 1px solid #' + buttonColor + ';background: none repeat scroll 0 0 #' + buttonColor + ';}' +
+			'#kiwi .toolbar .panellist li:hover, #kiwi .btn-primary:hover, #kiwi .toolbar .panellist li.active:hover {background: none repeat scroll 0 0 #' + firstColor + ';border: 1px solid #' + buttonColor + ';}' +
+			'#kiwi .toolbar .panellist li.active {border: 1px solid #' + secondColor + ';background: none repeat scroll 0 0 #' + secondColor + ';}' +
+			'#kiwi .toolbar .topic {background-color: #' + secondColor + ';}' +
+			'#kiwi .server_select button {background-color: #' + firstColor + ';}' +
+			'</style>').appendTo('body');
 	}
 
 }
