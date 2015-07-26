@@ -102,22 +102,24 @@ kiwi.plugins.on('loaded', function() {
 	                that = this;
 
 				// Go through each ignore and build the table line
-				this.ignore_list.forEach(function(entry) {
-					var date = kiwi.utils.formatDate(new Date(entry.time)),
-						nickname,
-						separator_position,
-						row;
+				if(this.ignore_list !== undefined) {
+					this.ignore_list.forEach(function(entry) {
+						var date = kiwi.utils.formatDate(new Date(entry.time)),
+							nickname,
+							separator_position,
+							row;
 
-					// If there is no nick, show the mask
-					separator_position = entry.mask.indexOf('!');
-					if(separator_position > 2) {
-						nickname = entry.mask.substring(0, separator_position);
-					} else {
-						nickname = entry.mask;
-					}
+						// If there is no nick, show the mask
+						separator_position = entry.mask.indexOf('!');
+						if(separator_position > 2) {
+							nickname = entry.mask.substring(0, separator_position);
+						} else {
+							nickname = entry.mask;
+						}
 
-	                tbody[0].appendChild(that.addIgnoreLine(nickname, date, entry.mask));
-				});
+		                tbody[0].appendChild(that.addIgnoreLine(nickname, date, entry.mask));
+					});					
+				}
 	            
             	table[0].appendChild(tbody[0]);
 			},
