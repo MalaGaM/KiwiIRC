@@ -3,9 +3,10 @@
 		// Catch the GET params. The URL must be formated like this :
 		// http://www.mykiwiirc.url:7778/?chatnow=1&nickname=azer&password=&channel=lybby&age=&sexe=U&location=
 		var channel = getQueryVariable('channel'),
-			default_channel = '#accueil';
+			default_channel = '#accueil',
 			password = getQueryVariable('nicksrv_pass'),
 			chatnow = getQueryVariable('chatnow');
+
 		
 		if(channel != undefined && channel != '') {
 			$('#server_select_channel').val('#'+channel);
@@ -26,6 +27,9 @@
 		}
 		
 		if (chatnow == 1) {
+			// Hide login applet if in autoconnect mode
+			$('#kiwi .server_select').css('display', 'none');
+			// Simulate the login click
 			$('.server_details button').click();
 		}
 	});
