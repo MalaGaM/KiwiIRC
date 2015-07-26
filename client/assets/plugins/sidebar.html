@@ -598,7 +598,7 @@ kiwi.plugins.on('loaded', function() {
     function toggleIgnore(nick) {
         var ignored = getIgnoreStatus(nick),
             network = kiwi.components.Network(),
-            mask = toUserMask(nick);
+            mask = kiwi.utils.toUserMask(nick);
 
         if(ignored) {
             network.unignoreMask(mask);
@@ -611,7 +611,7 @@ kiwi.plugins.on('loaded', function() {
 
     function getIgnoreStatus(nick) {
         var ignore_list = kiwi.connections.active_connection.ignore_list,
-            mask = toUserMask(nick),
+            mask = kiwi.utils.toUserMask(nick),
             ignored;
 
         ignored = ignore_list.find(function(entry) {
