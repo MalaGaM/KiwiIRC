@@ -27,6 +27,42 @@
 #kiwi .toolbar {
     background-color:#1B1B1B; font-size:0.9em;
 }
+#kiwi .autocomplete {
+    position: absolute;
+    box-sizing: border-box;
+    box-shadow: 0 1px 15px rgba(64, 54, 63, 0.25);
+    border: 1px solid #CCC;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    background: #eee;
+    overflow-y: auto;
+    display: none;
+}
+#kiwi .autocomplete-header {
+    display: none;
+}
+#kiwi .autocomplete-list {
+    overflow-y: auto;
+}
+#kiwi .autocomplete-item {
+    border-bottom: 1px solid #CCC;
+    background: #fff;
+    padding: 5px 20px;
+    list-style: none;
+    overflow: hidden;
+}
+#kiwi .autocomplete-item.selected { background: #D1EACD; }
+#kiwi .autocomplete-item .word { font-weight: bold; }
+#kiwi .autocomplete-item .matches {display: none;}
+#kiwi .autocomplete-item .actions { float: right; font-size: 0.9em; margin-right: 2em; }
+#kiwi .autocomplete-item .actions a { margin-left: 1em; }
+#kiwi .autocomplete-item .description {
+    float: right;
+    margin-right: 1em;
+    font-style: italic;
+}
+
 #kiwi .controlbox { background-color:#1B1B1B; }
 #kiwi .memberlists_resize_handle {
     display:none; width:0;
