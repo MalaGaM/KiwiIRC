@@ -27,7 +27,7 @@ if(theme !== undefined) {
 		'#kiwi .toolbar .topic {background-color: #' + secondColor + ';}' +
 		'#kiwi button, #kiwi .toolbar .panellist {background-color: #' + buttonColor + ';color:#' + buttonTextColor +
 		';}</style>').appendTo('body');
-	} else if(theme == 'webfit') {
+	} else if(theme == 'webfit' || theme == 'blue') {
 		$('<style>'+
 			'#kiwi .toolbar {background: linear-gradient(#' + firstColor + ', #' + secondColor + ') repeat scroll 0 0 rgba(0, 0, 0, 0);}' +
 			'#kiwi .controlbox {background: linear-gradient(#' + secondColor + ', #' + firstColor + ') repeat scroll 0 0 rgba(0, 0, 0, 0);}' +
@@ -42,7 +42,15 @@ if(theme !== undefined) {
 			'#kiwi .server_select button {background-color: #' + firstColor + ';}' +
 			'#kiwi .toolbar .panellist li.server:before {color: #' + buttonTextColor + ';}' + 
 			'</style>').appendTo('body');
+	} else if(theme == 'mini') {
+		$('<style>' + 
+			'#kiwi .toolbar, #kiwi .controlbox {background-color: #' + firstColor + ';}' +
+			'#kiwi .toolbar .panellist {background-color: #' + buttonColor + ';color: #' + buttonTextColor + ';}' +
+			'#kiwi .toolbar .panellist .active {background-color: #' + secondColor + ';color: #' + buttonTextColor + ';border-top: 2px solid #FFF5AB;&}' +
+			'#kiwi.connected .toolbar .panellist li.server:before {color: #' + buttonTextColor + ';}' +
+			'#kiwi .server_select button {background-color: #' + firstColor + ';color: #' + buttonTextColor + ';}' +
+			'#kiwi .server_select label {display: block;}' +
+			'#kiwi .toolbar .app_tools {display: none !important;}</style>').appendTo('body');
 	}
-
 }
 </script>
