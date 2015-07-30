@@ -1,6 +1,4 @@
 #!/bin/sh
-ulimit -n 4096
-
 basedir=`dirname "$0"`
 
 case `uname` in
