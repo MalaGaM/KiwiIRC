@@ -118,6 +118,7 @@
 
             _kiwi.global.panels = this.panels;
             _kiwi.global.panels.applets = this.applet_panels;
+            _kiwi.global.rightbar = this.rightbar;
 
             _kiwi.global.components.Applet = _kiwi.model.Applet;
             _kiwi.global.components.Panel =_kiwi.model.Panel;
