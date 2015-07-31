@@ -51,6 +51,14 @@ if(theme !== undefined) {
 			'#kiwi .server_select button {background-color: #' + firstColor + ';color: #' + buttonTextColor + ';}' +
 			'#kiwi .server_select label {display: block;}' +
 			'#kiwi .toolbar .app_tools {display: none !important;}</style>').appendTo('body');
+		$('#kiwi').addClass('narrow');
+
+		var net = kiwi.components.Network();
+	    net.on('connect', function() {
+	        setTimeout(function(){
+	        	kiwi.rightbar.toggle(true);
+	        }, 3000);
+	    });
 	}
 }
 </script>
