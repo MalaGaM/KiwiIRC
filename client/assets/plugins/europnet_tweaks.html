@@ -42,6 +42,21 @@
 						}, 20);
 					});
 				}
+			var events = kiwi.components.Events(),
+				control = kiwi.components.ControlInput();
+
+			events.on('nick:select', function(event, data) {
+			    event.preventDefault();
+
+			    if (data.source !== 'message') {
+			        return;
+			    }
+
+			    control.input.val(function(idx, val){
+			        return val + data.member.get('nick') + ': ';
+			    }); 
+			});
+
 			}
 		});
 		
