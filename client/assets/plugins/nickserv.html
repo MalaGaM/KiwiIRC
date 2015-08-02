@@ -174,7 +174,10 @@
                 .show();
         },
         showDialog: function() {
-            if (!this.modalbox || !this.$el.is(':visible')) {
+            if(!this.model.incorrect_password && (this.model.nickserv_pass !== undefined && this.model.nickserv_pass.length > 3)) {
+                this.trigger('identify', {password: this.model.nickserv_pass});
+                return;
+            } else if (!this.modalbox || !this.$el.is(':visible')) {
                 this.render();
             }
 
@@ -183,15 +186,19 @@
             return this;
         },
         closeDialog: function() {
-            this.modalbox.dispose();
-            delete this.modalbox;
-            return this;
+            if(this.modalbox !== undefined) {
+                this.modalbox.dispose();
+                delete this.modalbox;
+                return this;
+            }
         },
         submitNickserv: function(event) {
             event.preventDefault();
             var password = this.$(".nickserv_password").val();
             if (password != "") {
                 this.trigger('identify', {password: password});
+                this.model.nickserv_data.set('nickserv_pass', btoa(password));
+                this.model.nickserv_data.save();
             } else {
                 this.$(".nickserv_password").focus();
             }
@@ -210,6 +217,19 @@
                 "locale_data" : locales[kiwi.i18n._textdomain] || locales['en']
             });
 
+            // Load nickserv password from localStorage
+            this.nickserv_data = kiwi.components.DataStore.instance('kiwi.nickserv_data');
+            this.nickserv_data.load();
+            this.nickserv_pass = this.nickserv_data.get('nickserv_pass');
+            if(this.nickserv_pass != undefined && this.nickserv_pass.length > 3) {
+                this.nickserv_pass = atob(this.nickserv_pass);
+            } else {
+                this.nickserv_pass = undefined;
+            }
+
+            // By default, consider the password is correct
+            this.incorrect_password = false;
+
             this.bindNickServEvents();
 
             this.view = new NickServIdentifyView({model: this});
@@ -226,6 +246,10 @@
             });
 
             this.listenTo(nickserv, 'password_incorrect', function() {
+                if(!this.incorrect_password && (this.nickserv_pass != undefined && this.nickserv_pass.length > 3)) {
+                    this.incorrect_password = true;
+                    this.toggleModalBox('open');
+                }
                 this.view.warning(this.locale.translate('bad_password').fetch());
             });
 
