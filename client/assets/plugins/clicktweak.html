@@ -1,0 +1,21 @@
+<script>
+kiwi.plugins.on('loaded', function() {
+    var network = kiwi.components.Network();
+    network.on('connect', function() {
+		var events = kiwi.events,
+			control = kiwi.components.ControlInput();
+
+		events.on('nick:select', function(event, data) {
+		    event.preventDefault();
+
+		    if (data.source !== 'message') {
+		        return;
+		    }
+
+		    control.input.val(function(idx, val){
+		        return val + data.member.get('nick') + ': ';
+		    }); 
+		});
+	});
+});
+</script>
