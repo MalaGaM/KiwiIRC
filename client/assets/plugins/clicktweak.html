@@ -6,11 +6,10 @@ kiwi.plugins.on('loaded', function() {
 			control = kiwi.components.ControlInput();
 
 		events.on('nick:select', function(event, data) {
-		    event.preventDefault();
-
 		    if (data.source !== 'message') {
 		        return;
 		    }
+		    event.preventDefault();
 
 		    control.input.val(function(idx, val){
 		        return val + data.member.get('nick') + ': ';
