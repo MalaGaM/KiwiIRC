@@ -426,7 +426,7 @@ IrcConnection.prototype.write = function (data, force, force_complete_fn) {
 IrcConnection.prototype.flushWriteBuffer = function () {
 
     // In case the socket closed between writing our queue.. clean up
-    if (!this.connected) {
+    if (!this.socket) {
         this.write_buffer = [];
         this.writing_buffer = false;
         return;
