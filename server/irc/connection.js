@@ -479,7 +479,7 @@ IrcConnection.prototype.end = function (data) {
 
     this.requested_disconnect = true;
 
-    if (data) {
+    if (data && this.connected) {
         // Once the last bit of data has been sent, then re-run this function to close the socket
         this.write(data, true, function() {
             that.end();
