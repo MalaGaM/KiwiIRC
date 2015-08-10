@@ -9,11 +9,18 @@ kiwi.plugins.on('loaded', function() {
 		    if (data.source !== 'message') {
 		        return;
 		    }
-		    event.preventDefault();
 
-		    control.input.val(function(idx, val){
-		        return val + data.member.get('nick') + ': ';
-		    }); 
+		    if(data.type === 1) {
+			    event.preventDefault();
+			    if(control.input.val() !== (data.member.get('nick') + ': ')){
+    			    control.input.val(function(idx, val){
+    			        return val + data.member.get('nick') + ': ';
+    			    });
+			    }
+		    } else if (data.type === 2) {
+			    event.preventDefault();
+			    network.createQuery(data.member.get('nick'));
+		    }
 		});
 	});
 });

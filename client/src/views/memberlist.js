@@ -2,6 +2,8 @@ _kiwi.view.MemberList = Backbone.View.extend({
     tagName: "div",
     events: {
         "click .nick": "nickClick",
+        "contextmenu .nick": "nickClick",
+        "dblclick .nick": "nickClick",
         "click .channel_info": "channelInfoClick"
     },
 
@@ -41,8 +43,17 @@ _kiwi.view.MemberList = Backbone.View.extend({
         var $target = $(event.currentTarget).parent('li'),
             member = $target.data('member');
 
-        _kiwi.global.events.emit('nick:select', {target: $target, member: member, source: 'nicklist'})
-        .then(_.bind(this.openUserMenuForItem, this, $target));
+        if(event.type === 'dblclick') {
+            _kiwi.global.events.emit('nick:dblclick', {target: $target, member: member, source: 'nicklist', type: event.which})
+            .then(_.bind(this.openUserMenuForItem, this, $target));
+        } else {
+            _kiwi.global.events.emit('nick:select', {target: $target, member: member, source: 'nicklist', type: event.which})
+            .then(_.bind(this.openUserMenuForItem, this, $target));
+
+            if(event.which === 3) {
+                return false;
+            }
+        }
     },
 
 
