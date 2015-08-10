@@ -45,7 +45,7 @@ _kiwi.view.MemberList = Backbone.View.extend({
 
         if(event.type === 'dblclick') {
             _kiwi.global.events.emit('nick:dblclick', {target: $target, member: member, source: 'nicklist', type: event.which})
-            .then(_.bind(this.openUserMenuForItem, this, $target));
+            .then(_kiwi.app.connections.active_connection.createQuery(member.get('nick')));
         } else {
             _kiwi.global.events.emit('nick:select', {target: $target, member: member, source: 'nicklist', type: event.which})
             .then(_.bind(this.openUserMenuForItem, this, $target));
