@@ -459,7 +459,7 @@ kiwi.plugins.on('loaded', function() {
             var report_reason = this.$(".report_reason").val(),
                 network = kiwi.components.Network();
 
-            if (report_reason != "") {
+            if (report_reason != "" && report_reason.length > 7) {
                 network.msg('#pole-moderation', this.model.text.abuse_report + '. ' + this.model.text.abuse_report_nick + ': ' + this.model.panel.get('name') + ' - ' + this.model.text.abuse_channels + ': ' + this.model.member_info.common_channels.join(', ') + ' - ' + this.model.text.abuse_reason + ' : ' + report_reason);
                 this.$(".report_modal .intro").hide();
                 this.$(".report_modal .report_reason").hide();
