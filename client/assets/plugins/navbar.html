@@ -280,8 +280,11 @@ kiwi.plugins.on('loaded', function() {
                 nav_dom.hide();
             }
         });
+
+        // Radio player Analytics
         if(ga !== undefined) {
-            // Radio player Analytics
+            ga('send', 'pageview', '/radio/load');
+
             $('#navbar .jp-play').on('click', function(){
                 ga('send', 'pageview', '/radio/play');
             });
