@@ -311,13 +311,21 @@ kiwi.plugins.on('loaded', function() {
 
 
         // Radio player Analytics
+        var count_radio_minutes = function () {
+            if($.jPlayer.event.playing) {
+                ga('send', 'pageview', '/radio/minutes');
+                setTimeout(count_radio_minutes, 60000);
+            }
+        }
+
         if(ga !== undefined) {
             ga('send', 'pageview', '/radio/load');
 
-            $('#navbar .jp-play').on('click', function(){
+            $("#player").on($.jPlayer.event.play, function(){
                 ga('send', 'pageview', '/radio/play');
+                count_radio_minutes();
             });
-            $('#navbar .jp-pause').on('click', function(){
+            $("#player").on($.jPlayer.event.pause, function(){
                 ga('send', 'pageview', '/radio/pause');
             });
         }
@@ -341,6 +349,7 @@ kiwi.plugins.on('loaded', function() {
         toggleDuration: false,
         preload: "none"
     });
+
 });
 </script> 
 <script type="text/javascript">
