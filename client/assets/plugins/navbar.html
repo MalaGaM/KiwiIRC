@@ -311,10 +311,14 @@ kiwi.plugins.on('loaded', function() {
 
 
         // Radio player Analytics
-        var count_radio_minutes = function () {
-            if($.jPlayer.event.playing) {
+        var countRadioMinutes = function () {
+            if(!jp_player.data().jPlayer.status.paused) {
                 ga('send', 'pageview', '/radio/minutes');
-                setTimeout(count_radio_minutes, 60000);
+                if(add_minute == undefined) {
+                    var add_minute = setTimeout(countRadioMinutes, 60000);
+                }
+            } else {
+                if(add_minute !== undefined) clearTimeout(add_minute);
             }
         }
 
@@ -323,7 +327,7 @@ kiwi.plugins.on('loaded', function() {
 
             $("#player").on($.jPlayer.event.play, function(){
                 ga('send', 'pageview', '/radio/play');
-                count_radio_minutes();
+                countRadioMinutes();
             });
             $("#player").on($.jPlayer.event.pause, function(){
                 ga('send', 'pageview', '/radio/pause');
@@ -331,7 +335,7 @@ kiwi.plugins.on('loaded', function() {
         }
     })();
 
-    $("#player").jPlayer({
+    var jp_player = $("#player").jPlayer({
         ready: function () {
             $(this).jPlayer("setMedia", {
                 title: "Radio",
