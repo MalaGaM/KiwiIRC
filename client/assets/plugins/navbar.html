@@ -5,27 +5,30 @@
             <img src="/assets/plugins/images/<%= logo_file %>" height="50" alt="<%= logo_title %>" title=="<%= logo_title %>">
         </a>
         <div id="player" class="jp-jplayer"></div>
-            <div id="jp_container" class="jp-audio">
-                <div class="jp-type-single">
-                  <div class="jp-gui jp-interface">
-                      <ul class="jp-controls">
-                        <li><span class="jp-title">Radio</span></li>
+        <div id="jp_container" class="jp-audio">
+            <div class="jp-type-single">
+                <div class="jp-gui jp-interface">
+                    <span class="jp-title">Radio</span>
+                    <div class="eq">
+                        <span class="eqbar"></span>
+                        <span class="eqbar"></span>
+                        <span class="eqbar"></span>
+                        <span class="eqbar"></span>
+                        <span class="eqbar"></span>
+                    </div>
+                    <ul class="jp-controls">
                         <li><a href="javascript:;" class="jp-play" tabindex="1" title="<%= play %>">&#61515;</a></li>
                         <li><a href="javascript:;" class="jp-pause" tabindex="1" title="<%= stop %>">&#61517;</a></li>
                         <li><a href="javascript:;" class="jp-mute" tabindex="1" title="<%= mute %>">&#61480;</a></li>
                         <li><a href="javascript:;" class="jp-unmute" tabindex="1" title="<%= unmute %>">&#61478;</a></li>
-                      </ul>
-                      <div class="jp-volume-bar">
+                    </ul>
+                    <div class="jp-volume-bar">
                         <div class="jp-volume-bar-value"></div>
-                      </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="social">
-            <div class="gplus">
-                <div class="g-plusone" data-size="medium" data-href="<%= gplus_url %>"></div>
-            </div>
-            <a href="https://twitter.com/share" class="twitter-share-button" data-url="<%= twitter_url %>" data-text="<%= twitter_text %>" data-via="EuropNet"></a>
             <div id="fb-root"></div>
             <div class="fb-like" data-href="<%= facebook_url %>" data-send="false" data-layout="button_count" data-width="140" data-show-faces="false" data-action="recommend"></div>
         </div>
@@ -59,14 +62,11 @@
         padding: 15px 10px 0 0;
         margin-right: 20px;
     }
-    #navbar .fb-like, #navbar .twitter-share-button, #navbar .gplus {
+    #navbar .fb-like {
         float: right;
         padding-bottom: 4px;
         padding-right: 10px;
         z-index: 2;
-    }
-    #navbar .gplus {
-        width: 70px;
     }
     #kiwi {clear: both;}
 
@@ -88,6 +88,8 @@
     #navbar .jp-title {
         font-family:Arial,Helvetica,Sans-serif;
         color:#FFF;
+        float: left;
+        margin: 10px 7px 0 7px;
     }
 
     #navbar .jp-gui {
@@ -99,7 +101,7 @@
     }
 
     #navbar .jp-jplayer, #navbar .jp-audio {
-        width: 190px;
+        width: 230px;
         height: 20px;
         position: relative;
         float: right;
@@ -143,7 +145,7 @@
         height: 20px;
         display: inline-block;
         line-height: 26px;
-        margin-left: 10px;
+        margin-left: 8px;
     }
 
     #navbar .jp-mute {
@@ -152,7 +154,7 @@
 
     #navbar .jp-volume-bar {
         position: absolute;
-        left: 135px;
+        right: 7px;
         top: 13px;
         width: 45px;
         height: 8px;
@@ -168,7 +170,20 @@
         height: 8px;
         border-radius: 20px 20px 20px 20px;
     }
+    #navbar .eq {
+        position: static;
+        float: left;
+        margin: 7px;
+    }
 
+    #navbar .eqbar {
+        background-color: #ffffff;
+        width:4px;
+        height:15px;
+        display: inline-block;
+        vertical-align: bottom;
+        margin-left: -2px;
+    }
 </style>
 
 <script>
@@ -237,18 +252,12 @@ kiwi.plugins.on('loaded', function() {
                     this.text['logo_file'] = 'logo-cfr.png';
                     this.text['logo_title'] = 'Chat-fr';
                     this.text['facebook_url'] = 'https://www.facebook.com/EuropNet/160252764002584';
-                    this.text['twitter_url'] = 'http://www.chat-fr.org/';
-                    this.text['twitter_text'] = 'Je suis sur Chat-fr, le site de Chat gratuit sans inscription :D Rejoignez moi ! #Chat';
-                    this.text['gplus_url'] = 'http://www.chat-fr.org/';
 
                 } else {
                     this.text['logo_link'] = 'http://www.europnet.org/';
                     this.text['logo_file'] = 'logo-en-white.png';
                     this.text['logo_title'] = 'EuropNet';
                     this.text['facebook_url'] = 'https://www.facebook.com/EuropNet/160252764002584';
-                    this.text['twitter_url'] = 'http://www.europnet.org/';
-                    this.text['twitter_text'] = 'Découvrez #EuropNet, le tchat IRC de référence ! #Chat #IRC';
-                    this.text['gplus_url'] = 'http://www.europnet.org/';
                 }
             },
 
@@ -259,7 +268,8 @@ kiwi.plugins.on('loaded', function() {
 
             calculateKiwiHeight: function(bar_height) {
                 return $(window).height() - bar_height;
-            }
+            },
+
         });
 
         var nav = new Navbar(),
@@ -269,6 +279,24 @@ kiwi.plugins.on('loaded', function() {
         nav_dom = nav.render().$el;
         $('#kiwi').before(nav_dom);
         //nav.render().$el.prependTo($('#kiwi'));
+
+
+        // Animate equalizer
+        var fluctuate = function (bar) {
+            var hgt = Math.random() * 10;
+            hgt += 1;
+            var t = hgt * 30;
+
+            bar.animate({
+                height: hgt
+            }, t, function() {
+                fluctuate($(this));
+            });
+        }
+
+        $("#navbar .eqbar").each(function(i) {
+            fluctuate($(this));
+        });
         
         // Adjust kiwi size on load
         $('#kiwi').height(nav.calculateKiwiHeight(nav_dom.height()));
@@ -280,6 +308,7 @@ kiwi.plugins.on('loaded', function() {
                 nav_dom.hide();
             }
         });
+
 
         // Radio player Analytics
         if(ga !== undefined) {
@@ -322,12 +351,6 @@ kiwi.plugins.on('loaded', function() {
   js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v2.4&appId=292727577526632";
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));
-
-!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
-</script>
-<!-- Placez cette balise dans l'en-tête ou juste avant la balise de fermeture du corps de texte. -->
-<script src="https://apis.google.com/js/platform.js" async defer>
-  {lang: 'fr'}
 </script>
 <script type="text/javascript">
     /*! jPlayer 2.9.2 for jQuery ~ (c) 2009-2014 Happyworm Ltd ~ MIT License */
