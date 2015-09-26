@@ -20,7 +20,7 @@
                 search: _kiwi.global.i18n.translate('client_applets_chanlist_search').fetch(),
                 refresh: _kiwi.global.i18n.translate('client_applets_chanlist_refresh').fetch(),
             };
-            this.$el = $(_.template($('#tmpl_channel_list').html().trim(), text));
+            this.$el = $(_.template($('#tmpl_channel_list').html().trim())(text));
 
             this.channels = [];
 

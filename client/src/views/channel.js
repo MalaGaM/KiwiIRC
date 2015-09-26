@@ -83,7 +83,7 @@ _kiwi.view.Channel = _kiwi.view.Panel.extend({
             display_obj.nick = styleText('message_nick', {nick: msg.nick, prefix: msg.nick_prefix || ''});
 
             line_msg = '<div class="msg <%= type %> <%= css_classes %>"><div class="time"><%- time_string %></div><div class="nick" style="<%= nick_style %>"><%- nick %></div><div class="text" style="<%= style %>"><%= msg %> </div></div>';
-            this.$messages.append($(_.template(line_msg, display_obj)).data('message', msg));
+            this.$messages.append($(_.template(line_msg)(display_obj)).data('message', msg));
 
             // Activity/alerts based on the type of new message. We only do this if we have
             // an associated network (think: could be a broadcasted channel so alerts are not needed)
@@ -177,7 +177,7 @@ _kiwi.view.Channel = _kiwi.view.Panel.extend({
             // Use the nick from the member object so the style matches the letter casing
             style = this.getNickStyles(nick).asCssString();
         }
-        nick_re = new RegExp('(.*)(' + _kiwi.global.utils.escapeRegex(nick) + ')(.*)', 'i');
+        nick_re = new RegExp('(.*)(' + _.escapeRegExp(nick) + ')(.*)', 'i');
         return word.replace(nick_re, function (__, before, nick_in_orig_case, after) {
             return _.escape(before)
                 + '<span class="inline-nick" style="' + style + '; cursor:pointer" data-nick="' + _.escape(nick) + '">'
@@ -198,7 +198,7 @@ _kiwi.view.Channel = _kiwi.view.Panel.extend({
             return;
         }
 
-        re = new RegExp('(^|\\s)([' + escapeRegex(network.get('channel_prefix')) + '][^ ,\\007]+)', 'g');
+        re = new RegExp('(^|\\s)([' + _.escapeRegExp(network.get('channel_prefix')) + '][^ ,\\007]+)', 'g');
 
         if (!word.match(re)) {
             return parsed;
@@ -314,7 +314,7 @@ _kiwi.view.Channel = _kiwi.view.Panel.extend({
             regexpStr = _.chain((_kiwi.global.settings.get('custom_highlights') || '').split(/[\s,]+/))
                 .compact()
                 .concat(nick)
-                .map(escapeRegex)
+                .map(_.escapeRegExp)
                 .join('|')
                 .value();
 

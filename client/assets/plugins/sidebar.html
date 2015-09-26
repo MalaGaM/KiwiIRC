@@ -199,7 +199,7 @@ kiwi.plugins.on('loaded', function() {
         initQueryRightPanel: function() {
             // If this is the first query, create "queries" right_bar container
             if($('#kiwi .right-bar-content .queries') == undefined || $('#kiwi .right-bar-content .queries').length == 0) {
-                var query_sidebar_container = $(_.template($('#query_sidebar_container').html().trim(), this.model.text));
+                var query_sidebar_container = $(_.template($('#query_sidebar_container').html().trim())(this.model.text));
                 
                 $('#kiwi .right_bar .right-bar-content').append(query_sidebar_container);
             } else {
@@ -217,7 +217,7 @@ kiwi.plugins.on('loaded', function() {
                 this.model.text['query_id'] = this.model.panel.cid;
 
                 // Push the html with the locale strings
-                var query_sidebar_content = $(_.template($('#query_sidebar_content').html().trim(), this.model.text)),
+                var query_sidebar_content = $(_.template($('#query_sidebar_content').html().trim())(this.model.text)),
                     query_nick = this.model.panel.get('name');
 
                 // Add the right_bar content

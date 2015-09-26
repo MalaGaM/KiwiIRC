@@ -32,7 +32,7 @@ _kiwi.view.ServerSelect = Backbone.View.extend({
                 location: _kiwi.global.i18n.translate('client_views_serverselect_location').fetch()
             };
 
-        this.$el = $(_.template($('#tmpl_server_select').html().trim(), text));
+        this.$el = $(_.template($('#tmpl_server_select').html().trim())(text));
 
         // Remove the 'more' link if the server has disabled server changing
         if (_kiwi.app.server_settings && _kiwi.app.server_settings.connection) {

@@ -88,6 +88,7 @@
             'command:notice':      {fn: noticeCommand, description: translateText('command_description_notice')},
             'command:quote':       {fn: quoteCommand, description: translateText('command_description_quote')},
             'command:kick':        {fn: kickCommand, description: translateText('command_description_kick')},
+            'command:names':       {fn: namesCommand, description: ''},
             'command:clear':       {fn: clearCommand, description: translateText('command_description_clear')},
             'command:ctcp':        {fn: ctcpCommand, description: translateText('command_description_ctcp')},
             'command:quit':        {fn: quitCommand, description: translateText('command_description_quit')},
@@ -96,8 +97,8 @@
             'command:whowas':      {fn: whowasCommand, description: translateText('command_description_whowas')},
             'command:away':        {fn: awayCommand, description: translateText('command_description_away')},
             'command:encoding':    {fn: encodingCommand, description: translateText('command_description_encoding')},
-            'command:channel':     channelCommand,
-            'command:applet':      appletCommand,
+            'command:channel':     {fn: channelCommand, description: ''},
+            'command:applet':      {fn: appletCommand, description: ''},
             'command:settings':    {fn: settingsCommand, description: translateText('command_description_settings')},
             'command:script':      {fn: scriptCommand, description: translateText('command_description_script')}
         };
@@ -435,6 +436,21 @@
 
         this.app.connections.active_connection.gateway.kick(panel.get('name'), nick, ev.params.join(' '));
     }
+
+
+    function namesCommand (ev) {
+        var channel, panel = this.app.panels().active;
+
+        if (!panel.isChannel()) return;
+
+        // Make sure we have a channel
+        channel = ev.params.length === 0 ?
+            panel.get('name') :
+            ev.params[0];
+
+        this.app.connections.active_connection.gateway.raw('NAMES ' + channel);
+    }
+
 
     function clearCommand (ev) {
         // Can't clear a server or applet panel

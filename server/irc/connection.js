@@ -4,6 +4,7 @@ var net             = require('net'),
     dns             = require('dns'),
     _               = require('lodash'),
     winston         = require('winston'),
+    Socks           = require('socksjs'),
     EventBinder     = require('./eventbinder.js'),
     IrcServer       = require('./server.js'),
     IrcCommands     = require('./commands.js'),
@@ -12,18 +13,12 @@ var net             = require('net'),
     EE              = require('../ee.js'),
     iconv           = require('iconv-lite'),
     Proxy           = require('../proxy.js'),
-    Stats           = require('../stats.js'),
-    Socks;
+    Stats           = require('../stats.js');
 
 
-// Break the Node.js version down into usable parts
-var version_values = process.version.substr(1).split('.').map(function (item) {
-    return parseInt(item, 10);
-});
-
-// If we have a suitable Nodejs version, bring in the SOCKS functionality
-if (version_values[1] >= 10) {
-    Socks = require('socksjs');
+var next_connection_id = 1;
+function generateConnectionId() {
+    return next_connection_id++;
 }
 
 var IrcConnection = function (hostname, port, ssl, nick, user, options, state, con_num) {
@@ -36,6 +31,9 @@ var IrcConnection = function (hostname, port, ssl, nick, user, options, state, c
     Stats.incr('irc.connection.created');
 
     options = options || {};
+
+    // An ID to identify this connection instance
+    this.id = generateConnectionId();
 
     // Socket state
     this.connected = false;
@@ -64,7 +62,7 @@ var IrcConnection = function (hostname, port, ssl, nick, user, options, state, c
     // User information
     this.nick = nick;
     this.user = user;  // Contains users real hostname and address
-    this.username = this.nick.replace(/[^0-9a-zA-Z\-_.\/]/, '');
+    this.username = '';
     this.gecos = ''; // Users real-name. Uses default from config if empty
     this.password = options.password || '';
     this.quit_message = ''; // Uses default from config if empty
@@ -319,6 +317,7 @@ IrcConnection.prototype.connect = function () {
                 rawSocketConnect.call(that, this);
             }
 
+            winston.debug('(connection ' + that.id + ') Socket connected');
             Stats.incr('irc.connection.connected');
             that.connected = true;
 
@@ -339,6 +338,7 @@ IrcConnection.prototype.connect = function () {
                 safely_registered = (new Date()) - that.server.registered > 10000, // Safely = registered + 10secs after.
                 should_reconnect = false;
 
+            winston.debug('(connection ' + that.id + ') Socket closed');
             that.connected = false;
             that.server.reset();
 
@@ -368,6 +368,7 @@ IrcConnection.prototype.connect = function () {
                 }
 
                 if (should_reconnect) {
+                    winston.debug('(connection ' + that.id + ') Socket reconnecting');
                     Stats.incr('irc.connection.reconnect');
                     that.reconnect_attempts++;
                     that.emit('reconnecting');
@@ -408,9 +409,11 @@ IrcConnection.prototype.write = function (data, force, force_complete_fn) {
 
     if (force) {
         this.socket && this.socket.write(encoded_buffer, force_complete_fn);
+        winston.debug('(connection ' + this.id + ') Raw C:', data);
         return;
     }
 
+    winston.debug('(connection ' + this.id + ') Raw C:', data);
     this.write_buffer.push(encoded_buffer);
 
     // Only flush if we're not writing already
@@ -717,19 +720,21 @@ var socketConnectHandler = function () {
     connect_data = findWebIrc.call(this, connect_data);
 
     global.modules.emit('irc authorize', connect_data).then(function ircAuthorizeCb() {
-        var gecos = that.gecos;
+        var gecos = ident = '';
 
         if (global.config.client.settings.rich_nicklist && global.config.client.settings.rich_nicklist_track_asl) {
             gecos = that.age + ' ' + that.gender + ' ' + that.location;
         } else if (!gecos && global.config.default_gecos) {
             // We don't have a gecos yet, so use the default
-            gecos = global.config.default_gecos.toString().replace('%n', that.nick);
-            gecos = gecos.replace('%h', that.user.hostname);
-
-        } else if (!gecos) {
-            // We don't have a gecos nor a default, so lets set somthing
-            gecos = '[www.kiwiirc.com] ' + that.nick;
+            gecos = (that.gecos || global.config.default_gecos || '%n')
+                .replace('%n', that.nick)
+                .replace('%h', that.user.hostname);
         }
+
+        ident = (that.username || global.config.default_ident || '%n')
+            .replace('%n', (that.nick.replace(/[^0-9a-zA-Z\-_.\/]/, '') || 'nick'))
+            .replace('%h', that.user.hostname)
+            .replace('%i', ip2Hex(that.user.address) || '00000000');
 
         // Send any initial data for webirc/etc
         if (connect_data.prepend_data) {
@@ -745,7 +750,7 @@ var socketConnectHandler = function () {
         }
 
         that.write('NICK ' + that.nick);
-        that.write('USER ' + that.username + ' 0 0 :' + gecos);
+        that.write('USER ' + ident + ' 0 0 :' + gecos);
 
         that.emit('connected');
     });
@@ -759,41 +764,24 @@ var socketConnectHandler = function () {
  */
 function findWebIrc(connect_data) {
     var webirc_pass = global.config.webirc_pass,
-        ip_as_username = global.config.ip_as_username,
         found_webirc_pass, tmp;
 
 
     // Do we have a single WEBIRC password?
-    if (typeof webirc_pass === 'string') {
+    if (typeof webirc_pass === 'string' && webirc_pass) {
         found_webirc_pass = webirc_pass;
 
     // Do we have a WEBIRC password for this hostname?
-    } else if (typeof webirc_pass === 'object' && webirc_pass[this.irc_host.hostname]) {
-        found_webirc_pass = webirc_pass[this.irc_host.hostname];
+    } else if (typeof webirc_pass === 'object' && webirc_pass[this.irc_host.hostname.toLowerCase()]) {
+        found_webirc_pass = webirc_pass[this.irc_host.hostname.toLowerCase()];
     }
 
     if (found_webirc_pass) {
         // Build the WEBIRC line to be sent before IRC registration
-        tmp = 'WEBIRC ' + webirc_pass[this.irc_host.hostname] + ' KiwiIRC ';
+        tmp = 'WEBIRC ' + found_webirc_pass + ' KiwiIRC ';
         tmp += this.user.hostname + ' ' + this.user.address;
 
         connect_data.prepend_data = [tmp];
-    }
-
-    // Check if we need to pass the users IP as its username/ident
-    if (ip_as_username && ip_as_username.indexOf(this.irc_host.hostname) > -1) {
-        // Get a hex value of the clients IP
-        this.username = this.user.address.split('.').map(function ipSplitMapCb(i){
-            var hex = parseInt(i, 10).toString(16);
-
-            // Pad out the hex value if it's a single char
-            if (hex.length === 1) {
-                hex = '0' + hex;
-            }
-
-            return hex;
-        }).join('');
-
     }
 
     return connect_data;
@@ -872,6 +860,28 @@ function socketOnData(data) {
 
 
 
+function ip2Hex(ip) {
+    // We can only deal with IPv4 addresses for now
+    if (!ip.match(/^[0-9]{0,3}\.[0-9]{0,3}\.[0-9]{0,3}\.[0-9]{0,3}$/)) {
+        return;
+    }
+
+    var hexed = ip.split('.').map(function ipSplitMapCb(i){
+        var hex = parseInt(i, 10).toString(16);
+
+        // Pad out the hex value if it's a single char
+        if (hex.length === 1) {
+            hex = '0' + hex;
+        }
+
+        return hex;
+    }).join('');
+
+    return hexed;
+}
+
+
+
 /**
  * The regex that parses a line of data from the IRCd
  * Deviates from the RFC a little to support the '/' character now used in some
@@ -896,6 +906,8 @@ function parseIrcLine(buffer_line) {
 
     // Parse the complete line, removing any carriage returns
     msg = parse_regex.exec(line.replace(/^\r+|\r+$/, ''));
+
+    winston.debug('(connection ' + this.id + ') Raw S:', line.replace(/^\r+|\r+$/, ''));
 
     if (!msg) {
         // The line was not parsed correctly, must be malformed

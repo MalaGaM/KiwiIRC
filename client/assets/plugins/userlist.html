@@ -211,7 +211,7 @@
             };
 
             // Push the html with the locale strings
-            this.$el = $(_.template($('#tmpl_user_list').html().trim(), text));
+            this.$el = $(_.template($('#tmpl_user_list').html().trim())(text));
 
             this.members = [];
             // Waiting to add the table back into the DOM?

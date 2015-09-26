@@ -262,7 +262,7 @@ kiwi.plugins.on('loaded', function() {
             },
 
             render: function() {
-                this.$el = $(_.template($('#tmpl_navbar').html(), this.text));
+                this.$el = $(_.template($('#tmpl_navbar').html())(this.text));
                 return this;
             },
 

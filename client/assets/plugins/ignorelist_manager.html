@@ -87,7 +87,7 @@ kiwi.plugins.on('loaded', function() {
 
 				this.ignore_list = ignore_object.ignore_data.get(network_address);
 				
-                this.$el = $(_.template($('#ignore_list_manager').html().trim(), this.model.text));
+                this.$el = $(_.template($('#ignore_list_manager').html().trim())(this.model.text));
 
                 this.model.on('applet_loaded', function () {
                     that.$el.parent().css('height', '100%');
