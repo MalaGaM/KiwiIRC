@@ -47,6 +47,12 @@ var IrcConnection = function (hostname, port, ssl, nick, user, options, state, c
     // Last few lines from the IRCd for context when disconnected (server errors, etc)
     this.last_few_lines = [];
 
+    // IRCd message buffers
+    this.read_buffer = [];
+
+    // In process of reading the IRCd messages?
+    this.reading_buffer = false;
+
     // IRCd write buffers (flood controll)
     this.write_buffer = [];
 
@@ -152,8 +158,8 @@ module.exports.IrcConnection = IrcConnection;
 /**
  * Create and keep track of all timers so they can be easily removed
  */
-IrcConnection.prototype.setTimeout = function(fn, length) {
-    var tmr = setTimeout(fn, length);
+IrcConnection.prototype.setTimeout = function(fn, length /*, argN */) {
+    var tmr = setTimeout.apply(null, arguments);
     this._timers = this._timers || [];
     this._timers.push(tmr);
     return tmr;
@@ -851,11 +857,8 @@ function socketOnData(data) {
         data.copy(this.held_data, 0, line_start);
     }
 
-    // Process our data line by line
-    for (i = 0; i < lines.length; i++) {
-        parseIrcLine.call(this, lines[i]);
-    }
-
+    this.read_buffer = this.read_buffer.concat(lines);
+    processIrcLines(this);
 }
 
 
@@ -883,13 +886,39 @@ function ip2Hex(ip) {
 
 
 /**
+ * Process the messages recieved from the IRCd that are buffered on an IrcConnection object
+ * Will only process 4 lines per JS tick so that node can handle any other events while
+ * handling a large buffer
+ */
+function processIrcLines(irc_con, continue_processing) {
+    if (irc_con.reading_buffer && !continue_processing) return;
+    irc_con.reading_buffer = true;
+
+    var lines_per_js_tick = 4,
+        processed_lines = 0;
+
+    while(processed_lines < lines_per_js_tick && irc_con.read_buffer.length > 0) {
+        parseIrcLine(irc_con, irc_con.read_buffer.shift());
+        processed_lines++;
+    }
+
+    if (irc_con.read_buffer.length > 0) {
+        irc_con.setTimeout(processIrcLines, 1, irc_con, true);
+    } else {
+        irc_con.reading_buffer = false;
+    }
+}
+
+
+
+/**
  * The regex that parses a line of data from the IRCd
  * Deviates from the RFC a little to support the '/' character now used in some
  * IRCds
  */
 var parse_regex = /^(?:(?:(?:@([^ ]+) )?):(?:([^\s!]+)|([^\s!]+)!([^\s@]+)@?([^\s]+)?) )?(\S+)(?: (?!:)(.+?))?(?: :(.*))?$/i;
 
-function parseIrcLine(buffer_line) {
+function parseIrcLine(irc_con, buffer_line) {
     var msg,
         i,
         tags = [],
@@ -899,7 +928,7 @@ function parseIrcLine(buffer_line) {
         hold_last_lines;
 
     // Decode server encoding
-    line = iconv.decode(buffer_line, this.encoding);
+    line = iconv.decode(buffer_line, irc_con.encoding);
     if (!line) {
         return;
     }
@@ -907,7 +936,7 @@ function parseIrcLine(buffer_line) {
     // Parse the complete line, removing any carriage returns
     msg = parse_regex.exec(line.replace(/^\r+|\r+$/, ''));
 
-    winston.debug('(connection ' + this.id + ') Raw S:', line.replace(/^\r+|\r+$/, ''));
+    winston.debug('(connection ' + irc_con.id + ') Raw S:', line.replace(/^\r+|\r+$/, ''));
 
     if (!msg) {
         // The line was not parsed correctly, must be malformed
@@ -917,13 +946,13 @@ function parseIrcLine(buffer_line) {
 
     // If enabled, keep hold of the last X lines
     if (global.config.hold_ircd_lines) {
-        this.last_few_lines.push(line.replace(/^\r+|\r+$/, ''));
+        irc_con.last_few_lines.push(line.replace(/^\r+|\r+$/, ''));
 
         // Trim the array down if it's getting to long. (max 3 by default)
         hold_last_lines = parseInt(global.config.hold_ircd_lines, 10) || 3;
 
-        if (this.last_few_lines.length > hold_last_lines) {
-            this.last_few_lines = this.last_few_lines.slice(this.last_few_lines.length - hold_last_lines);
+        if (irc_con.last_few_lines.length > hold_last_lines) {
+            irc_con.last_few_lines = irc_con.last_few_lines.slice(irc_con.last_few_lines.length - hold_last_lines);
         }
     }
 
@@ -951,5 +980,5 @@ function parseIrcLine(buffer_line) {
         msg_obj.params.push(msg[8].trimRight());
     }
 
-    this.irc_commands.dispatch(new IrcCommands.Command(msg_obj.command.toUpperCase(), msg_obj));
+    irc_con.irc_commands.dispatch(new IrcCommands.Command(msg_obj.command.toUpperCase(), msg_obj));
 }
