@@ -35,6 +35,10 @@ var IrcConnection = function (hostname, port, ssl, nick, user, options, state, c
     // An ID to identify this connection instance
     this.id = generateConnectionId();
 
+    // All setInterval/setTimeout values relating to this connection will be
+    // added here. Keeps it easier to clearTimeout() them all during cleanup.
+    this._timers = [];
+
     // Socket state
     this.connected = false;
 
@@ -160,16 +164,11 @@ module.exports.IrcConnection = IrcConnection;
  */
 IrcConnection.prototype.setTimeout = function(fn, length /*, argN */) {
     var tmr = setTimeout.apply(null, arguments);
-    this._timers = this._timers || [];
     this._timers.push(tmr);
     return tmr;
 };
 
 IrcConnection.prototype.clearTimers = function() {
-    if (!this._timers) {
-        return;
-    }
-
     this._timers.forEach(function(tmr) {
         clearTimeout(tmr);
     });
@@ -900,6 +899,7 @@ function processIrcLines(irc_con, continue_processing) {
     while(processed_lines < lines_per_js_tick && irc_con.read_buffer.length > 0) {
         parseIrcLine(irc_con, irc_con.read_buffer.shift());
         processed_lines++;
+        Stats.incr('irc.connection.parsed_lines');
     }
 
     if (irc_con.read_buffer.length > 0) {

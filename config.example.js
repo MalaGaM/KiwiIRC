@@ -94,6 +94,14 @@ conf.default_ident = '%i';
 
 
 /*
+* Default quit message
+* If a browser gets disconnected without sending a QUIT command, this
+* message will be used instead.
+*/
+conf.quit_message = 'http://www.kiwiirc.com/ - A hand-crafted IRC client';
+
+
+/*
 * Auto reconnect if the IRC server disconnects a kiwi user
 * Hundreds of connected users getting disconnected then reconnecting at once may see
 * high CPU usage causing further dropouts. Set to false if under high usage.
@@ -189,6 +197,7 @@ conf.socks_proxy.pass = null;
 // Default quit message
 conf.quit_message = "http://www.kiwiirc.com/ - A hand-crafted IRC client";
 
+
 // Default settings for the client. These may be changed in the browser
 conf.client = {
     server: 'irc.kiwiirc.com',
@@ -236,6 +245,18 @@ conf.client_themes = [
 //conf.restrict_server_ssl = false;
 //conf.restrict_server_password = "";
 
+
+/*
+ * If running multiple kiwi servers you may specify them here.
+ * Note: All kiwi servers must have the same conf.http_base_path config option.
+ * 
+ * To force the client to connect to one other kiwi server, use:
+ *     conf.client.kiwi_server = 'https://kiwi-server2.com';
+ *
+ * To force the client to connect to a random kiwi server from a list, use:
+ *     conf.client.kiwi_server = ['https://kiwi-server1.com', 'https://kiwi-server2.com'];
+ */
+//conf.client.kiwi_server = '';
 
 
 /*
