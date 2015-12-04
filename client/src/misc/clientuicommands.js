@@ -99,6 +99,7 @@
             'command:quote':       {fn: quoteCommand, description: translateText('command_description_quote'), aliases: ['raw']},
             'command:kick':        {fn: kickCommand, description: translateText('command_description_kick')},
             'command:names':       {fn: namesCommand, description: ''},
+            'command:mode':        {fn: modeCommand, description: ''},
             'command:clear':       {fn: clearCommand, description: translateText('command_description_clear')},
             'command:ctcp':        {fn: ctcpCommand, description: translateText('command_description_ctcp')},
             'command:quit':        {fn: quitCommand, description: translateText('command_description_quit'), aliases: ['q']},
@@ -459,6 +460,62 @@
     }
 
 
+    function modeCommand (ev) {
+        var params, for_channel, network,
+            panel = this.app.panels().active;
+
+        network = panel.get('network');
+        if (!network) {
+            return;
+        }
+
+        // Use the specified channel is one is given..
+        if (network.isChannelName(ev.params[0])) {
+            for_channel = ev.params[0];
+            params = ev.params.slice(1).join(' ');
+
+        // Use the current channel..
+        } else if(panel.isChannel()) {
+            for_channel = panel.get('name');
+            params = ev.params.join(' ');
+
+        // Nothing to get a mode for..
+        } else {
+            return;
+        }
+
+        // Due to a flaw on the server-side we can't actually get modes for channels
+        // that we are not joined.
+        if (!params) {
+            network.gateway.on('channel_info', function onChanInfo(event) {
+                if (event.channel.toLowerCase() !== for_channel.toLowerCase() || typeof event.modes === 'undefined') {
+                    return;
+                }
+
+                // No need to listen any more
+                network.gateway.off('channel_info', onChanInfo);
+
+                // Convert the modes into human readable format (+nt -xyz)
+                var mode_string = _.chain(event.modes)
+                    .reduce(function(res, mode) {
+                        var type = mode.mode[0]==='-'?'-':'+';
+                        res[type].push(mode.mode.substr(1));
+                        return res;
+                    }, {'+':[], '-':[]})
+                    .reduce(function(res, modes, type) {
+                        if (modes.length > 0) res += type + modes.join('') + ' ';
+                        return res;
+                    }, '')
+                    .value();
+                    
+                panel.addMsg('', event.channel + ' ' + mode_string);
+            });
+        }
+
+        this.app.connections.active_connection.gateway.raw('MODE ' + for_channel + ' ' + params);
+    }
+
+
     function clearCommand (ev) {
         // Can't clear a server or applet panel
         if (this.app.panels().active.isServer() || this.app.panels().active.isApplet()) {
@@ -502,22 +559,20 @@
     function appletCommand (ev) {
         if (!ev.params[0]) return;
 
-        var panel = new _kiwi.model.Applet();
+        var panel;
 
         if (ev.params[1]) {
             // Url and name given
-            panel.load(ev.params[0], ev.params[1]);
+            panel = panel.loadFromUrl(ev.params[0], ev.params[1]);
         } else {
             // Load a pre-loaded applet
-            if (this.applets[ev.params[0]]) {
-                panel.load(new this.applets[ev.params[0]]());
-            } else {
+            panel = _kiwi.model.Applet.loadOnce('kiwi_settings');
+            if (!panel) {
                 this.app.panels().server.addMsg('', styleText('applet_notfound', {text: translateText('client_models_application_applet_notfound', [ev.params[0]])}));
                 return;
             }
         }
 
-        this.app.connections.active_connection.panels.add(panel);
         panel.view.show();
     }
 

@@ -229,6 +229,7 @@ conf.client = {
         rich_nicklist_track_away: true,
         rich_nicklist_track_ircop: true,
         count_all_activity: false,
+        show_autocomplete_slideout: true,
         locale: null // null = use the browser locale settings
     },
     window_title: 'Kiwi IRC'

@@ -14,11 +14,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
 "Project-Id-Version: Kiwi\n"
-"Language: es\n"
+"Language: gl\n"
 
 #: client/assets/src/applets/chanlist.js
 msgid "client_applets_chanlist_channelname"
-msgstr "Nombre del canal"
+msgstr "Nome da canle"
 
 #: 
 msgid "client_applets_chanlist_users"
@@ -26,23 +26,23 @@ msgstr "Usuarios"
 
 #: 
 msgid "client_applets_chanlist_topic"
-msgstr "Tema del canal"
+msgstr "Tema da canle"
 
 #: 
 msgid "client_applets_chanlist_channellist"
-msgstr "Lista de canales"
+msgstr "Lista de canles"
 
 #: client/assets/src/applets/scripteditor.js
 msgid "client_applets_scripteditor_save"
-msgstr "Guardar"
+msgstr "Gardar"
 
 #: 
 msgid "client_applets_scripteditor_error"
-msgstr "Error de script: %s"
+msgstr "Erro de script: %s"
 
 #: 
 msgid "client_applets_scripteditor_saved"
-msgstr "Tu script ha sido guardado y está ahora activo"
+msgstr "O teu script foi gardado e agora está activo"
 
 #: 
 msgid "client_applets_scripteditor_title"
@@ -50,7 +50,7 @@ msgstr "Editor de scripts"
 
 #: client/assets/src/applets/settings.js
 msgid "client_applets_settings_channelview_tabs"
-msgstr "Pestañas"
+msgstr "Pestana"
 
 #: 
 msgid "client_applets_settings_channelview_list"
@@ -58,23 +58,23 @@ msgstr "Lista"
 
 #: 
 msgid "client_applets_settings_channelview_list_notice"
-msgstr "para muchos canales"
+msgstr "para moitas canles"
 
 #: 
 msgid "client_applets_settings_notification_joinpart"
-msgstr "Notificaciones de entrada/salida de canal"
+msgstr "Notificacións de entrada/salida da canle"
 
 #: 
 msgid "client_applets_settings_timestamp"
-msgstr "Marcas de tiempo"
+msgstr "Marcas de tempo"
 
 #: 
 msgid "client_applets_settings_notification_sound"
-msgstr "Silenciar sonido de notificaciones"
+msgstr "Silenciar son de notificacións"
 
 #: 
 msgid "client_applets_settings_history_length"
-msgstr "Historial de mensajes por ventana"
+msgstr "Historial de mensaxes por ventá"
 
 #: 
 msgid "client_applets_settings_default_client"
@@ -82,19 +82,19 @@ msgstr "Cliente IRC predeterminado"
 
 #: 
 msgid "client_applets_settings_default_client_enable"
-msgstr "Hacer KiwiIRC mi cliente IRC predeterminado"
+msgstr "Facer KiwiIRC o meu cliente IRC predeterminado"
 
 #: 
 msgid "client_applets_settings_locale_restart_needed"
-msgstr "Nota: Los cambios tendrán efecto después de actualizar la página"
+msgstr "Nota: Os cambios terán efecto despois de actualizar a páxina"
 
 #: 
 msgid "client_applets_settings_default_client_notice"
-msgstr "Nota: Los usuarios de Chrome o Chromium quizás deban revisar sus configuraciones en %s si nada ocurre"
+msgstr "Nota: Os usuarios de Chrome ou Chromium quizais teñan que revisar a súa configuración en %s se non acontece nada"
 
 #: 
 msgid "client_applets_settings_title"
-msgstr "Configuraciones"
+msgstr "Configuracións"
 
 #: client/assets/src/models/applet.js
 msgid "client_models_applet_unknown"
@@ -106,15 +106,15 @@ msgstr "Cargando..."
 
 #: 
 msgid "client_models_applet_notfound"
-msgstr "No encontrado"
+msgstr "Non encontrado"
 
 #: client/assets/src/models/application.js
 msgid "client_models_application_reconnecting"
-msgstr "Has sido desconectado. Intentando reconectar"
+msgstr "Ten sido desconectado. Intentando reconectar"
 
 #: 
 msgid "client_models_application_reconnect_in_x_seconds"
-msgstr "Has sido desconectado. Intentando reconectar en %d segundos"
+msgstr "Ten sido desconectado. Intentando reconectar en %d segundos"
 
 #: 
 msgid "client_models_application_reconnect_successfully"
@@ -122,7 +122,7 @@ msgstr "Conexión reestablecida"
 
 #: 
 msgid "client_models_application_settings_saved"
-msgstr "La configuración ha sido guardada"
+msgstr "A configuración foi gardada"
 
 #: 
 msgid "client_models_application_ignore_title"
@@ -130,7 +130,7 @@ msgstr "Nicks ignorados"
 
 #: 
 msgid "client_models_application_ignore_none"
-msgstr "Tu lista de ignorados está vacía"
+msgstr "A súa lista de ignorados está valeira"
 
 #: 
 msgid "client_models_application_ignore_nick"
@@ -138,15 +138,15 @@ msgstr "Ignorando %s"
 
 #: 
 msgid "client_models_application_ignore_stop_notice"
-msgstr "Especifica qué nick quieres dejar de ignorar"
+msgstr "Especifica qué nick queres deixar de ignorar"
 
 #: 
 msgid "client_models_application_ignore_stopped"
-msgstr "Se ha dejado de ignorar a %s"
+msgstr "Deixouse de ignorar a %s"
 
 #: 
 msgid "client_models_application_applet_notfound"
-msgstr "El Applet \"%s\" no existe"
+msgstr "O Applet \"%s\" non existe"
 
 #: 
 msgid "client_models_application_encoding_changed"
@@ -154,11 +154,11 @@ msgstr "Codificación modificada a %s"
 
 #: 
 msgid "client_models_application_encoding_invalid"
-msgstr "%s no es una codificación válida"
+msgstr "%s non é unha codificación válida"
 
 #: 
 msgid "client_models_application_encoding_notspecified"
-msgstr "Codificación no especificada"
+msgstr "Codificación non especificada"
 
 #: 
 msgid "client_models_application_encoding_usage"
@@ -166,7 +166,7 @@ msgstr "Uso: /encoding [NUEVA-CODIFICACIÓN]"
 
 #: 
 msgid "client_models_application_connection_create"
-msgstr "Nueva conexión"
+msgstr "Nova conexión"
 
 #: 
 msgid "client_models_application_connection_connecting"
@@ -174,63 +174,63 @@ msgstr "Conectando a %s:%s..."
 
 #: 
 msgid "client_models_application_connection_error"
-msgstr "Error conectando a %s:%s (%s)"
+msgstr "Erro conectando a %s:%s (%s)"
 
 #: client/assets/src/models/channel.js
 msgid "client_models_channel_join"
-msgstr "ha entrado"
+msgstr "entrou"
 
 #: 
 msgid "client_models_channel_quit"
-msgstr "ha abandonado %s"
+msgstr "abandonou %s"
 
 #: 
 msgid "client_models_channel_kicked"
-msgstr "fue expulsado por %s %s"
+msgstr "foi expulsado por %s %s"
 
 #: 
 msgid "client_models_channel_selfkick"
-msgstr "Has sido expulsado por %s %s"
+msgstr "Ten sido expulsado por %s %s"
 
 #: 
 msgid "client_models_channel_part"
-msgstr "ha salido de %s"
+msgstr "saiu de %s"
 
 #: client/assets/src/models/network.js
 msgid "client_models_network_channel_invalid_name"
-msgstr "no es un nombre de canal válido"
+msgstr "non é un nome de canle válida"
 
 #: 
 msgid "client_models_network_disconnected"
-msgstr "Desconectado de la red"
+msgstr "Desconectado da red"
 
 #: 
 msgid "client_models_network_nickname_changed"
-msgstr "ha cambiado su nick a %s"
+msgstr "cambiou o seu nick a %s"
 
 #: 
 msgid "client_models_network_topic"
-msgstr "Tema del canal puesto por %s a las %s"
+msgstr "Tema da canle posto por %s ás %s"
 
 #: 
 msgid "client_models_network_selfmode"
-msgstr "puso modo %s"
+msgstr "puxo modo %s"
 
 #: 
 msgid "client_models_network_mode"
-msgstr "puso modo %s"
+msgstr "puxo modo %s"
 
 #: 
 msgid "client_models_network_channels"
-msgstr "Canales: %s"
+msgstr "Canles: %s"
 
 #: 
 msgid "client_models_network_server"
-msgstr "Conectado al servidor: %s %s"
+msgstr "Conectado ó servidor: %s %s"
 
 #: 
 msgid "client_models_network_idle_and_signon"
-msgstr "Inactivo hace %s, conectado desde %s"
+msgstr "Inactivo fai %s, conectado dende %s"
 
 #: 
 msgid "client_models_network_away"
@@ -238,55 +238,55 @@ msgstr "Inactivo: %s"
 
 #: 
 msgid "client_models_network_idle"
-msgstr "Inactivo hace: %s"
+msgstr "Inactivo fai: %s"
 
 #: 
 msgid "client_models_network_nickname_notfound"
-msgstr "Nick no existe"
+msgstr "Nick non existe"
 
 #: 
 msgid "client_models_network_banned"
-msgstr "Has sido baneado de %s. %s"
+msgstr "Fuches baneado de %s. %s"
 
 #: 
 msgid "client_models_network_channel_badkey"
-msgstr "Contraseña del canal incorrecta para %s"
+msgstr "Contrasinal da canle incorrecta para %s"
 
 #: 
 msgid "client_models_network_channel_inviteonly"
-msgstr "es sólo para invitados."
+msgstr "é só para convidados."
 
 #: 
 msgid "client_models_network_channel_limitreached"
-msgstr "está lleno."
+msgstr "está cheo."
 
 #: 
 msgid "client_models_network_nickname_alreadyinuse"
-msgstr "El nick \"%s\" ya está en uso. Elige otro distinto"
+msgstr "O nick \"%s\" xa está en uso. Escolle outro distinto"
 
 #: 
 msgid "client_models_network_badpassword"
-msgstr "Contraseña incorrecta"
+msgstr "Contrasinal incorrecta"
 
 #: client/assets/src/views/application.js
 msgid "client_views_application_close_notice"
-msgstr "Esto cerrará todas las conexiones. ¿Estás seguro de que quieres cerrar KiwiIRC?"
+msgstr "Isto pechaá todas as conexións. Estás seguro de que queres pechar KiwiIRC?"
 
 #: client/assets/src/views/channel.js
 msgid "client_views_channel_joining"
-msgstr "Entrando al canal..."
+msgstr "Entrando á canle..."
 
 #: 
 msgid "client_views_channel_topic"
-msgstr "Tema del canal %s es: %s"
+msgstr "Tema da canle %s é: %s"
 
 #: client/assets/src/views/mediamessage.js
 msgid "client_views_mediamessage_close"
-msgstr "Cerrar"
+msgstr "Pechar"
 
 #: 
 msgid "client_views_mediamessage_notfound"
-msgstr "No encontrado"
+msgstr "Non encontrado"
 
 #: 
 msgid "client_views_mediamessage_load_tweet"
@@ -294,7 +294,7 @@ msgstr "Cargando Tweet"
 
 #: 
 msgid "client_views_mediamessage_load_image"
-msgstr "Cargando imagen"
+msgstr "Cargando imaxe"
 
 #: 
 msgid "client_views_mediamessage_load_reddit"
@@ -306,7 +306,7 @@ msgstr "Cargando Gist"
 
 #: client/assets/src/views/nickchangegbox.js
 msgid "client_views_nickchangebox_new"
-msgstr "Nuevo nick"
+msgstr "Novo nick"
 
 #: 
 msgid "client_views_nickchangebox_change"
@@ -318,11 +318,11 @@ msgstr "Cancelar"
 
 #: client/assets/src/views/panel.js
 msgid "client_views_panel_activity"
-msgstr "¡Gente hablando!"
+msgstr "Xente falando!"
 
 #: client/assets/src/views/serverselect.js
 msgid "client_views_serverselect_form_title"
-msgstr "Elige un nick..."
+msgstr "Elixe un nick..."
 
 #: 
 msgid "client_views_serverselect_nickname"
@@ -330,27 +330,27 @@ msgstr "Nick"
 
 #: 
 msgid "client_views_serverselect_enable_password"
-msgstr "Tengo una contraseña"
+msgstr "Teño un contrasinal"
 
 #: 
 msgid "client_views_serverselect_password"
-msgstr "Contraseña"
+msgstr "Contrasinal"
 
 #: 
 msgid "client_views_serverselect_channel"
-msgstr "Canal"
+msgstr "Canle"
 
 #: 
 msgid "client_views_serverselect_channelkey"
-msgstr "Contraseña del canal"
+msgstr "Contrasinal da canle"
 
 #: 
 msgid "client_views_serverselect_channelkey_required"
-msgstr "Canal requiere una contraseña"
+msgstr "Canle require un contrasinal"
 
 #: 
 msgid "client_views_serverselect_key"
-msgstr "Contraseña"
+msgstr "Contrasinal"
 
 #: 
 msgid "client_views_serverselect_connection_start"
@@ -358,7 +358,7 @@ msgstr "Conectando..."
 
 #: 
 msgid "client_views_serverselect_server_and_network"
-msgstr "Servidor y red"
+msgstr "Servidor e rede"
 
 #: 
 msgid "client_views_serverselect_server"
@@ -366,7 +366,7 @@ msgstr "Servidor"
 
 #: 
 msgid "client_views_serverselect_port"
-msgstr "Puerto"
+msgstr "Porto"
 
 #: 
 msgid "client_views_serverselect_poweredby"
@@ -374,7 +374,7 @@ msgstr "Funciona con KiwiIRC"
 
 #: 
 msgid "client_views_serverselect_nickname_error_empty"
-msgstr "Debes elegir un nick primero"
+msgstr "Debes elixir un nick primeiro"
 
 #: 
 msgid "client_views_serverselect_connection_successfully"
@@ -386,7 +386,7 @@ msgstr "Conectando..."
 
 #: 
 msgid "client_views_serverselect_nickname_error_alreadyinuse"
-msgstr "Nick ya está en uso"
+msgstr "Nick xa está en uso"
 
 #: 
 msgid "client_views_serverselect_nickname_invalid"
@@ -394,15 +394,15 @@ msgstr "Nick inválido"
 
 #: 
 msgid "client_views_serverselect_password_incorrect"
-msgstr "Contraseña incorrecta"
+msgstr "Contrasinal incorrecto"
 
 #: 
 msgid "client_views_serverselect_connection_error"
-msgstr "Error al conectar"
+msgstr "Erró ó conectar"
 
 #: 
 msgid "client_views_serverselect_server_notfound"
-msgstr "Servidor no encontrado"
+msgstr "Servidor non encontrado"
 
 #: 
 msgid "client_views_serverselect_connection_refused"
@@ -434,7 +434,7 @@ msgstr "Banear"
 
 #: 
 msgid "client_views_userbox_query"
-msgstr "Mensaje"
+msgstr "Mensaxe"
 
 #: 
 msgid "client_views_userbox_whois"
@@ -442,7 +442,7 @@ msgstr "Info"
 
 #: 
 msgid "client_views_userbox_slap"
-msgstr "¡Bofetear!"
+msgstr "Labazada!"
 
 #: 
 msgid "client_views_serverselect_ssl"
@@ -450,7 +450,7 @@ msgstr "SSL"
 
 #: 
 msgid "client_models_application_jumpserver_prepare"
-msgstr "En 5 minutos serás reconectado y entrarás automaticamente a tus canales. ¡Prepárate!"
+msgstr "En 5 minutos serás reconectado e entrarás automaticamente as tuas canles. Prepárate!"
 
 #: 
 msgid "client_models_application_jumpserver_reconnect"
@@ -458,15 +458,15 @@ msgstr "Reconectando..."
 
 #: 
 msgid "client_applets_settings_html5_notifications"
-msgstr "Activar notificaciones de escritorio HTML5"
+msgstr "Activar notificacións de escritorio HTML5"
 
 #: 
 msgid "client_applets_settings_enable_notifications"
-msgstr "Activar notificaciones"
+msgstr "Activar notificacións"
 
 #: 
 msgid "client_applets_settings_emoticons"
-msgstr "Mostrar emoticones"
+msgstr "Mostrar emoticonas"
 
 #: 
 msgid "client_applet_about"
@@ -474,19 +474,19 @@ msgstr "Acerca de KiwiIRC"
 
 #: 
 msgid "client_applet_about_homepage"
-msgstr "Página principal del proyecto"
+msgstr "Páxina principal do proxecto"
 
 #: 
 msgid "client_applet_about_link_channel"
-msgstr "Enlace a este canal"
+msgstr "Enlace a esta canle"
 
 #: 
 msgid "client_applet_about_share_channel"
-msgstr "Compartir este canal"
+msgstr "Compartir esta canle"
 
 #: 
 msgid "client_applet_fav_my_networks"
-msgstr "Mis redes"
+msgstr "As miñas redes"
 
 #: 
 msgid "client_applet_fav_networks"
@@ -494,43 +494,19 @@ msgstr "Redes favoritas"
 
 #: 
 msgid "client_applet_fav_add"
-msgstr "Agregar red"
+msgstr "Agregar rede"
 
 #: 
 msgid "client_applet_fav_save"
-msgstr "Guardar red"
+msgstr "Gardar rede"
 
 #: 
 msgid "client_applet_fav_delete"
-msgstr "Eliminar red"
-
-#: client/assets/src/views/member.js
-msgid "client_views_member_years_old"
-msgstr "years old"
-
-#: client/assets/src/views/member.js
-msgid "client_views_member_gender_M"
-msgstr "Man"
-
-#: client/assets/src/views/member.js
-msgid "client_views_member_gender_F"
-msgstr "Woman"
-
-#: client/assets/src/views/member.js
-msgid "client_views_member_gender_U"
-msgstr "Unknown"
-
-#: client/assets/src/views/member.js
-msgid "client_views_member_ircop"
-msgstr "IRC operator"
-
-#: client/assets/src/views/member.js
-msgid "client_views_member_away"
-msgstr "Away"
+msgstr "Eliminar rede"
 
 #: 
 msgid "client_applets_settings_notification_count_all_activity"
-msgstr "Incluir mensajes de entrada/salida del canal"
+msgstr "Incluir mensaxes de entrada/salida da canle"
 
 #: 
 msgid "client_views_userbox_ignore"
@@ -550,11 +526,11 @@ msgstr "%s PM"
 
 #: 
 msgid "client_models_application_has_been_invited"
-msgstr "ha sido invitado a %s"
+msgstr "fuches invitado a %s"
 
 #: 
 msgid "client_models_network_channel_alreadyin"
-msgstr "ya está en este canal"
+msgstr "xa está nesta canle"
 
 #: Date format
 msgid "client_date_format"
@@ -562,7 +538,7 @@ msgstr "d/m/Y"
 
 #: client.libs.date_format.shortMonths.January
 msgid "client.libs.date_format.short_months.january"
-msgstr "Ene"
+msgstr "Xan"
 
 #: client.libs.date_format.shortMonths.february
 msgid "client.libs.date_format.short_months.february"
@@ -578,15 +554,15 @@ msgstr "Abr"
 
 #: client.libs.date_format.shortMonths.may
 msgid "client.libs.date_format.short_months.may"
-msgstr "May"
+msgstr "Mai"
 
 #: client.libs.date_format.shortMonths.june
 msgid "client.libs.date_format.short_months.june"
-msgstr "Jun"
+msgstr "Xun"
 
 #: client.libs.date_format.shortMonths.july
 msgid "client.libs.date_format.short_months.july"
-msgstr "Jul"
+msgstr "Xul"
 
 #: client.libs.date_format.shortMonths.august
 msgid "client.libs.date_format.short_months.august"
@@ -594,11 +570,11 @@ msgstr "Ago"
 
 #: client.libs.date_format.shortMonths.september
 msgid "client.libs.date_format.short_months.september"
-msgstr "Sep"
+msgstr "Set"
 
 #: client.libs.date_format.shortMonths.october
 msgid "client.libs.date_format.short_months.october"
-msgstr "Oct"
+msgstr "Out"
 
 #: client.libs.date_format.shortMonths.november
 msgid "client.libs.date_format.short_months.november"
@@ -606,15 +582,15 @@ msgstr "Nov"
 
 #: client.libs.date_format.shortMonths.december
 msgid "client.libs.date_format.short_months.december"
-msgstr "Dic"
+msgstr "Dec"
 
 #: client.libs.date_format.longMonts.January
 msgid "client.libs.date_format.long_months.january"
-msgstr "Enero"
+msgstr "Xaneiro"
 
 #: client.libs.date_format.longMonts.february
 msgid "client.libs.date_format.long_months.february"
-msgstr "Febrero"
+msgstr "Febreiro"
 
 #: client.libs.date_format.longMonts.march
 msgid "client.libs.date_format.long_months.march"
@@ -626,15 +602,15 @@ msgstr "Abril"
 
 #: client.libs.date_format.longMonts.may
 msgid "client.libs.date_format.long_months.may"
-msgstr "Mayo"
+msgstr "Maio"
 
 #: client.libs.date_format.longMonts.june
 msgid "client.libs.date_format.long_months.june"
-msgstr "Junio"
+msgstr "Juño"
 
 #: client.libs.date_format.longMonts.july
 msgid "client.libs.date_format.long_months.july"
-msgstr "Julio"
+msgstr "Jullo"
 
 #: client.libs.date_format.longMonts.august
 msgid "client.libs.date_format.long_months.august"
@@ -642,19 +618,19 @@ msgstr "Agosto"
 
 #: client.libs.date_format.longMonts.september
 msgid "client.libs.date_format.long_months.september"
-msgstr "Septiembre"
+msgstr "Setembro"
 
 #: client.libs.date_format.longMonths.october
 msgid "client.libs.date_format.long_months.october"
-msgstr "Octubre"
+msgstr "Outubro"
 
 #: client.libs.date_format.longMonths.november
 msgid "client.libs.date_format.long_months.november"
-msgstr "Noviembre"
+msgstr "Novembro"
 
 #: client.libs.date_format.longMonths.december
 msgid "client.libs.date_format.long_months.december"
-msgstr "Diciembre"
+msgstr "Decembro"
 
 #: client.libs.date_format.shortDays.monday
 msgid "client.libs.date_format.short_days.monday"
@@ -666,15 +642,15 @@ msgstr "Mar"
 
 #: client.libs.date_format.shortDays.wednesday
 msgid "client.libs.date_format.short_days.wednesday"
-msgstr "Mié"
+msgstr "Mér"
 
 #: client.libs.date_format.shortDays.thursday
 msgid "client.libs.date_format.short_days.thursday"
-msgstr "Jue"
+msgstr "Xov"
 
 #: client.libs.date_format.shortDays.friday
 msgid "client.libs.date_format.short_days.friday"
-msgstr "Vie"
+msgstr "Ven"
 
 #: client.libs.date_format.shortDays.saturday
 msgid "client.libs.date_format.short_days.saturday"
@@ -686,7 +662,7 @@ msgstr "Dom"
 
 #: client.libs.date_format.longDays.monday
 msgid "client.libs.date_format.long_days.monday"
-msgstr "Lunes"
+msgstr "Luns"
 
 #: client.libs.date_format.longDays.tuesday
 msgid "client.libs.date_format.long_days.tuesday"
@@ -694,15 +670,15 @@ msgstr "Martes"
 
 #: client.libs.date_format.longDays.wednesday
 msgid "client.libs.date_format.long_days.wednesday"
-msgstr "Miércoles"
+msgstr "Mércores"
 
 #: client.libs.date_format.longDays.thursday
 msgid "client.libs.date_format.long_days.thursday"
-msgstr "Jueves"
+msgstr "Xoves"
 
 #: client.libs.date_format.longDays.friday
 msgid "client.libs.date_format.long_days.friday"
-msgstr "Viernes"
+msgstr "Vernes"
 
 #: client.libs.date_format.longDays.saturday
 msgid "client.libs.date_format.long_days.saturday"
@@ -718,15 +694,15 @@ msgstr "Chat moderado"
 
 #: 
 msgid "client_views_channelinfo_inviteonly"
-msgstr "Sólo invitados"
+msgstr "Só convidados"
 
 #: 
 msgid "client_views_channelinfo_opschangechannel"
-msgstr "Sólo operadores pueden cambiar el tema del canal"
+msgstr "Só operadores poden cambiar o tema da canle"
 
 #: 
 msgid "client_views_channelinfo_externalmessages"
-msgstr "Bloquear mensajes desde otros canales"
+msgstr "Bloquear mensaxes dende outras canles"
 
 #: 
 msgid "client_views_channelinfo_togglebanlist"
@@ -734,32 +710,31 @@ msgstr "Alternar lista de Ban"
 
 #: 
 msgid "client_views_controlbox_message"
-msgstr "Enviar mensaje..."
+msgstr "Enviar mensaxe..."
 
 #: 
 msgid "disconnect_from_server"
-msgstr "Esto te desconectará de la red IRC. ¿Estás seguro?"
+msgstr "Isto desconectarate da rede IRC. Estás seguro?"
 
 #: 
 msgid "client_applets_settings_custom_highlights"
-msgstr "Destacados personalizados (separados por espacios)\n"
-""
+msgstr "Resaltados personalizados (separados por espazos)"
 
 #: client/assets/src/applets/settings.js
 msgid "client_applets_settings_messages"
-msgstr "Mensajes"
+msgstr "Mensaxes"
 
 #: client/assets/src/applets/settings.js
 msgid "client_applets_settings_chat_messages"
-msgstr "Mensajes Chat"
+msgstr "Mensaxes de Chat"
 
 #: client/assets/src/applets/settings.js
 msgid "client_applets_settings_alerts_notifications"
-msgstr "Alertas / Notificaciones"
+msgstr "Alertas / Notificacións"
 
 #: client/assets/src/applets/settings.js
 msgid "client_applets_settings_appearance"
-msgstr "Apariencia"
+msgstr "Aparencia"
 
 #: client/assets/src/applets/settings.js
 msgid "client_applets_settings_theme"
@@ -767,7 +742,7 @@ msgstr "Tema"
 
 #: client/assets/src/applets/settings.js
 msgid "client_applets_settings_channels"
-msgstr "Canales"
+msgstr "Canles"
 
 #: 
 msgid "client_applets_settings_language"
@@ -775,43 +750,43 @@ msgstr "Idioma"
 
 #: 
 msgid "client_applets_settings_ignore_new_queries"
-msgstr "Bloquear nuevos mensajes privados"
+msgstr "Bloquear novas mensaxes privadas"
 
 #: 
 msgid "command_description_msg"
-msgstr "Enviar un mensaje"
+msgstr "Enviar unha mensaxe"
 
 #: 
 msgid "command_description_action"
-msgstr "Hacer algo físico"
+msgstr "Facer algo físico"
 
 #: 
 msgid "command_description_join"
-msgstr "Unirse a un canal"
+msgstr "Unirse a unha canle"
 
 #: 
 msgid "command_description_part"
-msgstr "Abandonar un canal"
+msgstr "Deixar unha canle"
 
 #: 
 msgid "command_description_cycle"
-msgstr "Abandonar, y volver a unirse a un canal"
+msgstr "Deixar, e logo volver unirse a unha canle"
 
 #: 
 msgid "command_description_nick"
-msgstr "Cambiart tu nick"
+msgstr "Cambiar o teu nick"
 
 #: 
 msgid "command_description_query"
-msgstr "Iniciar una conversación privada con alguien"
+msgstr "Iniciar unha conversa privada con alguén"
 
 #: 
 msgid "command_description_invite"
-msgstr "Invitar a alguien al canal"
+msgstr "Ivitar a algué a unha canle"
 
 #: 
 msgid "command_description_topic"
-msgstr "Establecer el tema de este canal"
+msgstr "Establecer o tema nesta canle"
 
 #: 
 msgid "command_description_notice"
@@ -819,81 +794,81 @@ msgstr "Enviar un aviso"
 
 #: 
 msgid "command_description_quote"
-msgstr "Enviar un comando directo al servidor IRC"
+msgstr "Enviar un comando directo o servidor IRC"
 
 #: 
 msgid "command_description_kick"
-msgstr "Expulsar a alguien del canal"
+msgstr "Patear a alguén da canle"
 
 #: 
 msgid "command_description_clear"
-msgstr "Limpiar todos los mensajes de esta ventana"
+msgstr "Limpar todas as menxaxes desta ventá"
 
 #: 
 msgid "command_description_ctcp"
-msgstr "Enviar un comando CTCP a alguien"
+msgstr "Enviar un comando CTCP a alguén"
 
 #: 
 msgid "command_description_quit"
-msgstr "Desconectar del servidor IRC"
+msgstr "Desconectar do servidor IRC"
 
 #: 
 msgid "command_description_server"
-msgstr "Conectar a una nueva red IRC"
+msgstr "Conectar a unha nova rede IRC"
 
 #: 
 msgid "command_description_whois"
-msgstr "Solicitar información sobre alguien"
+msgstr "Pedir información sobre alguén"
 
 #: 
 msgid "command_description_whowas"
-msgstr "Solicitar información sobre alguien que se desconectó recientemente"
+msgstr "Pedir información sobre alguen que se desconectou recentemente"
 
 #: 
 msgid "command_description_away"
-msgstr "Marcarse como fuera"
+msgstr "Marcarse como fora"
 
 #: 
 msgid "command_description_encoding"
-msgstr "Cambiar codificación de tu conexión"
+msgstr "Cambia a codificación da tua conexión"
 
 #: 
 msgid "command_description_settings"
-msgstr "Mostrar la ventana de ajustes"
+msgstr "Mostrar a ventáde configuración"
 
 #: 
 msgid "command_description_script"
-msgstr "Modificar script de usuario kiwi"
+msgstr "Modificar scripts de usuario kiwi"
 
 #: 
 msgid "command_description_css"
-msgstr "Recargar la hoja de estilo CSS"
+msgstr "Recargar a folla de estilos CSS"
 
 #: 
 msgid "command_description_js"
-msgstr "Cargar fichero javascript desde una URL"
+msgstr "Carga un ficheiro javascript dende unha URL"
 
 #: 
 msgid "command_description_set"
-msgstr "Establecer los ajustes de configuración"
+msgstr "Establece a configuración de preferencias de kiwi"
 
 #: 
 msgid "command_description_save"
-msgstr "Grabar los ajustes actuales de kiwi"
+msgstr "Grava a configuración actual de kiwi"
 
 #: 
 msgid "command_description_alias"
-msgstr "Crear un alias para un /comando existente"
+msgstr "Crea un alias a un /command existente"
 
 #: 
 msgid "command_description_ignore"
-msgstr "Ignorar los mensajes de alguien"
+msgstr "Ignora as mensaxes de alguén"
 
 #: 
 msgid "command_description_unignore"
-msgstr "Parar de ignorar a alguien"
+msgstr "Para de ingorar a alguén"
 
 #: 
 msgid "client_applets_settings_autocomplete_slideout"
-msgstr "Mostrar la caja de autocompletado"
+msgstr "Mostra a caixa de autocompletado"
 
