@@ -4,6 +4,30 @@
         <a class="logo" href="<%= logo_link %>" target="_blank">
             <img src="/assets/plugins/images/<%= logo_file %>" height="50" alt="<%= logo_title %>" title=="<%= logo_title %>">
         </a>
+        <div class="nav">
+            <ul>
+                <li>
+                    <a href="http://www.chat-fr.org/photos" target="_blank" title="Photos chatteurs" onclick="javascript:ga('send', 'event', 'Menu', 'Photos');">
+                        <i class="fa fa-camera" title="Photos chatteurs"></i>Photos chatteurs
+                    </a>
+                </li>
+                <li>
+                    <a href="http://www.chat-fr.org/rencontre" target="_blank" title="Annuaire chatteurs" onclick="javascript:ga('send', 'event', 'Menu', 'Annuaire');">
+                        <i class="fa fa-book" title="Annuaire chatteurs"></i>Annuaire chatteurs
+                    </a>
+                </li>
+                <li>
+                    <a href="http://www.chat-fr.org/register" target="_blank" title="Crééz votre fiche" onclick="javascript:ga('send', 'event', 'Menu', 'Inscription');">
+                        <i class="fa fa-user" title="Crééz votre fiche"></i>Crééz votre fiche
+                    </a>
+                </li>
+                <li>
+                    <a href="http://quote.europnet.org" target="_blank" title="Quotes" onclick="javascript:ga('send', 'event', 'Menu', 'Quotes');">
+                        <i class="fa fa-quote-right" title="Quotes"></i>Quotes
+                    </a>
+                </li>
+            </ul>
+        </div>
         <div class="social">
             <div id="fb-root"></div>
             <div class="fb-like" data-href="<%= facebook_url %>" data-send="false" data-layout="button_count" data-width="140" data-show-faces="false" data-action="recommend"></div>
@@ -32,9 +56,49 @@
         float: left;
         margin-left: 10px;
     }
+    #navbar .nav ul {
+        display: block;
+        float: left;
+        list-style: outside none none;
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        color: rgb(255, 255, 255);
+        line-height: 1.42857;
+        font-size: 14px;
+    }
+    #navbar .nav li {
+        display: block;
+        float: left;
+        position: relative;
+    }
+    #navbar .nav li a {
+        text-decoration: none;
+        color: #FFF;
+        padding: 0.2em 0.5em;
+        font-size: 1em;
+        margin: 11px 7px;
+        display: inline-block;
+        background: #428BCA none repeat scroll 0% 0%;
+        color: #FFF;
+        font-weight: normal;
+        line-height: 1.42857;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        cursor: pointer;
+        -moz-user-select: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+    #navbar .nav li a i {
+        padding-right: 0.5em;
+    }
+    #navbar .nav li a:hover {
+        background-color: #3071a9;
+        border-color: #428BCA;
+    }
     #navbar .social {
         float: right;
-        width: 380px;
+        width: 180px;
         padding: 15px 10px 0 0;
         margin-right: 20px;
     }
@@ -45,6 +109,9 @@
         z-index: 2;
     }
     #kiwi {clear: both;}
+    #kiwi-narrow #nav-bar .nav {
+        display: none;
+    }
 </style>
 
 <script>
