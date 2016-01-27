@@ -109,8 +109,13 @@
         z-index: 2;
     }
     #kiwi {clear: both;}
-    #kiwi-narrow #nav-bar .nav {
+    #kiwi-narrow #nav-bar .nav, #kiwi-narrow #ad_button {
         display: none;
+    }
+    #kiwi #ad_button {
+        background-color: #FFFFFF;
+        color: #3071A9;
+        border-color: #FFF;
     }
 </style>
 
@@ -194,6 +199,47 @@ kiwi.plugins.on('loaded', function() {
                 return $(window).height() - bar_height;
             },
 
+            adButton: function() {
+                // If we're a man 24 or more, we're in the category
+                if(kiwi.connections.active_connection.get('gender') === 'M' && 
+                    kiwi.connections.active_connection.get('age') > 23 &&
+                    $('#ad_button').length == 0) {
+
+                    // After 5 minutes, run through the panels
+                    setTimeout(function() {
+                        var panels = kiwi.connections.active_connection.panels;
+                        this.ad_category = 'casual';
+                        this.query_counter = 0;
+
+                        // Roll through panels to find category to put the user in
+                        panels.forEach(_.bind(function(panel) {
+                            if(panel.isChannel()) {
+                                if(panel.get('name') === '#rencontres' && this.ad_category === 'casual') { // Dating
+                                    this.ad_category = 'dating';
+                                } else if(panel.get('name') === '#sexe' && this.ad_category != 'sex') { // Sex
+                                    this.ad_category = 'sex';
+                                }
+                            } else if(panel.isQuery()) {
+                                this.query_counter++;
+                            }
+                        }, this));
+
+                        // Choose and trigger the button
+                        if(this.query_counter > 3 && this.ad_category != undefined && this.ad_category != '' && $('#ad_button').length == 0) {
+                            if(this.ad_category === 'sex') {
+                                ga('send', 'event', 'Ad', 'Display sex');
+                                $('#navbar .nav ul').append('<li id="ad_button"><a href="http://www.chat-fr.org/component/banners/click/9" target="_blank" title="Rencontres coquines" onclick="javascript:ga(\'send\', \'event\', \'Ad\', \'Click sex\');"><i class="fa fa-quote-right" title="Rencontres coquines"></i>Rencontres coquines</a></li>');
+                            } else if(this.ad_category === 'dating') {
+                                ga('send', 'event', 'Ad', 'Display dating');
+                                $('#navbar .nav ul').append('<li id="ad_button"><a href="http://www.chat-fr.org/component/banners/click/9" target="_blank" title="Rencontres coquines" onclick="javascript:ga(\'send\', \'event\', \'Ad\', \'Click dating\');"><i class="fa fa-heart" title="Rencontres coquines" style="color: rgb(253, 93, 238);"></i>Rencontres coquines</a></li>');
+                            } else if(this.ad_category === 'casual') {
+                                ga('send', 'event', 'Ad', 'Display casual');
+                                //$('#navbar .nav ul').append('<li id="ad_button"><a href="http://www.chat-fr.org/component/banners/click/9" target="_blank" title="Rencontres coquines" onclick="javascript:ga(\'send\', \'event\', \'Ad\', \'Click casual\');"><i class="fa fa-quote-right" title="Rencontres coquines"></i>Rencontres coquines</a></li>');
+                            }
+                        }
+                    }, 300000);
+                }
+            }
         });
 
         var nav = new Navbar(),
@@ -215,6 +261,12 @@ kiwi.plugins.on('loaded', function() {
                 nav_dom.hide();
             }
         });
+
+        var n = kiwi.components.Network();
+        n.on('connect', function(){
+            nav.adButton();
+        });
+
     })();
 });
 </script> 
