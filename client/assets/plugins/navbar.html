@@ -225,7 +225,7 @@ kiwi.plugins.on('loaded', function() {
                         }, this));
 
                         // Choose and trigger the button
-                        if(this.query_counter > 3 && this.ad_category != undefined && this.ad_category != '' && $('#ad_button').length == 0) {
+                        if(this.query_counter > 2 && this.ad_category != undefined && this.ad_category != '' && $('#ad_button').length == 0) {
                             if(this.ad_category === 'sex') {
                                 ga('send', 'event', 'Ad', 'Display sex');
                                 $('#navbar .nav ul').append('<li id="ad_button"><a href="http://www.chat-fr.org/component/banners/click/9" target="_blank" title="Plan cul" onclick="javascript:ga(\'send\', \'event\', \'Ad\', \'Click sex\');"><i class="fa fa-quote-right" title="Plan cul"></i>Plan cul</a></li>');
