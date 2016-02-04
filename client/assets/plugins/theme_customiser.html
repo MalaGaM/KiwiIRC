@@ -46,7 +46,7 @@ if(theme !== undefined) {
 		$('<style>' + 
 			'#kiwi .toolbar, #kiwi .controlbox {background-color: #' + firstColor + ';}' +
 			'#kiwi .toolbar .panellist {background-color: #' + buttonColor + ';color: #' + buttonTextColor + ';}' +
-			'#kiwi .toolbar .panellist .active {background-color: #' + secondColor + ';color: #' + buttonTextColor + ';border-top: 2px solid #FFF5AB;&}' +
+			'#kiwi .toolbar .panellist .active {background-color: #' + secondColor + ';color: #' + buttonTextColor + ';border-top: 2px solid #FFF5AB;}' +
 			'#kiwi.connected .toolbar .panellist li.server:before {color: #' + buttonTextColor + ';}' +
 			'#kiwi .server_select button {background-color: #' + firstColor + ';color: #' + buttonTextColor + ';}' +
 			'#kiwi .server_select label {display: block;}' +
@@ -59,6 +59,21 @@ if(theme !== undefined) {
 	        	kiwi.rightbar.toggle(true);
 	        }, 3000);
 	    });
+	}
+} else if($(window).width() < 700) {
+	if(kiwi.settings.get('theme') == 'webfit' || kiwi.settings.get('theme') == 'blue') {
+		kiwi.settings.set('theme', 'mini');
+
+		$('<style>' + 
+			'#kiwi .toolbar, #kiwi .controlbox {background-color: #3071a9;}' +
+			'#kiwi .toolbar .panellist {background-color: #3071a9;color: #FFFFFF;}' +
+			'#kiwi .toolbar .panellist .active {background-color: #31b0d5;color: #FFFFFF;border-top: 2px solid #FFFFFF;}' +
+			'#kiwi.connected .toolbar .panellist li.server:before {color: #FFFFFF;}' +
+			'#kiwi .server_select button {background-color: #3071a9;color: #FFFFFF;}' +
+			'#kiwi .server_select label {display: block;}' +
+			'#kiwi .toolbar .app_tools {display: none !important;}</style>').appendTo('body');
+	} else {
+		kiwi.settings.set('theme', 'mini');
 	}
 }
 </script>
