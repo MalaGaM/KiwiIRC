@@ -1,7 +1,8 @@
 _kiwi.view.AppToolbar = Backbone.View.extend({
     events: {
         'click .settings': 'clickSettings',
-        'click .startup': 'clickStartup'
+        'click .startup': 'clickStartup',
+        'click .tabs_menu': 'clickTabsMenu'
     },
 
     initialize: function () {
@@ -19,5 +20,11 @@ _kiwi.view.AppToolbar = Backbone.View.extend({
     clickStartup: function (event) {
         event.preventDefault();
         _kiwi.app.startup_applet.view.show();
+    },
+
+    clickTabsMenu: function (event) {
+        event.preventDefault();
+        _kiwi.app.view.$el.toggleClass('with_sidebar');
     }
+
 });
