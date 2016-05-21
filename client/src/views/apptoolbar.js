@@ -28,11 +28,8 @@ _kiwi.view.AppToolbar = Backbone.View.extend({
         _kiwi.app.view.$el.find('.panels').click(function() {
             _kiwi.app.view.$el.removeClass('with_sidebar');
         });
-    },
-
-    hideSidebar: function (event) {
-        event.preventDefault();
-        console.log('OKKK');
-        _kiwi.app.view.$el.removeClass('with_sidebar');
+        _kiwi.app.view.$el.find('.controlbox').click(function() {
+            _kiwi.app.view.$el.removeClass('with_sidebar');
+        });
     }    
 });
