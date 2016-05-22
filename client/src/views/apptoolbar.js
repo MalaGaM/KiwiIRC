@@ -25,10 +25,9 @@ _kiwi.view.AppToolbar = Backbone.View.extend({
     clickTabsMenu: function (event) {
         event.preventDefault();
         _kiwi.app.view.$el.toggleClass('with_sidebar');
-        _kiwi.app.view.$el.find('.panels').click(function() {
-            _kiwi.app.view.$el.removeClass('with_sidebar');
-        });
-        _kiwi.app.view.$el.find('.controlbox').click(function() {
+        _kiwi.app.view.$el.find('.toolbar_overlay').click(function() {
+            console.log("closing");
+            console.log(_kiwi.app.view.$el.hasClass('with_sidebar'));
             _kiwi.app.view.$el.removeClass('with_sidebar');
         });
     }    
