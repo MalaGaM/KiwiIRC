@@ -72,7 +72,7 @@ var IrcConnection = function (hostname, port, ssl, nick, user, options, state, c
     // User information
     this.nick = nick;
     this.user = user;  // Contains users real hostname and address
-    this.username = '';
+    this.username = ''; // Uses default from config if empty
     this.gecos = ''; // Users real-name. Uses default from config if empty
     this.password = options.password || '';
     this.quit_message = ''; // Uses default from config if empty
@@ -217,6 +217,9 @@ IrcConnection.prototype.connect = function () {
     this.disposeSocket();
 
     this.requested_disconnect = false;
+
+    // Make sure we have the username and gecos configured
+    this.setDefaultUserDetails();
 
     // Get the IP family for the dest_addr (either socks or IRCd destination)
     getConnectionFamily(dest_addr, function getConnectionFamilyCb(err, family, host) {
@@ -569,11 +572,12 @@ IrcConnection.prototype.disposeSocket = function () {
     }
 };
 
+
+
 /**
  * Set a new encoding for this connection
  * Return true in case of success
  */
-
 IrcConnection.prototype.setEncoding = function (encoding) {
     var encoded_test;
 
@@ -591,6 +595,25 @@ IrcConnection.prototype.setEncoding = function (encoding) {
         return false;
     }
 };
+
+
+
+/**
+ * Set the defeault username and gecos values if we don't have them already
+ */
+IrcConnection.prototype.setDefaultUserDetails = function () {
+    this.username = (this.username || global.config.default_ident || '%n')
+        .replace('%n', (this.nick.replace(/[^0-9a-zA-Z\-_.\/]/, '') || 'nick'))
+        .replace('%h', this.user.hostname)
+        .replace('%i', ip2Hex(this.user.address) || '00000000');
+
+    this.gecos = (this.gecos || global.config.default_gecos || '%n')
+        .replace('%n', this.nick)
+        .replace('%h', this.user.hostname);
+};
+
+
+
 
 function getConnectionFamily(host, callback) {
     if (net.isIP(host)) {
@@ -728,21 +751,10 @@ var socketConnectHandler = function () {
     connect_data = findWebIrc.call(this, connect_data);
 
     global.modules.emit('irc authorize', connect_data).then(function ircAuthorizeCb() {
-        var gecos = ident = '';
-
+        // Override gecos if in ASL mode
         if (global.config.client.settings.rich_nicklist && global.config.client.settings.rich_nicklist_track_asl) {
-            gecos = that.age + ' ' + that.gender + ' ' + that.location;
-        } else if (!gecos && global.config.default_gecos) {
-            // We don't have a gecos yet, so use the default
-            gecos = (that.gecos || global.config.default_gecos || '%n')
-                .replace('%n', that.nick)
-                .replace('%h', that.user.hostname);
+            that.gecos = that.age + ' ' + that.gender + ' ' + that.location;
         }
-
-        ident = (that.username || global.config.default_ident || '%n')
-            .replace('%n', (that.nick.replace(/[^0-9a-zA-Z\-_.\/]/, '') || 'nick'))
-            .replace('%h', that.user.hostname)
-            .replace('%i', ip2Hex(that.user.address) || '00000000');
 
         // Send any initial data for webirc/etc
         if (connect_data.prepend_data) {
@@ -758,7 +770,7 @@ var socketConnectHandler = function () {
         }
 
         that.write('NICK ' + that.nick);
-        that.write('USER ' + ident + ' 0 0 :' + gecos);
+        that.write('USER ' + that.username + ' 0 0 :' + that.gecos);
 
         that.emit('connected');
     });
