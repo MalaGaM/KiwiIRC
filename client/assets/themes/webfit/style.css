@@ -1479,16 +1479,6 @@ and (max-device-width : 480px) {
 /* Smartphones (landscape) ----------- */
 @media only screen 
 and (min-width : 321px) and  (orientation : portrait) {
-    #kiwi.chanlist_treeview .toolbar .panellist li {
-        padding: 0px;
-        width: 60px;
-    }
-
-    #kiwi.chanlist_treeview .toolbar .panellist li span {
-        max-width: 40px;
-        overflow: hidden;
-    }
-
     #kiwi.chanlist_treeview .toolbar .panellist li .activity {
         display: none;
     }
@@ -1518,16 +1508,6 @@ and (min-width : 321px) and  (orientation : portrait) {
 /* Smartphones (portrait) ----------- */
 @media only screen 
 and (max-width : 320px) and (orientation : portrait) {
-    #kiwi .chanlist_treeview .toolbar .panellist li {
-        padding: 0px;
-        width: 60px;
-    }
-
-    #kiwi.chanlist_treeview .toolbar .panellist li span {
-        max-width: 40px;
-        overflow: hidden;
-    }
-
     #kiwi.chanlist_treeview .toolbar .panellist li .activity {
         display: none;
     }
