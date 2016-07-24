@@ -229,10 +229,6 @@
     top: 7px;
 }
 
-#kiwi .toolbar .panellist li .part:before {
-    content: "[x]";
-}
-
 #kiwi .toolbar .panellist li.server span {
     padding-left: 5px;
     font-weight: bold;
@@ -808,6 +804,10 @@
     color: #7BCCE3;
 }
 
+#kiwi.narrow .toolbar .app_tools ul li:hover {
+    color: #D4D4D4;
+}
+
 #kiwi .toolbar .app_tools img {
 }
 
@@ -1038,7 +1038,7 @@
 #kiwi.narrow .toolbar .tabs { -moz-transform:translateX(-160px); -ms-transform:translateX(-160px); -webkit-transform:translateX(-160px); transform:translateX(-160px); }
 #kiwi.narrow.with_sidebar .toolbar .tabs { height: 100% }
 #kiwi .toolbar_overlay, #kiwi.narrow .toolbar .topic, #kiwi .toolbar .app_tools ul li.tabs_menu { display: none; }
-#kiwi.narrow .toolbar_overlay { position: absolute; top: 0; left:0; height: 100%; width: 100%; z-index: 2; background-color: rgba(0,0,0,0.4); }
+#kiwi.narrow .toolbar_overlay { position: absolute; top: 0; left:0; height: 100%; width: 100%; z-index: 3; background-color: rgba(0,0,0,0.4); }
 #kiwi.narrow.with_sidebar .toolbar_overlay { display: block; }
 #kiwi.narrow.with_sidebar .controlbox { border-top: none; }
 #kiwi.narrow.with_sidebar .panels { bottom: 0; }
@@ -1372,6 +1372,10 @@
     content: "\f00d";
 }
 
+#kiwi.narrow .toolbar .panellist li .part:before {
+    font-size: 26px;
+}
+
 #kiwi .toolbar .panellist li .part:hover {
     color: #000;
 }
@@ -1441,14 +1445,6 @@ and  (orientation : landscape) {
 @media only screen 
 and (min-device-width : 320px) 
 and (max-device-width : 480px) {
-    #kiwi .app_tools .main {
-        width: 100px;
-    }
-
-    #kiwi.chanlist_treeview  .app_tools .main {
-        width: 100%;
-    }
-
     #kiwi .app_tools .main li {
         margin-top: 3px;
     }
@@ -1472,14 +1468,6 @@ and (max-device-width : 480px) {
         display: none;
     }
 
-    #kiwi.chanlist_treeview .toolbar .tabs {
-        width: 80px;
-    }
-
-    #kiwi.chanlist_treeview .panels {
-        left: 80px;
-    }
-
     #kiwi .app_tools .main li .txt {
         display: none;
     }
@@ -1496,11 +1484,6 @@ and (max-device-width : 480px) {
 /* Smartphones (landscape) ----------- */
 @media only screen 
 and (min-width : 321px) and  (orientation : portrait) {
-    
-    #kiwi.chanlist_treeview  .app_tools .main {
-        width: 100%;
-    }
-
     #kiwi.chanlist_treeview .toolbar .panellist li {
         padding: 0px;
         width: 60px;
@@ -1513,14 +1496,6 @@ and (min-width : 321px) and  (orientation : portrait) {
 
     #kiwi.chanlist_treeview .toolbar .panellist li .activity {
         display: none;
-    }
-
-    #kiwi.chanlist_treeview .toolbar .tabs {
-        width: 80px;
-    }
-
-    #kiwi.chanlist_treeview .panels {
-        left: 80px;
     }
 
     #kiwi .app_tools .main li {
@@ -1548,14 +1523,6 @@ and (min-width : 321px) and  (orientation : portrait) {
 /* Smartphones (portrait) ----------- */
 @media only screen 
 and (max-width : 320px) and (orientation : portrait) {
-    #kiwi .app_tools .main {
-        width: 100px;
-    }
-
-    #kiwi.chanlist_treeview  .app_tools .main {
-        width: 100%;
-    }
-
     #kiwi .chanlist_treeview .toolbar .panellist li {
         padding: 0px;
         width: 60px;
@@ -1568,14 +1535,6 @@ and (max-width : 320px) and (orientation : portrait) {
 
     #kiwi.chanlist_treeview .toolbar .panellist li .activity {
         display: none;
-    }
-
-    #kiwi.chanlist_treeview .toolbar .tabs {
-        width: 80px;
-    }
-
-    #kiwi.chanlist_treeview .panels {
-        left: 80px;
     }
 
     #kiwi .app_tools .main li {
