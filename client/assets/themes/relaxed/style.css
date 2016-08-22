@@ -463,7 +463,7 @@
 #kiwi.narrow .toolbar .tabs { -moz-transform:translateX(-160px); -ms-transform:translateX(-160px); -webkit-transform:translateX(-160px); transform:translateX(-160px); z-index: 4; }
 #kiwi.narrow.with_sidebar .toolbar .tabs { height: 100% }
 #kiwi .toolbar_overlay, #kiwi.narrow .toolbar .topic, #kiwi .toolbar .app_tools ul li.tabs_menu { display: none; }
-#kiwi.narrow .toolbar_overlay { position: absolute; left: 0; height: 100%; width: 100%; z-index: 3; background-color: rgba(0,0,0,0.4); }
+#kiwi.narrow .toolbar_overlay { position: absolute; left: 0; height: 100%; width: 100%; z-index: 3; background-color: rgba(0,0,0,0.5); }
 #kiwi.narrow.with_sidebar .toolbar_overlay { display: block; }
 #kiwi.narrow.with_sidebar .controlbox { border-top: none; }
 #kiwi.narrow.with_sidebar .panels { bottom: 0; }
