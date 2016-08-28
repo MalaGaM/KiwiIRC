@@ -255,6 +255,11 @@
     display: inline-block;
 }
 
+#kiwi.chanlist_treeview .toolbar .panellist li span {
+    overflow: hidden;
+    max-width: 100px;
+}
+
 #kiwi .toolbar .panellist li .activity {
     float: right;
     display: inline-block;
