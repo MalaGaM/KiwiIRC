@@ -156,7 +156,7 @@
     background-color: #5bc0de;
     border-color: #5bc0de;
     margin: 0 0 0 3px;
-    width: 120px;
+    width: 105px;
 }
 
 #kiwi .toolbar .panellist li span {
@@ -206,7 +206,7 @@
 }
 
 #kiwi .toolbar .panellist .active {
-    padding-right: 25px;
+    padding-right: 20px;
     color: #fff;
     background-color: #f90;
     border-color: #F88C00;
