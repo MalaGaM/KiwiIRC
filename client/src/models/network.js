@@ -86,7 +86,10 @@
                     host:       this.get('address'),
                     port:       this.get('port'),
                     ssl:        this.get('ssl'),
-                    password:   this.get('password')
+                    password:   this.get('password'),
+                    age:        this.get('age'),
+                    gender:     this.get('gender'),
+                    location:   this.get('location')
                 };
 
             _kiwi.gateway.makeIrcConnection(server_info, function(err, connection_id) {
