@@ -356,7 +356,7 @@
 
 #kiwi .messages .msg .text {
     display: block;
-    margin-left: 11em;
+    margin-left: 11.5em;
     border-left: 1px solid #DEDEDE;
     white-space: pre-wrap;
     word-wrap: break-word;
