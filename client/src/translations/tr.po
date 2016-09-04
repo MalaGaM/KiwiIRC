@@ -22,7 +22,7 @@ msgstr "Kanal Adı"
 
 #: 
 msgid "client_applets_chanlist_users"
-msgstr "Kullanıcılar"
+msgstr "Kullanıcı"
 
 #: 
 msgid "client_applets_chanlist_topic"
@@ -458,23 +458,23 @@ msgstr "Güvenli şekilde yeniden bağlanılıyor..."
 
 #: 
 msgid "client_applets_settings_html5_notifications"
-msgstr "Desktop notifications"
+msgstr "Masaüstü uyarıları"
 
 #: 
 msgid "client_applets_settings_enable_notifications"
-msgstr "Enable notifications"
+msgstr "Uyarıları etkinleştir"
 
 #: 
 msgid "client_applets_settings_emoticons"
-msgstr "Show emoticons"
+msgstr "Ifadeleri resim olarak göster"
 
 #: 
 msgid "client_applet_about"
-msgstr "About Kiwi"
+msgstr "Kiwi Hakkında"
 
 #: 
 msgid "client_applet_about_homepage"
-msgstr "Project homepage"
+msgstr "Proje sayfası"
 
 #: 
 msgid "client_applet_about_link_channel"
@@ -482,27 +482,27 @@ msgstr "Link to this channel"
 
 #: 
 msgid "client_applet_about_share_channel"
-msgstr "Share this channel"
+msgstr "Bu kanalı paylaş"
 
 #: 
 msgid "client_applet_fav_my_networks"
-msgstr "My networks"
+msgstr "Sunucularım"
 
 #: 
 msgid "client_applet_fav_networks"
-msgstr "Favourite networks"
+msgstr "Favori sunucular"
 
 #: 
 msgid "client_applet_fav_add"
-msgstr "Add network"
+msgstr "Sunucu ekle"
 
 #: 
 msgid "client_applet_fav_save"
-msgstr "Save network"
+msgstr "Sunucuyu kaydet"
 
 #: 
 msgid "client_applet_fav_delete"
-msgstr "Delete network"
+msgstr "Sunucuyu sil"
 
 #: client/assets/src/views/member.js
 msgid "client_views_member_years_old"
@@ -530,7 +530,7 @@ msgstr "Away"
 
 #: 
 msgid "client_applets_settings_notification_count_all_activity"
-msgstr "Include join/part messages as activity"
+msgstr "Giriş ve çıkış mesajlarını göster"
 
 #: 
 msgid "client_views_userbox_ignore"
@@ -538,7 +538,7 @@ msgstr "Aldırmamak"
 
 #: 
 msgid "client_applets_settings_timestamp_24_hour"
-msgstr "Use 24-hour timestamps"
+msgstr "Saat göstergesini 24 saat olarak kullan"
 
 #: 
 msgid "client_views_panel_timestamp_am"
@@ -550,11 +550,11 @@ msgstr "%s PM"
 
 #: 
 msgid "client_models_application_has_been_invited"
-msgstr "has been invited to %s"
+msgstr "%s kanalına davet edildi"
 
 #: 
 msgid "client_models_network_channel_alreadyin"
-msgstr "is already on this channel"
+msgstr "zaten bu kanalda"
 
 #: Date format
 msgid "client_date_format"
@@ -610,51 +610,51 @@ msgstr "Dec"
 
 #: client.libs.date_format.longMonts.January
 msgid "client.libs.date_format.long_months.january"
-msgstr "January"
+msgstr "Ocak"
 
 #: client.libs.date_format.longMonts.february
 msgid "client.libs.date_format.long_months.february"
-msgstr "February"
+msgstr "Şubat"
 
 #: client.libs.date_format.longMonts.march
 msgid "client.libs.date_format.long_months.march"
-msgstr "March"
+msgstr "Mart"
 
 #: client.libs.date_format.longMonts.april
 msgid "client.libs.date_format.long_months.april"
-msgstr "April"
+msgstr "Nisan"
 
 #: client.libs.date_format.longMonts.may
 msgid "client.libs.date_format.long_months.may"
-msgstr "May"
+msgstr "Mayıs"
 
 #: client.libs.date_format.longMonts.june
 msgid "client.libs.date_format.long_months.june"
-msgstr "June"
+msgstr "Haziran"
 
 #: client.libs.date_format.longMonts.july
 msgid "client.libs.date_format.long_months.july"
-msgstr "July"
+msgstr "Temmuz"
 
 #: client.libs.date_format.longMonts.august
 msgid "client.libs.date_format.long_months.august"
-msgstr "August"
+msgstr "Ağustos"
 
 #: client.libs.date_format.longMonts.september
 msgid "client.libs.date_format.long_months.september"
-msgstr "September"
+msgstr "Eylül"
 
 #: client.libs.date_format.longMonths.october
 msgid "client.libs.date_format.long_months.october"
-msgstr "October"
+msgstr "Ekim"
 
 #: client.libs.date_format.longMonths.november
 msgid "client.libs.date_format.long_months.november"
-msgstr "November"
+msgstr "Kasım"
 
 #: client.libs.date_format.longMonths.december
 msgid "client.libs.date_format.long_months.december"
-msgstr "December"
+msgstr "Aralık"
 
 #: client.libs.date_format.shortDays.monday
 msgid "client.libs.date_format.short_days.monday"
@@ -686,47 +686,47 @@ msgstr "Sun"
 
 #: client.libs.date_format.longDays.monday
 msgid "client.libs.date_format.long_days.monday"
-msgstr "Monday"
+msgstr "Pazartesi"
 
 #: client.libs.date_format.longDays.tuesday
 msgid "client.libs.date_format.long_days.tuesday"
-msgstr "Tueday"
+msgstr "Salı"
 
 #: client.libs.date_format.longDays.wednesday
 msgid "client.libs.date_format.long_days.wednesday"
-msgstr "Wednesday"
+msgstr "Çarşamba"
 
 #: client.libs.date_format.longDays.thursday
 msgid "client.libs.date_format.long_days.thursday"
-msgstr "Thursday"
+msgstr "Perşembe"
 
 #: client.libs.date_format.longDays.friday
 msgid "client.libs.date_format.long_days.friday"
-msgstr "Friday"
+msgstr "Cuma"
 
 #: client.libs.date_format.longDays.saturday
 msgid "client.libs.date_format.long_days.saturday"
-msgstr "Saturday"
+msgstr "Cumartesi"
 
 #: client.libs.date_format.longDays.sunday
 msgid "client.libs.date_format.long_days.sunday"
-msgstr "Sunday"
+msgstr "Pazar"
 
 #: 
 msgid "client_views_channelinfo_moderated"
-msgstr "Moderated Chat"
+msgstr "Kanal sadece yetkililere açık"
 
 #: 
 msgid "client_views_channelinfo_inviteonly"
-msgstr "Invite Only"
+msgstr "Sadece davetliler"
 
 #: 
 msgid "client_views_channelinfo_opschangechannel"
-msgstr "Only operators can change the topic"
+msgstr "Kanal başlığını sadece yetkililer değiştirebilir"
 
 #: 
 msgid "client_views_channelinfo_externalmessages"
-msgstr "Block messages from outside this channel"
+msgstr "Kanal dışından gelecek mesajları engelle"
 
 #: 
 msgid "client_views_channelinfo_togglebanlist"
@@ -734,7 +734,7 @@ msgstr "Toggle Banlist"
 
 #: 
 msgid "client_views_controlbox_message"
-msgstr "Send message..."
+msgstr "Mesaj gönder..."
 
 #: 
 msgid "disconnect_from_server"
@@ -742,39 +742,39 @@ msgstr "This will disconnect from the IRC network. Are you sure?"
 
 #: 
 msgid "client_applets_settings_custom_highlights"
-msgstr "Custom highlights (space separated)"
+msgstr "Özel uyarılar (farklı sözler için boşluk kullanınız)"
 
 #: client/assets/src/applets/settings.js
 msgid "client_applets_settings_messages"
-msgstr "Messages"
+msgstr "Mesajlar"
 
 #: client/assets/src/applets/settings.js
 msgid "client_applets_settings_chat_messages"
-msgstr "Chat messages"
+msgstr "Sohbet mesajları"
 
 #: client/assets/src/applets/settings.js
 msgid "client_applets_settings_alerts_notifications"
-msgstr "Alerts / Notifications"
+msgstr "Uyarılar"
 
 #: client/assets/src/applets/settings.js
 msgid "client_applets_settings_appearance"
-msgstr "Appearance"
+msgstr "Görünüm"
 
 #: client/assets/src/applets/settings.js
 msgid "client_applets_settings_theme"
-msgstr "Theme"
+msgstr "Tema"
 
 #: client/assets/src/applets/settings.js
 msgid "client_applets_settings_channels"
-msgstr "Channels"
+msgstr "Kanallar"
 
 #: 
 msgid "client_applets_settings_language"
-msgstr "Language"
+msgstr "Dil"
 
 #: 
 msgid "client_applets_settings_ignore_new_queries"
-msgstr "Block new private messages"
+msgstr "Yeni özel mesajları engelle"
 
 #: 
 msgid "command_description_msg"
@@ -786,63 +786,63 @@ msgstr "Do something physical"
 
 #: 
 msgid "command_description_join"
-msgstr "Join a channel"
+msgstr "Kanala gir"
 
 #: 
 msgid "command_description_part"
-msgstr "Leave a channel"
+msgstr "Kanaldan çık"
 
 #: 
 msgid "command_description_cycle"
-msgstr "Leave, then re-join a channel"
+msgstr "Bir kanaldan ve tekrar gir"
 
 #: 
 msgid "command_description_nick"
-msgstr "Change your nickname"
+msgstr "Rumuz değiştir"
 
 #: 
 msgid "command_description_query"
-msgstr "Start a private conversation with someone"
+msgstr "Birisiyle özel sohbet başlat"
 
 #: 
 msgid "command_description_invite"
-msgstr "Invite somebody into the channel"
+msgstr "Başka bir kullanıcıyı kanala davet et"
 
 #: 
 msgid "command_description_topic"
-msgstr "Set the topic for this channel"
+msgstr "Kanal başlığı ayarla"
 
 #: 
 msgid "command_description_notice"
-msgstr "Send a notice"
+msgstr "Bir uyarı gönder"
 
 #: 
 msgid "command_description_quote"
-msgstr "Send a raw command to the IRC server"
+msgstr "IRC sunucusuna raw olarak komut gönder"
 
 #: 
 msgid "command_description_kick"
-msgstr "Kick somebody from the channel"
+msgstr "Kanaldan birisini uzaklaştır"
 
 #: 
 msgid "command_description_clear"
-msgstr "Clear all messages from this window"
+msgstr "Bu penceredeki tüm mesajları temizle"
 
 #: 
 msgid "command_description_ctcp"
-msgstr "Send a CTCP command to somebody"
+msgstr "Kullanıcıya CTCP gönder"
 
 #: 
 msgid "command_description_quit"
-msgstr "Disconnect from the IRC server"
+msgstr "IRC sunucusundaki bağlantıyı kapat"
 
 #: 
 msgid "command_description_server"
-msgstr "Connect to a new IRC network"
+msgstr "IRC sunucusuna bağlantı kur"
 
 #: 
 msgid "command_description_whois"
-msgstr "Request information on somebody"
+msgstr "Kullanıcı hakkında bilgi"
 
 #: 
 msgid "command_description_whowas"
@@ -850,7 +850,7 @@ msgstr "Request information on somebody that disconnected recently"
 
 #: 
 msgid "command_description_away"
-msgstr "Mark yourself as away"
+msgstr "Meşgul durumuna geçiş yap"
 
 #: 
 msgid "command_description_encoding"
@@ -858,7 +858,7 @@ msgstr "Change your connection encoding"
 
 #: 
 msgid "command_description_settings"
-msgstr "Show the settings window"
+msgstr "Ayarlar penceresini göster"
 
 #: 
 msgid "command_description_script"
@@ -878,7 +878,7 @@ msgstr "Set a kiwi config setting"
 
 #: 
 msgid "command_description_save"
-msgstr "Save the current kiwi settings"
+msgstr "Kiwinin şuanki ayarlarını kaydet"
 
 #: 
 msgid "command_description_alias"
@@ -886,13 +886,13 @@ msgstr "Create an alias to an existing /command"
 
 #: 
 msgid "command_description_ignore"
-msgstr "Ignore messages from somebody"
+msgstr "Kullanıcının mesajlarını engelle"
 
 #: 
 msgid "command_description_unignore"
-msgstr "Stop ignoring somebody"
+msgstr "Kullanıcını üzerindeki engellemeyi kaldır"
 
 #: 
 msgid "client_applets_settings_autocomplete_slideout"
-msgstr "Show the autocomplete box"
+msgstr "Otomatik tamamlama kutusunu göster"
 
