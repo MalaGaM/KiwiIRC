@@ -196,7 +196,10 @@ _kiwi.model.Member = Backbone.Model.extend({
             gender = 'U',
             temp_realname = [];
 
-        if(realname == 0) realname = '';
+        // Workaeound for buggy values, dont know how they get here
+        if(realname == 0 || realname == 2) {
+            realname = '';
+        }
 
         // Detect and set away status
         if (_kiwi.global.settings.get('rich_nicklist_track_away') && flags.indexOf('G') > -1) {
