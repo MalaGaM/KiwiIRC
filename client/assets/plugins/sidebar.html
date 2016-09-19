@@ -555,10 +555,9 @@ kiwi.plugins.on('loaded', function() {
 
                     // Check if the member is in the channel
                     for(member in members) {
-                        var regexp = new RegExp(kiwi.utils.escapeRegex(query_nick), 'i'),
                         panel_name = panel.get('name');
 
-                        if(member.match(regexp)) {
+                        if(member == query_nick.toLowerCase()) {
                             common_channels.push(panel_name);
 
                             /* TODO : make the channel links work
