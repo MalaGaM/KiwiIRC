@@ -253,7 +253,7 @@ _kiwi.view.Channel = _kiwi.view.Panel.extend({
             extra_html = _kiwi.view.MediaMessage.buildHtml(url);
 
             // Make the link clickable
-            return '<a class="link_ext" target="_blank" rel="nofollow" href="' + url.replace(/"/g, '%22') + '">' + _.escape(nice) + '</a>' + extra_html;
+            return '<a class="link_ext" target="_blank" rel="noopener" href="' + url.replace(/"/g, '%22') + '">' + _.escape(nice) + '</a>' + extra_html;
         });
 
         return found_a_url ? parsed_url : false;
