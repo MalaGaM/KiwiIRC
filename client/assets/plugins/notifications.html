@@ -96,7 +96,7 @@
 	    	network.on('connect', function() {
 	    		// Wait a few seconds so everything doesn't happen at once
 	    		setTimeout(function() {
-		        	var notif = new Notification('Nouvelle version du chat !', 'Beaucoup de changements sur le chat, notamment l\'apparence (<a href="http://www.europnet.org/fr/news-fr/149-nouvelle-version-webchat-septembre2014" target="_blank">liste complète</a>).<br />Pour retrouver l\'ancien thème, choisissez "Relaxed" dans les <a onclick="kiwi.components.Applet.loadOnce(\'kiwi_settings\').view.show()"><strong>Paramètres</strong></a>.<br /><br />Pour toute question ou remarque, envoyez nous un message <a href="http://www.europnet.org/fr/menu-header-contact.html" target="_blank">sur cette page</a> !<br /><br />Bon chat sur EuropNet !');
+		        	var notif = new Notification('Nouvelle version du chat !', 'Nous préparons une toute nouvelle version de votre interface de chat avec énormément de nouveautés.<br />Vous pouvez la tester en avant première sur <a href="https://beta.europnet.org/" target="_blank">https://beta.europnet.org/</a>.<br /><br />Pour toute question ou remarque, retrouvez-nous sur le salon #beta<br /><br />Bon chat sur EuropNet !');
 		        	notif.render().$el.appendTo($('#kiwi'));
 		        	notif.$el.slideDown('fast');
 
