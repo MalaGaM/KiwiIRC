@@ -18,7 +18,7 @@
     "engine.io": "^1.5.4",
     "es6-promise": "^3.0.2",
     "eventemitter2": "0.4.14",
-    "iconv-lite": "0.4.11",
+    "iconv-lite": "0.6.3",
     "ipaddr.js": "^1.0.3",
     "lodash": "^3.10.1",
     "negotiator": "^0.5.3",
